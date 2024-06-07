@@ -1,5 +1,16 @@
 # Changelog
 
+## vNext (TBD)
+
+### Enhancements
+* None
+
+### Fixed
+* None
+
+### Internals
+* None
+
 ## 15.1.0 (2024-06-07)
 
 ### Enhancements
