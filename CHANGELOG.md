@@ -1,5 +1,19 @@
 # Changelog
 
+## vNext (TBD)
+
+### Enhancements
+
+* Improved data visualization for dictionaries and mixed types. ([#1663](https://github.com/realm/realm-studio/pull/1663/files))
+
+### Fixed
+
+* None
+
+### Internals
+
+* None
+
 ## 15.1.1 (2024-06-07)
 
 

@@ -1,6 +1,5 @@
 import { display as displayDataCell } from '../ui/RealmBrowser/Content/Table/types/DataCell';
-import { stringify } from 'flatted';
-
+import { InspectOptions, inspect } from 'util';
 // TODO: Investigate better solution.
 const $REF_MATCHER =
   /\s*\"\$ref[Id]*\" *: *(\"(.*?)\"(,|\s|)|\s*\{(.*?)\}(,|\s|))/g;
@@ -14,6 +13,29 @@ type SafeJsonOptions = {
   maxLength?: number;
   postFix?: string;
   shallow?: boolean;
+};
+
+export const prettifiedInspect = (
+  object: unknown,
+  options?: InspectOptions,
+) => {
+  // If it is possible to serialize the object to a simpler structure with toJSON, do it.
+  const simplifiedObject =
+    object &&
+    typeof object === 'object' &&
+    'toJSON' in object &&
+    typeof object.toJSON === 'function'
+      ? object.toJSON()
+      : object;
+
+  return inspect(simplifiedObject, {
+    compact: false,
+    // TODO: Can potentially support higher depth if one can hide symbols properly.
+    depth: 0,
+    breakLength: 80,
+    showHidden: false,
+    ...options,
+  });
 };
 
 export const asSafeJsonString = (
@@ -39,7 +61,7 @@ export const asSafeJsonString = (
     );
   } else {
     try {
-      json = stringify(value);
+      json = prettifiedInspect(value);
     } catch (err) {
       json = err instanceof Error ? err.message : String(err);
     }
@@ -127,9 +149,8 @@ export const getCellStringRepresentation = (
   }
 
   if (canUseJsonViewer(property, value)) {
-    return asSafeJsonString(value, {
-      cleanupRefs: true,
-      maxLength: VALUE_STRING_LENGTH_LIMIT,
+    return prettifiedInspect(value, {
+      maxStringLength: VALUE_STRING_LENGTH_LIMIT,
     });
   }
 
