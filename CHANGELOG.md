@@ -1,4 +1,13 @@
-# Changelog
+## vNext (TBD)
+
+### Enhancements
+* None
+
+### Fixed
+* Fixed connecting to the server and opening synced Realms ([#1665](https://github.com/realm/realm-studio/issues/1665), since v15.0.0)
+
+### Internals
+* None
 
 ## 15.2.0 (2024-06-12)
 

@@ -156,11 +156,12 @@ export abstract class RealmLoadingComponent<
         });
         const credentials = hydrateCredentials(realm.credentials);
         const user = await app.logIn(credentials);
-        return new Realm({
+        return Realm.open({
           encryptionKey: realm.encryptionKey,
           sync: {
             user,
             flexible: true,
+            /*
             initialSubscriptions: {
               update(subs, realm) {
                 for (const schema of realm.schema) {
@@ -169,6 +170,7 @@ export abstract class RealmLoadingComponent<
                 }
               },
             },
+            */
           },
           schema,
           schemaVersion,
