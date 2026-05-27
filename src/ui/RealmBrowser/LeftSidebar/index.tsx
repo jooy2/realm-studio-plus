@@ -36,6 +36,7 @@ interface ILeftSidebarContainerProps {
   getSchemaLength: (className: string) => number;
   isOpen: boolean;
   onClassFocussed: ClassFocussedHandler;
+  onReload: () => void;
   onToggle: () => void;
   progress: ILoadingProgress;
   readOnly?: boolean;
@@ -82,6 +83,7 @@ class LeftSidebarContainer extends React.Component<
         hiddenClassCount={hiddenClassCount}
         isOpen={this.props.isOpen}
         onClassFocussed={this.props.onClassFocussed}
+        onReload={this.props.onReload}
         onToggle={this.props.onToggle}
         progress={this.props.progress}
         readOnly={this.props.readOnly || false}

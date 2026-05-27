@@ -40,6 +40,11 @@
     text-transform: uppercase;
   }
 
+  &__HeaderActions {
+    display: flex;
+    gap: $spacer * .25;
+  }
+
   &__Classes {
     flex-grow: 1;
     flex-shrink: 0;

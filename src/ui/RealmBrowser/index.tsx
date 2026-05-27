@@ -136,18 +136,24 @@ class RealmBrowserContainer
   };
 
   private contentInstance: Content | null = null;
+  private fileWatcher: fs.FSWatcher | null = null;
+  private watchedInode: number | null = null;
+  private watchedFileName: string | null = null;
+  private watchDebounceTimer: ReturnType<typeof setTimeout> | null = null;
+  private isReloading = false;
 
   public componentDidMount() {
     this.loadRealm(
       this.props.realm,
       this.props.import ? this.props.import.schema : undefined
-    );
+    ).then(() => this.startWatchingRealmFile());
     this.addListeners();
   }
 
   public componentWillUnmount() {
     super.componentWillUnmount();
     this.removeListeners();
+    this.stopWatchingRealmFile();
     if (this.realm && this.realm.isInTransaction) {
       this.realm.cancelTransaction();
     }
@@ -194,6 +200,7 @@ class RealmBrowserContainer
         onSingleListFocussed={this.onSingleListFocussed}
         onOpenWithEncryption={this.onOpenWithEncryption}
         onRealmChanged={this.onRealmChanged}
+        onReload={this.onManualReload}
         progress={this.state.progress}
         realm={this.realm}
         toggleAddClass={this.toggleAddClass}
@@ -764,8 +771,104 @@ class RealmBrowserContainer
 
   private onOpenWithEncryption = (key: string) => {
     this.props.realm.encryptionKey = Buffer.from(key, 'hex');
-    this.loadRealm(this.props.realm);
+    this.loadRealm(this.props.realm).then(() => this.startWatchingRealmFile());
   };
+
+  private onManualReload = () => {
+    this.reloadFromDisk();
+  };
+
+  private reloadFromDisk = () => {
+    if (this.isReloading) {
+      return;
+    }
+    if (this.props.realm.mode !== realms.RealmLoadingMode.Local) {
+      return;
+    }
+    this.isReloading = true;
+    this.stopWatchingRealmFile();
+    // Reload the whole renderer. The original window query string carries
+    // the realm path but not the encryption key, so an encrypted file will
+    // naturally re-prompt via the existing loadingRealmFailed flow.
+    // In-flight transactions are handled by onBeforeUnload.
+    window.location.reload();
+  };
+
+  private startWatchingRealmFile() {
+    const realm = this.props.realm;
+    if (!realm || realm.mode !== realms.RealmLoadingMode.Local) {
+      return;
+    }
+    const realmPath = realm.path;
+    this.stopWatchingRealmFile();
+    try {
+      this.watchedInode = fs.statSync(realmPath).ino;
+    } catch {
+      this.watchedInode = null;
+    }
+    const dir = path.dirname(realmPath);
+    this.watchedFileName = path.basename(realmPath);
+    try {
+      this.fileWatcher = fs.watch(dir, (_event, changed) => {
+        if (!changed || changed !== this.watchedFileName) {
+          return;
+        }
+        if (this.watchDebounceTimer) {
+          clearTimeout(this.watchDebounceTimer);
+        }
+        this.watchDebounceTimer = setTimeout(() => {
+          this.handleWatchedFileEvent();
+        }, 250);
+      });
+    } catch {
+      // Watching is best-effort; the manual refresh button remains as a fallback.
+      this.fileWatcher = null;
+    }
+  }
+
+  private stopWatchingRealmFile() {
+    if (this.watchDebounceTimer) {
+      clearTimeout(this.watchDebounceTimer);
+      this.watchDebounceTimer = null;
+    }
+    if (this.fileWatcher) {
+      try {
+        this.fileWatcher.close();
+      } catch {
+        // ignore
+      }
+      this.fileWatcher = null;
+    }
+    this.watchedInode = null;
+    this.watchedFileName = null;
+  }
+
+  private handleWatchedFileEvent() {
+    const realm = this.props.realm;
+    if (
+      !realm ||
+      realm.mode !== realms.RealmLoadingMode.Local ||
+      this.isReloading
+    ) {
+      return;
+    }
+    const realmPath = realm.path;
+    let currentInode: number | null = null;
+    try {
+      currentInode = fs.statSync(realmPath).ino;
+    } catch {
+      // File does not currently exist on disk — keep the current view
+      // (matches existing behavior when a file is only deleted).
+      return;
+    }
+    if (
+      currentInode !== null &&
+      this.watchedInode !== null &&
+      currentInode !== this.watchedInode
+    ) {
+      this.reloadFromDisk();
+    }
+  }
 
   private onBeforeUnload = (e: BeforeUnloadEvent) => {
     if (this.realm && this.realm.isInTransaction) {

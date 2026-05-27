@@ -53,6 +53,7 @@ export interface ILeftSidebarProps {
   hiddenClassCount: number;
   isOpen: boolean;
   onClassFocussed: ClassFocussedHandler;
+  onReload: () => void;
   onToggle: () => void;
   progress: ILoadingProgress;
   readOnly: boolean;
@@ -67,6 +68,7 @@ export const LeftSidebar = ({
   hiddenClassCount,
   isOpen,
   onClassFocussed,
+  onReload,
   onToggle,
   progress,
   readOnly,
@@ -82,11 +84,20 @@ export const LeftSidebar = ({
   >
     <div className="LeftSidebar__Header">
       <span>Classes</span>
-      {readOnly ? null : (
-        <Button size="sm" onClick={toggleAddClass}>
-          <i className="fa fa-plus" />
+      <div className="LeftSidebar__HeaderActions">
+        <Button
+          size="sm"
+          onClick={onReload}
+          title="Reload Realm file from disk"
+        >
+          <i className="fa fa-refresh" />
         </Button>
-      )}
+        {readOnly ? null : (
+          <Button size="sm" onClick={toggleAddClass} title="Add class">
+            <i className="fa fa-plus" />
+          </Button>
+        )}
+      </div>
     </div>
     <div className="LeftSidebar__Classes">
       {classes && classes.length > 0 ? (

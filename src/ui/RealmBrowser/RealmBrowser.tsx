@@ -77,6 +77,7 @@ export interface IRealmBrowserProps {
   onSingleListFocussed: SingleListFocussedHandler;
   onOpenWithEncryption: (key: string) => void;
   onRealmChanged: () => void;
+  onReload: () => void;
   progress: ILoadingProgress;
   realm?: Realm;
   toggleAddClass: () => void;
@@ -122,6 +123,7 @@ export const RealmBrowser = ({
   onSingleListFocussed,
   onOpenWithEncryption,
   onRealmChanged,
+  onReload,
   progress,
   realm,
   toggleAddClass,
@@ -139,6 +141,7 @@ export const RealmBrowser = ({
         getSchemaLength={getSchemaLength}
         isOpen={isLeftSidebarOpen}
         onClassFocussed={onClassFocussed}
+        onReload={onReload}
         onToggle={onLeftSidebarToggle}
         progress={progress}
         readOnly={editMode === EditMode.Disabled}
