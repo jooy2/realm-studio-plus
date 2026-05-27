@@ -12,7 +12,7 @@
   "license": "Apache-2.0",
   "main": "./build/main.bundle.js",
   "build": {
-    "appId": "com.mongodb.realm-studio",
+    "appId": "com.realm.realm-studio-plus",
     "directories": {
       "buildResources": "./resources"
     },
@@ -33,17 +33,25 @@
     "mac": {
       "hardenedRuntime": true,
       "gatekeeperAssess": false,
+      "notarize": false,
+      "identity": null,
       "category": "public.app-category.developer-tools",
       "binaries": [
-        "dist/mac/Realm Studio.app/Contents/Resources/app.asar.unpacked/node_modules/realm/binding/build/realm.node"
+        "dist/mac/Realm Studio Plus.app/Contents/Resources/app.asar.unpacked/node_modules/realm/binding/build/realm.node"
       ],
       "target": [
-        "dmg",
-        "zip"
+        {
+          "target": "dmg",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
       ]
     },
     "dmg": {
       "iconSize": 90,
+      "sign": false,
       "contents": [
         {
           "x": 95,
@@ -60,14 +68,14 @@
     "linux": {
       "target": [
         "AppImage",
-        "tar.gz"
+        "deb",
+        "rpm"
       ]
     },
     "win": {
       "target": [
         "nsis",
-        "portable",
-        "zip"
+        "portable"
       ],
       "icon": "resources/icon.ico"
     },

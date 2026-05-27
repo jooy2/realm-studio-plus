@@ -1,12 +1,17 @@
 const { resolve } = require('path');
 const nodeExternals = require('webpack-node-externals');
 const webpack = require('webpack');
-const SentryPlugin = require('@sentry/webpack-plugin');
+const { sentryWebpackPlugin } = require('@sentry/webpack-plugin');
 
 const package = require('../package.json');
 
 module.exports = (env, argv) => {
   const isDevelopment = argv.mode === 'development';
+
+  if (!isDevelopment) {
+    process.env.SENTRY_PROPERTIES =
+      process.env.SENTRY_PROPERTIES || resolve(__dirname, 'sentry.properties');
+  }
 
   return {
     devServer: {
@@ -54,14 +59,16 @@ module.exports = (env, argv) => {
     ].concat(
       !isDevelopment
         ? [
-            new SentryPlugin({
-              release: `${package.name}@${package.version}`,
-              include: './build',
-              ignore: ['node_modules', 'webpack.config.js'],
-              configFile: resolve(__dirname, 'sentry.properties'),
-              ext: ['map', 'js'],
-              urlPrefix: '~/build/',
-              dryRun: !process.env.SENTRY_AUTH_TOKEN
+            sentryWebpackPlugin({
+              release: {
+                name: `${package.name}@${package.version}`
+              },
+              sourcemaps: {
+                assets: './build/**/*.{js,map}',
+                ignore: ['node_modules', 'webpack.config.js'],
+                urlPrefix: '~/build/'
+              },
+              disable: !process.env.SENTRY_AUTH_TOKEN
             })
           ]
         : []
