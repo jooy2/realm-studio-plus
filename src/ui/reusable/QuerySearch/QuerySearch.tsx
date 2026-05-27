@@ -23,13 +23,13 @@ import {
   InputGroup,
   Popover,
   PopoverBody,
-  UncontrolledTooltip,
+  UncontrolledTooltip
 } from 'reactstrap';
 
 export interface IQuerySearchProps {
   onQueryChange: (query: string) => void;
   onQueryHelp?: () => void;
-  queryHelpTooltip?: JSX.Element;
+  queryHelpTooltip?: React.JSX.Element;
   onQueryBlur?: React.EventHandler<React.FocusEvent>;
   onQueryFocus?: React.EventHandler<React.FocusEvent>;
   query: string;
@@ -53,13 +53,13 @@ export const QuerySearch = ({
   inputRef,
   inputElement,
   isPopoverOpen,
-  queryHelpTooltip,
+  queryHelpTooltip
 }: IQuerySearchProps) => {
   return (
     <section className={className}>
       <InputGroup size="sm">
         <Input
-          onChange={e => {
+          onChange={(e) => {
             onQueryChange(e.target.value);
           }}
           onFocus={onQueryFocus}

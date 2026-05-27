@@ -27,7 +27,7 @@ import {
   Modal,
   ModalBody,
   ModalFooter,
-  ModalHeader,
+  ModalHeader
 } from 'reactstrap';
 
 import './AddSubscriptionModal.scss';
@@ -39,7 +39,7 @@ export const AddSubscriptionModal = ({
   schemaName,
   query,
   queryError,
-  onQueryChange,
+  onQueryChange
 }: {
   isOpen: boolean;
   toggle: () => void;

@@ -17,14 +17,26 @@
 ////////////////////////////////////////////////////////////////////////////
 
 import electron, { MessageBoxSyncOptions } from 'electron';
-import * as sentry from '@sentry/electron';
+// `@sentry/electron` v7 ships separate `/main` and `/renderer` bundles and the
+// bare entrypoint throws. This module is imported from both processes, so we
+// require the correct subpath at runtime based on `process.type`. The type-only
+// import is erased at compile time; main and renderer share the same shape for
+// the API we use (`captureEvent`).
+import type * as SentryNS from '@sentry/electron/main';
 
 import { getRemote } from '../../utils';
+
+const sentry: typeof SentryNS =
+  process.type === 'browser'
+    ? // eslint-disable-next-line @typescript-eslint/no-require-imports
+      require('@sentry/electron/main')
+    : // eslint-disable-next-line @typescript-eslint/no-require-imports
+      require('@sentry/electron/renderer');
 
 export const showError = (
   failedIntent: string,
   error?: any,
-  messageOverrides: { [msg: string]: string } = {},
+  messageOverrides: { [msg: string]: string } = {}
 ) => {
   console.error(error);
   let message = '';
@@ -41,7 +53,7 @@ export const showError = (
     // Prepend the intent
     message: failedIntent,
     detail: message,
-    title: failedIntent,
+    title: failedIntent
   };
   // Tell Sentry about this error
   sentry.captureEvent({
@@ -50,7 +62,7 @@ export const showError = (
     message: failedIntent,
     tags: { type: 'user-error' },
     // Sending along the message as extra context
-    extra: { message },
+    extra: { message }
   });
   // Show a message box ...
   if (process.type === 'renderer') {

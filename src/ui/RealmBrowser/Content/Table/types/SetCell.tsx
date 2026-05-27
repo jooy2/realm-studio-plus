@@ -16,7 +16,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-import React from 'react';
 import { Badge } from 'reactstrap';
 import Realm from 'realm';
 import { getCellStringRepresentation } from '../../../../../utils/json';
@@ -26,7 +25,7 @@ const VALUE_STRING_LENGTH_LIMIT = 50;
 
 function setTake<T>(set: Realm.Set<T>, amount: number): Array<T> {
   const it = 0;
-  const arr = [];
+  const arr: T[] = [];
   for (const val of set) {
     if (it > amount) break;
     arr.push(val);
@@ -36,7 +35,7 @@ function setTake<T>(set: Realm.Set<T>, amount: number): Array<T> {
 
 const displayValue = (
   property: Realm.ObjectSchemaProperty,
-  set: Realm.Set<unknown>,
+  set: Realm.Set<unknown>
 ) => {
   if (!set) {
     return 'null';
@@ -48,8 +47,8 @@ const displayValue = (
       .map((val: unknown) =>
         getCellStringRepresentation(property, val).substring(
           0,
-          VALUE_STRING_LENGTH_LIMIT,
-        ),
+          VALUE_STRING_LENGTH_LIMIT
+        )
       )
       .join(', ');
 
@@ -63,11 +62,12 @@ const displayValue = (
 
 export const SetCell = ({
   property,
-  value,
+  value
 }: {
   property: Realm.ObjectSchemaProperty;
   value: Realm.Set<unknown>;
 }) => (
+  // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
   <div tabIndex={0} className="RealmBrowser__Table__SetCell">
     <span className="RealmBrowser__Table__SetCell__Value">
       {displayValue(property, value)}

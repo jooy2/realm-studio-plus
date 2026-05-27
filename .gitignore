@@ -2,10 +2,11 @@ build/
 dist/
 node_modules/
 realm-object-server/
-.idea
-.vscode
 .DS_Store
 data/
+*.log
+
+.idea/
 
 # Created by mocha-webpack
 .tmp/
@@ -24,3 +25,7 @@ spectron.log
 
 # Sentry cache folder
 .electron-symbols/
+
+# AI
+.claude/*.local.json
+.claude/worktree

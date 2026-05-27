@@ -33,7 +33,7 @@ export const create = (key: string) => {
     realm.close();
     // Delete the Realm file
     Realm.deleteFile({
-      path: realm.path,
+      path: realm.path
     });
     // Delete the temporary directory
     tempDirectory.removeCallback();

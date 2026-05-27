@@ -26,7 +26,7 @@ import { IClassFocus } from '../../focus';
 
 import {
   CreateObjectDialog,
-  ICreateObjectDialogProps,
+  ICreateObjectDialogProps
 } from './CreateObjectDialog';
 
 import './CreateObjectDialog.scss';
@@ -66,18 +66,18 @@ class CreateObjectDialogContainer extends React.PureComponent<
   ICreateObjectDialogContainerState
 > {
   private static generateInitialValues(
-    props: ICreateObjectDialogContainerProps,
+    props: ICreateObjectDialogContainerProps
   ) {
     if (props.isOpen) {
       const properties = props.schema.properties;
       const primaryKey = props.schema.primaryKey;
       const values: IRealmObject = {};
-      Object.keys(properties).forEach(propertyName => {
+      Object.keys(properties).forEach((propertyName) => {
         const property = properties[propertyName] as Realm.ObjectSchemaProperty;
         values[propertyName] = CreateObjectDialogContainer.generateInitialValue(
           property,
           propertyName,
-          primaryKey,
+          primaryKey
         );
       });
       return values;
@@ -89,7 +89,7 @@ class CreateObjectDialogContainer extends React.PureComponent<
   private static generateInitialValue(
     property: Realm.ObjectSchemaProperty,
     propertyName?: string,
-    primaryKey?: string,
+    primaryKey?: string
   ) {
     if (propertyName === primaryKey) {
       // Special handling for primary keys. Opting out of optional handling & return a random value.
@@ -126,7 +126,7 @@ class CreateObjectDialogContainer extends React.PureComponent<
     } else if (property.type === 'date') {
       return new Date();
     } else if (property.type === 'data') {
-      return new Buffer('');
+      return Buffer.from('');
     } else {
       // Best guess is null - even with if required
       return null;
@@ -134,18 +134,18 @@ class CreateObjectDialogContainer extends React.PureComponent<
   }
 
   public state: ICreateObjectDialogContainerState = {
-    values: {},
+    values: {}
   };
 
   public componentDidMount() {
     const values = CreateObjectDialogContainer.generateInitialValues(
-      this.props,
+      this.props
     );
     this.setState({ values });
   }
 
-  public componentWillReceiveProps(
-    nextProps: ICreateObjectDialogContainerProps,
+  public UNSAFE_componentWillReceiveProps(
+    nextProps: ICreateObjectDialogContainerProps
   ) {
     if (
       nextProps.isOpen &&
@@ -169,7 +169,7 @@ class CreateObjectDialogContainer extends React.PureComponent<
       onCreate: this.onCreate,
       onValueChange: this.onValueChange,
       values: this.state.values,
-      isEmbeddedType: this.isEmbeddedType,
+      isEmbeddedType: this.isEmbeddedType
     };
     if (this.props.isOpen) {
       return {
@@ -177,12 +177,12 @@ class CreateObjectDialogContainer extends React.PureComponent<
         isOpen: true,
         getClassFocus: this.props.getClassFocus,
         schema: this.props.schema,
-        onShowJsonViewerDialog: this.props.onShowJsonViewerDialog,
+        onShowJsonViewerDialog: this.props.onShowJsonViewerDialog
       };
     } else {
       return {
         ...common,
-        isOpen: false,
+        isOpen: false
       };
     }
   }
@@ -199,7 +199,7 @@ class CreateObjectDialogContainer extends React.PureComponent<
         this.props.onCreate(
           this.props.schema.name,
           this.state.values,
-          this.props.embeddedInfo,
+          this.props.embeddedInfo
         );
       } catch (err) {
         const className = this.props.schema.name;
@@ -218,8 +218,8 @@ class CreateObjectDialogContainer extends React.PureComponent<
     this.setState({
       values: {
         ...this.state.values,
-        [propertyName]: value,
-      },
+        [propertyName]: value
+      }
     });
   };
 }

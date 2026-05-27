@@ -20,7 +20,6 @@ import { ipcRenderer, MenuItemConstructorOptions } from 'electron';
 import * as remote from '@electron/remote';
 import fs from 'fs-extra';
 import path from 'path';
-import React from 'react';
 import Realm from 'realm';
 
 import { DataExporter, DataExportFormat } from '../../services/data-exporter';
@@ -29,13 +28,13 @@ import { Language, SchemaExporter } from '../../services/schema-export';
 import { menu, realms } from '../../utils';
 import {
   IMenuGenerator,
-  IMenuGeneratorProps,
+  IMenuGeneratorProps
 } from '../../windows/MenuGenerator';
 import { IRealmBrowserWindowProps } from '../../windows/WindowProps';
 import { showError } from '../reusable/errors';
 import {
   IRealmLoadingComponentState,
-  RealmLoadingComponent,
+  RealmLoadingComponent
 } from '../reusable/RealmLoadingComponent';
 
 import { Content, EditMode } from './Content';
@@ -44,7 +43,7 @@ import {
   generateKey,
   IClassFocus,
   IListFocus,
-  ISingleObjectFocus,
+  ISingleObjectFocus
 } from './focus';
 import { isPrimitive } from './primitives';
 import { RealmBrowser } from './RealmBrowser';
@@ -66,15 +65,15 @@ export type EditModeChangeHandler = (editMode: EditMode) => void;
 export type ListFocussedHandler = (
   object: Realm.Object,
   property: IPropertyWithName,
-  highlightedObject?: Realm.Object,
+  highlightedObject?: Realm.Object
 ) => void;
 export type SingleListFocussedHandler = (
   parent: Realm.Object,
-  property: IPropertyWithName,
+  property: IPropertyWithName
 ) => void;
 export type ClassFocussedHandler = (
   className: string,
-  highlightedObject?: Realm.Object,
+  highlightedObject?: Realm.Object
 ) => void;
 
 type ImportDialogOptions = {
@@ -133,7 +132,7 @@ class RealmBrowserContainer
     importDialog: null,
     jsonViewerDialog: null,
     progress: { status: 'idle' },
-    classes: [],
+    classes: []
   };
 
   private contentInstance: Content | null = null;
@@ -141,7 +140,7 @@ class RealmBrowserContainer
   public componentDidMount() {
     this.loadRealm(
       this.props.realm,
-      this.props.import ? this.props.import.schema : undefined,
+      this.props.import ? this.props.import.schema : undefined
     );
     this.addListeners();
   }
@@ -212,9 +211,9 @@ class RealmBrowserContainer
       submenu: [
         {
           label: 'CSV',
-          click: () => this.onImportIntoExistingRealm(),
-        },
-      ],
+          click: () => this.onImportIntoExistingRealm()
+        }
+      ]
     };
 
     const exportSchemaMenu: MenuItemConstructorOptions = {
@@ -222,29 +221,29 @@ class RealmBrowserContainer
       submenu: [
         {
           label: 'Swift',
-          click: () => this.onExportSchema(Language.Swift),
+          click: () => this.onExportSchema(Language.Swift)
         },
         {
           label: 'JavaScript',
-          click: () => this.onExportSchema(Language.JS),
+          click: () => this.onExportSchema(Language.JS)
         },
         {
           label: 'TypeScript',
-          click: () => this.onExportSchema(Language.TS),
+          click: () => this.onExportSchema(Language.TS)
         },
         {
           label: 'Java',
-          click: () => this.onExportSchema(Language.Java),
+          click: () => this.onExportSchema(Language.Java)
         },
         {
           label: 'Kotlin',
-          click: () => this.onExportSchema(Language.Kotlin),
+          click: () => this.onExportSchema(Language.Kotlin)
         },
         {
           label: 'C#',
-          click: () => this.onExportSchema(Language.CS),
-        },
-      ],
+          click: () => this.onExportSchema(Language.CS)
+        }
+      ]
     };
 
     const exportDataMenu: MenuItemConstructorOptions = {
@@ -252,13 +251,13 @@ class RealmBrowserContainer
       submenu: [
         {
           label: 'JSON',
-          click: () => this.onExportData(DataExportFormat.JSON),
+          click: () => this.onExportData(DataExportFormat.JSON)
         },
         {
           label: 'Local Realm',
-          click: () => this.onExportData(DataExportFormat.LocalRealm),
-        },
-      ],
+          click: () => this.onExportData(DataExportFormat.LocalRealm)
+        }
+      ]
     };
 
     const transactionMenuItems: MenuItemConstructorOptions[] =
@@ -269,15 +268,15 @@ class RealmBrowserContainer
               accelerator: 'CommandOrControl+T',
               click: () => {
                 this.onCommitTransaction();
-              },
+              }
             },
             {
               label: 'Cancel transaction',
               accelerator: 'CommandOrControl+Shift+T',
               click: () => {
                 this.onCancelTransaction();
-              },
-            },
+              }
+            }
           ]
         : [
             {
@@ -285,8 +284,8 @@ class RealmBrowserContainer
               accelerator: 'CommandOrControl+T',
               click: () => {
                 this.onBeginTransaction();
-              },
-            },
+              }
+            }
           ];
 
     const editModeMenu: MenuItemConstructorOptions = {
@@ -298,7 +297,7 @@ class RealmBrowserContainer
           checked: this.state.editMode === EditMode.InputBlur,
           click: () => {
             this.onEditModeChange(EditMode.InputBlur);
-          },
+          }
         },
         {
           label: 'Update on key press',
@@ -306,25 +305,25 @@ class RealmBrowserContainer
           checked: this.state.editMode === EditMode.KeyPress,
           click: () => {
             this.onEditModeChange(EditMode.KeyPress);
-          },
-        },
-      ],
+          }
+        }
+      ]
     };
 
     const copyRealmPathItem: MenuItemConstructorOptions = {
       label: 'Copy local Realm path',
       click: () => {
-        this.copyRealmPathToClipboard().then(null, err => {
+        this.copyRealmPathToClipboard().then(null, (err) => {
           showError('Failed to copy Realm path', err);
         });
-      },
+      }
     };
 
     return menu.performModifications(template, [
       {
         action: 'append',
         id: 'import',
-        items: [importMenu],
+        items: [importMenu]
       },
       {
         action: 'prepend',
@@ -333,14 +332,14 @@ class RealmBrowserContainer
           exportSchemaMenu,
           exportDataMenu,
           copyRealmPathItem,
-          { type: 'separator' },
-        ],
+          { type: 'separator' }
+        ]
       },
       {
         action: 'append',
         id: 'select-all',
-        items: [{ type: 'separator' }, ...transactionMenuItems, editModeMenu],
-      },
+        items: [{ type: 'separator' }, ...transactionMenuItems, editModeMenu]
+      }
     ]);
   }
 
@@ -355,8 +354,8 @@ class RealmBrowserContainer
       this.setState({
         isEncryptionDialogVisible: true,
         progress: {
-          status: 'done',
-        },
+          status: 'done'
+        }
       });
     } else if (
       message === FILE_UPGRADE_NEEDED_MESSAGE &&
@@ -370,7 +369,7 @@ class RealmBrowserContainer
         title: 'Realm file needs an upgrade',
         message: 'The Realm file stores data in an outdated format',
         detail:
-          'This file needs to be upgraded to a newer file format before it can be opened. Would you like a backup of the file, before performing an irreversible upgrade of the file?',
+          'This file needs to be upgraded to a newer file format before it can be opened. Would you like a backup of the file, before performing an irreversible upgrade of the file?'
       });
       const answer = buttons[answerIndex];
 
@@ -382,20 +381,20 @@ class RealmBrowserContainer
             const backupFileName = path.basename(realm.path, '.realm');
             const backupPath = path.resolve(
               backupDirectory,
-              backupFileName + '.backup.realm',
+              backupFileName + '.backup.realm'
             );
             // Copy, but ensure we don't override an existing file
             fs.copyFileSync(realm.path, backupPath, fs.constants.COPYFILE_EXCL);
             remote.dialog.showMessageBox({
               title: 'Backup saved',
               message: 'The backup Realm file was saved to:',
-              detail: backupPath,
+              detail: backupPath
             });
           }
           // Reopen, enabling format upgrades an upgrade
           this.loadRealm({
             ...realm,
-            enableFormatUpgrade: true,
+            enableFormatUpgrade: true
           });
         } catch (err) {
           showError('Failed upgrading Realm', err);
@@ -406,7 +405,7 @@ class RealmBrowserContainer
       }
     } else if (err.message === ARCHITECTURE_MISMATCH_MESSAGE) {
       const improvedError = new Error(
-        'The file is already opened by another process, with an incompatible lock file format. Try up- or downgrading Realm Studio or SDK to match their versions of Realm Core.\n\nSee Realm Studio changelog on GitHub for details on compatibility between versions.',
+        'The file is already opened by another process, with an incompatible lock file format. Try up- or downgrading Realm Studio or SDK to match their versions of Realm Core.\n\nSee Realm Studio changelog on GitHub for details on compatibility between versions.'
       );
       showError('Failed to open Realm', improvedError);
       window.close();
@@ -447,11 +446,11 @@ class RealmBrowserContainer
     }
 
     this.setState({
-      classes: this.realm.schema,
+      classes: this.realm.schema
     });
 
     const firstSchemaName = this.realm.schema.find(
-      c => c.name.indexOf('__') !== 0 && !c.embedded,
+      (c) => c.name.indexOf('__') !== 0 && !c.embedded
     )?.name;
 
     if (firstSchemaName) {
@@ -461,19 +460,19 @@ class RealmBrowserContainer
     if (this.props.import && this.realm) {
       const { format, paths } = this.props.import;
       // Assume the schema class names were generated from the files basenames
-      const files = paths.map(p => ({
+      const files = paths.map((p) => ({
         path: p,
-        className: path.basename(p),
+        className: path.basename(p)
       }));
       this.handleImport(format, files);
     }
   };
 
   private isEmbeddedType: IsEmbeddedTypeChecker = (
-    className?: string,
+    className?: string
   ): boolean => {
     const { classes } = this.state;
-    return classes.find(c => c.name === className)?.embedded ?? false;
+    return classes.find((c) => c.name === className)?.embedded ?? false;
   };
 
   private isCreateAllowed = (focus?: Focus): boolean => {
@@ -495,7 +494,7 @@ class RealmBrowserContainer
       this.props.updateMenu();
       // Hang on to the dataVersion
       this.setState({
-        dataVersionAtBeginning: this.state.dataVersion,
+        dataVersionAtBeginning: this.state.dataVersion
       });
     } else {
       throw new Error(`Realm is not ready or already in transaction`);
@@ -523,31 +522,31 @@ class RealmBrowserContainer
   };
 
   private isClassNameAvailable = (name: string): boolean => {
-    return !this.state.classes.find(schema => schema.name === name);
+    return !this.state.classes.find((schema) => schema.name === name);
   };
 
   private toggleAddClass = () => {
     this.setState({
-      isAddClassOpen: !this.state.isAddClassOpen,
+      isAddClassOpen: !this.state.isAddClassOpen
     });
   };
 
   private isPropertyNameAvailable = (name: string): boolean => {
     return (
       this.state.focus !== null &&
-      !this.state.focus.properties.find(property => property.name === name)
+      !this.state.focus.properties.find((property) => property.name === name)
     );
   };
 
   private toggleAddClassProperty = () => {
     this.setState({
-      isAddPropertyOpen: !this.state.isAddPropertyOpen,
+      isAddPropertyOpen: !this.state.isAddPropertyOpen
     });
   };
 
   private toggleAddSubscription = () => {
     this.setState({
-      isAddSubscriptionOpen: !this.state.isAddSubscriptionOpen,
+      isAddSubscriptionOpen: !this.state.isAddSubscriptionOpen
     });
   };
 
@@ -567,7 +566,7 @@ class RealmBrowserContainer
         await this.loadRealm(
           this.props.realm,
           modifiedSchema,
-          nextSchemaVersion,
+          nextSchemaVersion
         );
         // Select the schema when it the realm has loaded
         this.onClassFocussed(schema.name);
@@ -586,7 +585,7 @@ class RealmBrowserContainer
           this.state.classes,
           this.state.focus.className,
           name,
-          type,
+          type
         );
         // Close the current Realm
         this.realm.close();
@@ -598,14 +597,14 @@ class RealmBrowserContainer
         await this.loadRealm(
           this.props.realm,
           modifiedSchema,
-          nextSchemaVersion,
+          nextSchemaVersion
         );
         // Ensure we've selected the class that we've just added a property to
         this.onClassFocussed(focusedClassName);
       } catch (err) {
         showError(
           `Failed adding the property named "${name}" to the selected schema`,
-          err,
+          err
         );
       }
     }
@@ -615,7 +614,7 @@ class RealmBrowserContainer
     const { realm } = this;
     if (realm) {
       try {
-        realm.subscriptions.update(subs => {
+        (realm as any).subscriptions.update((subs: any) => {
           subs.add(realm.objects(schemaName).filtered(queryString));
         });
       } catch (err) {
@@ -638,7 +637,7 @@ class RealmBrowserContainer
 
   private onClassFocussed: ClassFocussedHandler = (
     className,
-    highlightedObject,
+    highlightedObject
   ) => {
     const focus = this.getClassFocus(className);
     this.changeFocusIfAllowed(focus, highlightedObject);
@@ -647,7 +646,7 @@ class RealmBrowserContainer
   private onListFocussed: ListFocussedHandler = (
     object: Realm.Object,
     property: IPropertyWithName,
-    highlightedObject?: Realm.Object,
+    highlightedObject?: Realm.Object
   ) => {
     const focus = this.getListFocus(object, property);
     this.changeFocusIfAllowed(focus, highlightedObject);
@@ -655,15 +654,15 @@ class RealmBrowserContainer
 
   private onSingleListFocussed: SingleListFocussedHandler = (
     object: Realm.Object,
-    property: IPropertyWithName,
+    property: IPropertyWithName
   ) => {
     const focus = this.getSingleObjectFocus(object, property);
     this.changeFocusIfAllowed(focus);
   };
 
-  private getClassFocus = (className: string): IClassFocus => {
+  private getClassFocus = (className: string): IClassFocus | any => {
     if (this.realm) {
-      const schema = this.realm.schema.find(s => s.name === className);
+      const schema = this.realm.schema.find((s) => s.name === className);
 
       return {
         kind: 'class',
@@ -673,7 +672,7 @@ class RealmBrowserContainer
             ? new MockedObjectCollection(schema)
             : this.realm.objects(className),
         properties: this.derivePropertiesFromClassName(className),
-        isEmbedded: this.isEmbeddedType(className),
+        isEmbedded: this.isEmbeddedType(className)
       };
     } else {
       throw new Error('getClassFocus called before realm was loaded');
@@ -682,7 +681,7 @@ class RealmBrowserContainer
 
   private getSingleObjectFocus = (
     object: Realm.Object & { [name: string]: any },
-    property: IPropertyWithName,
+    property: IPropertyWithName
   ): ISingleObjectFocus => {
     if (property.name && property.objectType) {
       return {
@@ -691,7 +690,7 @@ class RealmBrowserContainer
         property,
         results: new SingleObjectCollection(object[property.name]),
         properties: this.derivePropertiesFromClassName(property.objectType),
-        isEmbedded: property.isEmbedded ?? false,
+        isEmbedded: property.isEmbedded ?? false
       };
     } else {
       throw new Error('Expected a property with a name & objectType property');
@@ -701,7 +700,7 @@ class RealmBrowserContainer
   private getListFocus = (
     // `{ [name: string]: any }` because of Realm JS types
     object: Realm.Object & { [name: string]: any },
-    property: IPropertyWithName,
+    property: IPropertyWithName
   ): IListFocus => {
     if (property.name) {
       const common = {
@@ -709,19 +708,19 @@ class RealmBrowserContainer
         property,
         properties: this.derivePropertiesFromProperty(property),
         results: object[property.name],
-        isEmbedded: this.isEmbeddedType(property.objectType),
+        isEmbedded: this.isEmbeddedType(property.objectType)
       };
       if (property.objectType && isPrimitive(property.objectType)) {
         return {
           ...common,
           kind: 'list',
-          ofPrimitives: true,
+          ofPrimitives: true
         };
       } else {
         return {
           ...common,
           kind: 'list',
-          ofPrimitives: false,
+          ofPrimitives: false
         };
       }
     } else {
@@ -731,14 +730,14 @@ class RealmBrowserContainer
 
   private getSchemaLength = (name: string) => {
     if (this.realm) {
-      const schema = this.realm.schema.find(s => s.name === name);
+      const schema = this.realm.schema.find((s) => s.name === name);
       return schema?.asymmetric ? 0 : this.realm.objects(name).length;
     } else {
       return 0;
     }
   };
 
-  private onEditModeChange: EditModeChangeHandler = editMode => {
+  private onEditModeChange: EditModeChangeHandler = (editMode) => {
     localStorage.setItem(EDIT_MODE_STORAGE_KEY, editMode);
     this.setState({ editMode });
   };
@@ -784,7 +783,7 @@ class RealmBrowserContainer
         .showMessageBox(currentWindow, {
           type: 'warning',
           message: `You have ${unsavedChanges} unsaved change${plural}`,
-          buttons: ['Save and close', 'Discard and close', 'Cancel'],
+          buttons: ['Save and close', 'Discard and close', 'Cancel']
         })
         .then(({ response }) => {
           if (response === 0 || response === 1) {
@@ -802,24 +801,27 @@ class RealmBrowserContainer
     }
   };
 
+  private onExportSchemaIpc = (_event: unknown, language: Language) =>
+    this.onExportSchema(language);
+
   private addListeners() {
-    ipcRenderer.addListener('export-schema', this.onExportSchema);
+    ipcRenderer.addListener('export-schema', this.onExportSchemaIpc);
     window.addEventListener('beforeunload', this.onBeforeUnload);
   }
 
   private removeListeners() {
-    ipcRenderer.removeListener('export-schema', this.onExportSchema);
+    ipcRenderer.removeListener('export-schema', this.onExportSchemaIpc);
     window.removeEventListener('beforeunload', this.onBeforeUnload);
   }
 
   private derivePropertiesFromProperty(
-    property: IPropertyWithName,
+    property: IPropertyWithName
   ): IPropertyWithName[] {
     // Determine the properties
     if (property.objectType) {
       if (property.type === 'list') {
         const properties: IPropertyWithName[] = [
-          { name: '#', type: 'int', readOnly: true, isPrimaryKey: false },
+          { name: '#', type: 'int', readOnly: true, isPrimaryKey: false }
         ];
         if (isPrimitive(property.objectType)) {
           return properties.concat([
@@ -827,12 +829,12 @@ class RealmBrowserContainer
               name: null,
               type: property.objectType,
               readOnly: false,
-              isPrimaryKey: false,
-            },
+              isPrimaryKey: false
+            }
           ]);
         } else {
           return properties.concat(
-            this.derivePropertiesFromClassName(property.objectType),
+            this.derivePropertiesFromClassName(property.objectType)
           );
         }
       }
@@ -848,22 +850,22 @@ class RealmBrowserContainer
   }
 
   private derivePropertiesFromClassName(
-    className: string,
+    className: string
   ): IPropertyWithName[] {
     if (!this.realm) {
       throw new Error(
-        'derivePropertiesFromClassName called before realm was loaded',
+        'derivePropertiesFromClassName called before realm was loaded'
       );
     }
     // Deriving the ObjectSchema from the className
-    const objectSchema = this.realm.schema.find(schema => {
+    const objectSchema = this.realm.schema.find((schema) => {
       return schema.name === className;
     });
     if (!objectSchema) {
       throw new Error(`Found no object schema named '${className}'`);
     }
     // Derive the properties from the objectSchema
-    return Object.keys(objectSchema.properties).map(propertyName => {
+    return Object.keys(objectSchema.properties).map((propertyName) => {
       const property = objectSchema.properties[
         propertyName
       ] as Realm.ObjectSchemaProperty;
@@ -876,7 +878,7 @@ class RealmBrowserContainer
           readOnly: false,
           isEmbedded,
           isPrimaryKey: objectSchema.primaryKey === propertyName,
-          ...property,
+          ...property
         };
       } else {
         throw new Error(`Object schema had a string describing its property`);
@@ -888,7 +890,7 @@ class RealmBrowserContainer
     if (typeof this.state.dataVersionAtBeginning === 'number') {
       this.setState({
         dataVersion: this.state.dataVersionAtBeginning,
-        dataVersionAtBeginning: undefined,
+        dataVersionAtBeginning: undefined
       });
     }
   }
@@ -913,7 +915,7 @@ class RealmBrowserContainer
     const basename = path.basename(this.realm.path, '.realm');
     const selectedPath = remote.dialog.showSaveDialogSync({
       defaultPath: `${basename}-classes`,
-      message: `Select a directory to store the ${language} schema files`,
+      message: `Select a directory to store the ${language} schema files`
     });
     if (selectedPath && this.realm) {
       const exporter = SchemaExporter(language);
@@ -928,7 +930,7 @@ class RealmBrowserContainer
       if (this.realm) {
         const destinationPath = remote.dialog.showSaveDialogSync({
           defaultPath: exporter.suggestFilename(this.realm),
-          message: 'Select a destination for the data',
+          message: 'Select a destination for the data'
         });
         if (destinationPath) {
           exporter.export(this.realm, destinationPath);
@@ -942,18 +944,18 @@ class RealmBrowserContainer
   };
 
   private onImportIntoExistingRealm = (
-    format: dataImporter.ImportFormat = dataImporter.ImportFormat.CSV,
+    format: dataImporter.ImportFormat = dataImporter.ImportFormat.CSV
   ) => {
     const paths = dataImporter.showOpenDialog(format);
     if (this.realm && paths && paths.length > 0) {
-      const classNames = this.realm.schema.map(s => s.name);
+      const classNames = this.realm.schema.map((s) => s.name);
       this.setState({ importDialog: { filePaths: paths, classNames } });
     }
   };
 
   private handleImport = (
     format: dataImporter.ImportFormat,
-    files: dataImporter.ImportableFile[],
+    files: dataImporter.ImportableFile[]
   ) => {
     if (this.realm) {
       this.setState({ progress: { status: 'in-progress' } });

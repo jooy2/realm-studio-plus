@@ -28,7 +28,7 @@ import {
   ListFocussedHandler,
   IsEmbeddedTypeChecker,
   SingleListFocussedHandler,
-  JsonViewerDialogExecutor,
+  JsonViewerDialogExecutor
 } from '..';
 import { store } from '../../../store';
 import { getRange } from '../../../utils';
@@ -43,7 +43,7 @@ import { ICreateObjectDialogContainerProps } from './CreateObjectDialog';
 import { IDeleteObjectsDialogProps } from './DeleteObjectsDialog';
 import {
   IOpenSelectMultipleObjectsDialogContainerProps,
-  IOpenSelectSingleObjectDialogContainerProps,
+  IOpenSelectSingleObjectDialogContainerProps
 } from './SelectObjectDialog';
 import {
   CellChangeHandler,
@@ -55,19 +55,19 @@ import {
   ReorderingEndHandler,
   ReorderingStartHandler,
   rowHeights,
-  RowMouseDownHandler,
+  RowMouseDownHandler
 } from './Table';
 
 export enum EditMode {
   Disabled = 'disabled',
   InputBlur = 'input-blur',
-  KeyPress = 'key-press',
+  KeyPress = 'key-press'
 }
 
 export enum HighlightMode {
   Disabled = 'disabled',
   Single = 'single',
-  Multiple = 'multiple',
+  Multiple = 'multiple'
 }
 
 export type EmbeddedInfo = {
@@ -77,7 +77,7 @@ export type EmbeddedInfo = {
 export type CreateObjectHandler = (
   className: string,
   values: Record<string, unknown>,
-  embeddedInfo?: EmbeddedInfo,
+  embeddedInfo?: EmbeddedInfo
 ) => void;
 export type QueryChangeHandler = (query: string) => void;
 export type SortingChangeHandler = (sorting: ISorting | undefined) => void;
@@ -91,8 +91,7 @@ export type SelectObjectAction =
   | { type: 'object'; object: Realm.Object; propertyName: string }
   | { type: 'list'; list: Realm.List<any> };
 
-export interface ISelectObjectForObjectDialog
-  extends IOpenSelectSingleObjectDialogContainerProps {
+export interface ISelectObjectForObjectDialog extends IOpenSelectSingleObjectDialogContainerProps {
   action: 'object';
   isOpen: true;
   multiple: false;
@@ -100,8 +99,7 @@ export interface ISelectObjectForObjectDialog
   propertyName: string;
 }
 
-export interface ISelectObjectsForListDialog
-  extends IOpenSelectMultipleObjectsDialogContainerProps {
+export interface ISelectObjectsForListDialog extends IOpenSelectMultipleObjectsDialogContainerProps {
   action: 'list';
   isOpen: true;
   list: Realm.List<any>;
@@ -125,7 +123,7 @@ export interface IBaseContentContainerProps {
   onClassFocussed?: ClassFocussedHandler;
   onHighlightChange?: (
     highlight: IHighlight | undefined,
-    collection: Realm.OrderedCollection<any>,
+    collection: Realm.OrderedCollection<any>
   ) => void;
   onListFocussed?: ListFocussedHandler;
   onSingleListFocussed?: SingleListFocussedHandler;
@@ -135,14 +133,12 @@ export interface IBaseContentContainerProps {
   isEmbeddedType: IsEmbeddedTypeChecker;
 }
 
-export interface IReadOnlyContentContainerProps
-  extends IBaseContentContainerProps {
+export interface IReadOnlyContentContainerProps extends IBaseContentContainerProps {
   readOnly: true;
   editMode: EditMode.Disabled;
 }
 
-export interface IReadWriteContentContainerProps
-  extends IBaseContentContainerProps {
+export interface IReadWriteContentContainerProps extends IBaseContentContainerProps {
   dataVersionAtBeginning?: number;
   getClassFocus: (className: string) => IClassFocus;
   onAddColumnClick: () => void;
@@ -179,7 +175,7 @@ class ContentContainer extends React.Component<
     deleteObjectsDialog: { isOpen: false },
     hideSystemClasses: !store.shouldShowSystemClasses(),
     query: '',
-    selectObjectDialog: { isOpen: false },
+    selectObjectDialog: { isOpen: false }
   };
 
   public latestCellValidation?: {
@@ -195,7 +191,7 @@ class ContentContainer extends React.Component<
     (
       results: Realm.OrderedCollection<any>,
       query: string,
-      sorting?: ISorting,
+      sorting?: ISorting
     ) => {
       let filterError: Error | undefined;
       if (query) {
@@ -213,19 +209,19 @@ class ContentContainer extends React.Component<
         }
       }
       return { results, filterError };
-    },
+    }
   );
 
   private filteredProperties = memoize(
     (properties: IPropertyWithName[], hideSystemClasses: boolean) => {
       if (hideSystemClasses) {
         return properties.filter(
-          p => !(p.objectType && p.objectType.startsWith('__')),
+          (p) => !(p.objectType && p.objectType.startsWith('__'))
         );
       } else {
         return properties;
       }
-    },
+    }
   );
 
   private contentElement: HTMLElement | null = null;
@@ -234,7 +230,7 @@ class ContentContainer extends React.Component<
 
   public componentDidUpdate(
     prevProps: IContentContainerProps,
-    prevState: IContentContainerState,
+    prevState: IContentContainerState
   ) {
     if (
       this.state.query !== prevState.query ||
@@ -248,7 +244,7 @@ class ContentContainer extends React.Component<
       const { results } = this.filteredSortedResults(
         this.props.focus.results,
         this.state.query,
-        this.state.sorting,
+        this.state.sorting
       );
       this.props.onHighlightChange(this.state.highlight, results);
     }
@@ -262,11 +258,11 @@ class ContentContainer extends React.Component<
     this.setState({ error });
   }
 
-  public componentWillMount() {
+  public UNSAFE_componentWillMount() {
     this.removeStoreListener = store.onDidChange(
       store.KEY_SHOW_SYSTEM_CLASSES,
-      showSystemClasses =>
-        this.setState({ hideSystemClasses: !showSystemClasses }),
+      (showSystemClasses) =>
+        this.setState({ hideSystemClasses: !showSystemClasses })
     );
   }
 
@@ -295,14 +291,14 @@ class ContentContainer extends React.Component<
     const { results, filterError } = this.filteredSortedResults(
       this.props.focus.results,
       this.state.query,
-      this.state.sorting,
+      this.state.sorting
     );
     const focus: Focus = {
       ...this.props.focus,
       properties: this.filteredProperties(
         this.props.focus.properties,
-        this.state.hideSystemClasses,
-      ),
+        this.state.hideSystemClasses
+      )
     };
     const common = {
       contentRef: this.contentRef,
@@ -324,14 +320,14 @@ class ContentContainer extends React.Component<
       onSortingChange: this.onSortingChange,
       query: this.state.query,
       queryError: filterError,
-      sorting: this.state.sorting,
+      sorting: this.state.sorting
     };
     if (this.props.readOnly) {
       return {
         ...common,
         editMode: EditMode.Disabled,
         readOnly: true,
-        allowCreate: this.props.allowCreate,
+        allowCreate: this.props.allowCreate
       };
     } else {
       const { dataVersion = 0, dataVersionAtBeginning = 0 } = this.props;
@@ -351,7 +347,7 @@ class ContentContainer extends React.Component<
         onReorderingStart: this.onReorderingStart,
         realm: this.props.realm,
         readOnly: false,
-        selectObjectDialog: this.state.selectObjectDialog,
+        selectObjectDialog: this.state.selectObjectDialog
       };
     }
   }
@@ -381,28 +377,28 @@ class ContentContainer extends React.Component<
     this.setState({ highlight: undefined });
   };
 
-  private onSortingChange: SortingChangeHandler = sorting => {
+  private onSortingChange: SortingChangeHandler = (sorting) => {
     this.setState({ sorting });
   };
 
   private generateHighlight(
     object: Realm.Object | null,
-    scrollToObject = true,
+    scrollToObject = true
   ): IHighlight {
     if (object) {
       const { results } = this.filteredSortedResults(
         this.props.focus.results,
         this.state.query,
-        this.state.sorting,
+        this.state.sorting
       );
       const index = results.indexOf(object);
       const result: IHighlight = {
-        rows: new Set(index > -1 ? [index] : []),
+        rows: new Set(index > -1 ? [index] : [])
       };
       if (scrollToObject) {
         result.scrollTo = {
           center: true,
-          row: index,
+          row: index
         };
       }
       return result;
@@ -411,7 +407,7 @@ class ContentContainer extends React.Component<
     }
   }
 
-  private onCellChange: CellChangeHandler = params => {
+  private onCellChange: CellChangeHandler = (params) => {
     try {
       this.write(() => {
         const { parent, property, rowIndex, cellValue } = params;
@@ -427,7 +423,7 @@ class ContentContainer extends React.Component<
   };
 
   private onObjectSelect = (
-    selectedObjects: Realm.Object | Realm.Object[] | null,
+    selectedObjects: Realm.Object | Realm.Object[] | null
   ) => {
     if (this.state.selectObjectDialog.isOpen) {
       const { selectObjectDialog } = this.state;
@@ -496,7 +492,7 @@ class ContentContainer extends React.Component<
           if (cellValue === null && property.name && property.objectType) {
             this.onShowCreateObjectDialog(property.objectType, {
               key: property.name,
-              parent: rowObject,
+              parent: rowObject
             });
           } else if (this.props.onSingleListFocussed) {
             this.props.onSingleListFocussed(rowObject, property);
@@ -524,12 +520,12 @@ class ContentContainer extends React.Component<
           action: {
             type: 'object',
             object: rowObject,
-            propertyName: property.name,
+            propertyName: property.name
           },
           className: property.objectType,
           isOptional: property.optional,
           isEmbeddedType: this.props.isEmbeddedType,
-          onShowJsonViewerDialog: this.props.onShowJsonViewerDialog,
+          onShowJsonViewerDialog: this.props.onShowJsonViewerDialog
         });
       }
     }
@@ -537,34 +533,34 @@ class ContentContainer extends React.Component<
 
   private onCellHighlighted: CellHighlightedHandler = ({
     rowIndex,
-    columnIndex,
+    columnIndex
   }) => {
     this.setState({
       highlight: {
         rows: new Set([rowIndex]),
         scrollTo: {
           column: columnIndex,
-          row: rowIndex,
-        },
-      },
+          row: rowIndex
+        }
+      }
     });
   };
 
   private onCellValidated: CellValidatedHandler = (
     rowIndex,
     columnIndex,
-    valid,
+    valid
   ) => {
     this.latestCellValidation = {
       columnIndex,
       rowIndex,
-      valid,
+      valid
     };
   };
 
   private onContextMenu: CellContextMenuHandler = (
     e: React.MouseEvent<any>,
-    params,
+    params
   ) => {
     e.preventDefault();
     const { allowCreate, focus, readOnly } = this.props;
@@ -590,16 +586,16 @@ class ContentContainer extends React.Component<
                   action: {
                     type: 'object',
                     object: rowObject,
-                    propertyName: property.name,
+                    propertyName: property.name
                   },
                   className: property.objectType,
                   isOptional: property.optional,
                   isEmbeddedType: this.props.isEmbeddedType,
-                  onShowJsonViewerDialog: this.props.onShowJsonViewerDialog,
+                  onShowJsonViewerDialog: this.props.onShowJsonViewerDialog
                 });
               }
-            },
-          }),
+            }
+          })
         );
       }
 
@@ -612,7 +608,7 @@ class ContentContainer extends React.Component<
       ) {
         const { label, title, description } = this.generateDeleteTexts(
           focus,
-          this.state.highlight.rows.size > 1,
+          this.state.highlight.rows.size > 1
         );
 
         contextMenu.append(
@@ -625,11 +621,11 @@ class ContentContainer extends React.Component<
                   title,
                   description,
                   label,
-                  this.state.highlight.rows,
+                  this.state.highlight.rows
                 );
               }
-            },
-          }),
+            }
+          })
         );
       }
     }
@@ -652,15 +648,15 @@ class ContentContainer extends React.Component<
               this.onShowSelectObjectDialog({
                 action: {
                   type: 'list',
-                  list: focus.results,
+                  list: focus.results
                 },
                 className: focus.property.objectType,
                 isEmbeddedType: this.props.isEmbeddedType,
-                onShowJsonViewerDialog: this.props.onShowJsonViewerDialog,
+                onShowJsonViewerDialog: this.props.onShowJsonViewerDialog
               });
             }
-          },
-        }),
+          }
+        })
       );
     }
 
@@ -672,8 +668,8 @@ class ContentContainer extends React.Component<
           label: `Create new ${className}`,
           click: () => {
             this.onShowCreateObjectDialog(className);
-          },
-        }),
+          }
+        })
       );
     }
 
@@ -681,14 +677,14 @@ class ContentContainer extends React.Component<
     if (contextMenu.items.length > 0) {
       contextMenu.popup({
         x: e.clientX,
-        y: e.clientY,
+        y: e.clientY
       });
     }
   };
 
   private onShowCreateObjectDialog = (
     className: string,
-    embeddedInfo?: EmbeddedInfo,
+    embeddedInfo?: EmbeddedInfo
   ) => {
     if (!this.props.readOnly) {
       const { realm, getClassFocus, isEmbeddedType } = this.props;
@@ -698,11 +694,11 @@ class ContentContainer extends React.Component<
               name: className,
               properties: {
                 [className]: {
-                  type: className,
-                },
-              },
+                  type: className
+                }
+              }
             }
-          : realm.schema.find(s => s.name === className);
+          : realm.schema.find((s) => s.name === className);
       if (schema) {
         this.setState({
           createObjectDialog: {
@@ -713,8 +709,8 @@ class ContentContainer extends React.Component<
             schema,
             isEmbeddedType,
             embeddedInfo,
-            onShowJsonViewerDialog: this.props.onShowJsonViewerDialog,
-          },
+            onShowJsonViewerDialog: this.props.onShowJsonViewerDialog
+          }
         });
       }
     }
@@ -724,7 +720,7 @@ class ContentContainer extends React.Component<
     title: string,
     description: string,
     actionLabel: string,
-    rows: Set<number>,
+    rows: Set<number>
   ) => {
     this.setState({
       deleteObjectsDialog: {
@@ -738,17 +734,17 @@ class ContentContainer extends React.Component<
           this.setState({
             // Deleting objects will mess up the highlight
             highlight: undefined,
-            deleteObjectsDialog: { isOpen: false },
+            deleteObjectsDialog: { isOpen: false }
           });
-        },
-      },
+        }
+      }
     });
   };
 
   private onCreateObject: CreateObjectHandler = (
     className: string,
     values: Record<string, unknown>,
-    embeddedInfo?: EmbeddedInfo,
+    embeddedInfo?: EmbeddedInfo
   ) => {
     if (!this.props.readOnly) {
       const { focus, realm } = this.props;
@@ -794,9 +790,9 @@ class ContentContainer extends React.Component<
             highlight: {
               rows: new Set(rowIndex >= 0 ? [rowIndex] : []),
               scrollTo: {
-                row: rowIndex,
-              },
-            },
+                row: rowIndex
+              }
+            }
           });
         } else {
           throw new Error('onCreateObject called before realm was loaded');
@@ -822,7 +818,7 @@ class ContentContainer extends React.Component<
           rows.add(rowIndex);
         }
         this.setState({
-          highlight: { rows },
+          highlight: { rows }
         });
       } else if (e.button === 0 && e.shiftKey) {
         // The user wants to select since the previous selection
@@ -840,7 +836,7 @@ class ContentContainer extends React.Component<
         const rect = e.currentTarget.getBoundingClientRect();
         this.rowDragStart = {
           offset: rect.top,
-          rowIndex,
+          rowIndex
         };
         // Highlight the row
         this.setState({ highlight: { rows: new Set([rowIndex]) } });
@@ -890,7 +886,7 @@ class ContentContainer extends React.Component<
       focus.isEmbedded && focus.kind === 'list' && focus.property.name
         ? {
             parent: focus.parent,
-            key: focus.property.name,
+            key: focus.property.name
           }
         : undefined;
 
@@ -924,8 +920,8 @@ class ContentContainer extends React.Component<
     this.setState({
       highlight: {
         ...this.state.highlight,
-        rows: new Set([newIndex]),
-      },
+        rows: new Set([newIndex])
+      }
     });
   };
 
@@ -933,7 +929,7 @@ class ContentContainer extends React.Component<
     className,
     isOptional = false,
     action,
-    isEmbeddedType,
+    isEmbeddedType
   }: {
     className: string;
     isOptional?: boolean;
@@ -955,7 +951,7 @@ class ContentContainer extends React.Component<
           onSelect: this.onObjectSelect,
           propertyName: action.propertyName,
           isEmbeddedType,
-          onShowJsonViewerDialog: this.props.onShowJsonViewerDialog,
+          onShowJsonViewerDialog: this.props.onShowJsonViewerDialog
         };
         this.setState({ selectObjectDialog });
       } else {
@@ -969,7 +965,7 @@ class ContentContainer extends React.Component<
           onCancel: this.onCancelSelectObjectDialog,
           onSelect: this.onObjectSelect,
           isEmbeddedType,
-          onShowJsonViewerDialog: this.props.onShowJsonViewerDialog,
+          onShowJsonViewerDialog: this.props.onShowJsonViewerDialog
         };
         this.setState({ selectObjectDialog });
       }
@@ -1020,7 +1016,7 @@ class ContentContainer extends React.Component<
     const { results } = this.filteredSortedResults(
       this.props.focus.results,
       this.state.query,
-      this.state.sorting,
+      this.state.sorting
     );
     const result = new Set<Realm.Object>();
     for (const index of rowIndices) {
@@ -1045,7 +1041,7 @@ class ContentContainer extends React.Component<
       return {
         label: `Remove selected ${target} from the ${parent}`,
         title: `Removing ${target}`,
-        description: `Are you sure you want to remove ${determinedTarget} from the ${parent}?`,
+        description: `Are you sure you want to remove ${determinedTarget} from the ${parent}?`
       };
     } else {
       const target = multiple ? 'objects' : 'object';
@@ -1054,7 +1050,7 @@ class ContentContainer extends React.Component<
       return {
         label: `Delete selected ${target}`,
         title: `Delete ${target}`,
-        description: `Are you sure you want to delete ${determinedTarget}?`,
+        description: `Are you sure you want to delete ${determinedTarget}?`
       };
     }
   }

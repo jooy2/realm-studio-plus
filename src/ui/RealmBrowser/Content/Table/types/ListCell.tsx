@@ -16,7 +16,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-import React from 'react';
 import { Badge } from 'reactstrap';
 import Realm from 'realm';
 import { getCellStringRepresentation } from '../../../../../utils/json';
@@ -26,7 +25,7 @@ const VALUE_STRING_LENGTH_LIMIT = 50;
 
 const displayValue = (
   property: Realm.ObjectSchemaProperty,
-  list: Realm.List<any>,
+  list: Realm.List<any>
 ) => {
   if (!list) {
     return 'null';
@@ -38,8 +37,8 @@ const displayValue = (
       .map((val: any) =>
         getCellStringRepresentation(property, val).substring(
           0,
-          VALUE_STRING_LENGTH_LIMIT,
-        ),
+          VALUE_STRING_LENGTH_LIMIT
+        )
       )
       .join(', ');
 
@@ -53,7 +52,7 @@ const displayValue = (
 
 export const ListCell = ({
   property,
-  value,
+  value
 }: {
   property: Realm.ObjectSchemaProperty;
   value: any;

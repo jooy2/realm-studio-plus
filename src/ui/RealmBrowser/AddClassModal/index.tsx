@@ -42,7 +42,7 @@ const initialState: IAddClassModalState = {
   embedded: false,
   primaryKey: false,
   primaryKeyName: '',
-  primaryKeyType: 'objectId',
+  primaryKeyType: 'objectId'
 };
 
 class AddClassModalContainer extends React.Component<
@@ -66,31 +66,31 @@ class AddClassModalContainer extends React.Component<
     const newNameValue = e.target.value;
     this.setState({
       name: newNameValue,
-      nameIsValid: this.props.isClassNameAvailable(newNameValue),
+      nameIsValid: this.props.isClassNameAvailable(newNameValue)
     });
   };
 
   public onEmbeddedChange = () => {
     this.setState({
-      embedded: !this.state.embedded,
+      embedded: !this.state.embedded
     });
   };
 
   public onPKChange = () => {
     this.setState({
-      primaryKey: !this.state.primaryKey,
+      primaryKey: !this.state.primaryKey
     });
   };
 
   public onPKNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({
-      primaryKeyName: e.target.value,
+      primaryKeyName: e.target.value
     });
   };
 
   public onPKTypeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({
-      primaryKeyType: e.target.value,
+      primaryKeyType: e.target.value
     });
   };
 
@@ -100,7 +100,7 @@ class AddClassModalContainer extends React.Component<
   private getSchema = (): Realm.ObjectSchema => {
     const { name, primaryKey, primaryKeyType, embedded } = this.state;
     const primaryKeyName = this.preparePrimaryKeyName(
-      this.state.primaryKeyName,
+      this.state.primaryKeyName
     );
 
     return {
@@ -108,8 +108,8 @@ class AddClassModalContainer extends React.Component<
       embedded,
       ...(primaryKey ? { primaryKey: primaryKeyName } : {}),
       properties: {
-        ...(primaryKey ? { [primaryKeyName]: primaryKeyType } : {}),
-      },
+        ...(primaryKey ? { [primaryKeyName]: primaryKeyType } : {})
+      }
     };
   };
 }

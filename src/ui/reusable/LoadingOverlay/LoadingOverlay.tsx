@@ -17,7 +17,6 @@
 ////////////////////////////////////////////////////////////////////////////
 
 import classNames from 'classnames';
-import React from 'react';
 import { Button, Progress } from 'reactstrap';
 
 import { LoadingDots } from '../LoadingDots';
@@ -40,7 +39,7 @@ function formatProgress(progress: ILoadingProgress) {
 export const LoadingOverlay = ({
   loading,
   progress,
-  fade = true,
+  fade = true
 }: {
   loading?: boolean;
   progress?: ILoadingProgress;
@@ -60,7 +59,7 @@ export const LoadingOverlay = ({
   return isVisible ? (
     <div
       className={classNames('LoadingOverlay', {
-        'LoadingOverlay--no-fade': !fade,
+        'LoadingOverlay--no-fade': !fade
       })}
     >
       <div className="LoadingOverlay__Content">

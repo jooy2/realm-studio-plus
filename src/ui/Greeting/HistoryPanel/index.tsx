@@ -36,7 +36,7 @@ class HistoryPanelContainer extends React.Component<
       { type: "server", url: "https://localhost:9334" } as IServerEntry,
       { type: "synced-realm", url: "https://localhost:9334/~/realm-tasks" } as ISyncedRealmEntry,
       */
-    ],
+    ]
   };
 
   public render() {

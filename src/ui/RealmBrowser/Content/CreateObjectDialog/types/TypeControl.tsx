@@ -56,43 +56,47 @@ export const TypeControl = ({
   property,
   value,
   isEmbeddedType,
-  onShowJsonViewerDialog,
+  onShowJsonViewerDialog
 }: ITypeControlProps) => {
   if (property.type === 'objectId') {
     return (
       <ObjectIdControl
-        children={children}
         onChange={onChange}
         property={property}
         value={value as Realm.BSON.ObjectId | null}
-      />
+      >
+        {children}
+      </ObjectIdControl>
     );
   } else if (property.type === 'uuid') {
     return (
       <UUIDControl
-        children={children}
         onChange={onChange}
         property={property}
         value={value as Realm.BSON.UUID | null}
-      />
+      >
+        {children}
+      </UUIDControl>
     );
   } else if (property.type === 'bool') {
     return (
       <BooleanControl
-        children={children}
         onChange={onChange}
         property={property}
         value={value as boolean}
-      />
+      >
+        {children}
+      </BooleanControl>
     );
   } else if (property.type === 'string') {
     return (
       <StringControl
-        children={children}
         onChange={onChange}
         property={property}
         value={value as string}
-      />
+      >
+        {children}
+      </StringControl>
     );
   } else if (
     property.type === 'int' ||
@@ -101,38 +105,42 @@ export const TypeControl = ({
   ) {
     return (
       <NumericControl
-        children={children}
         property={property}
         value={value as number | null}
         onChange={onChange}
-      />
+      >
+        {children}
+      </NumericControl>
     );
   } else if (property.type === 'decimal128') {
     return (
       <Decimal128Control
-        children={children}
         property={property}
         value={value as Realm.BSON.Decimal128 | null}
         onChange={onChange}
-      />
+      >
+        {children}
+      </Decimal128Control>
     );
   } else if (property.type === 'date') {
     return (
       <DateControl
-        children={children}
         property={property}
         value={value as string}
         onChange={onChange}
-      />
+      >
+        {children}
+      </DateControl>
     );
   } else if (property.type === 'data') {
     return (
       <DataControl
-        children={children}
         property={property}
         value={value as string}
         onChange={onChange}
-      />
+      >
+        {children}
+      </DataControl>
     );
   } else if (property.type === 'object') {
     if (isEmbeddedType(property.objectType)) {
@@ -147,19 +155,19 @@ export const TypeControl = ({
 
     return (
       <ObjectControl
-        children={children}
         getClassFocus={getClassFocus}
         onChange={onChange}
         property={property}
         value={value}
         isEmbeddedType={isEmbeddedType}
         onShowJsonViewerDialog={onShowJsonViewerDialog}
-      />
+      >
+        {children}
+      </ObjectControl>
     );
   } else if (property.type === 'list') {
     return (
       <ListControl
-        children={children}
         generateInitialValue={generateInitialValue}
         getClassFocus={getClassFocus}
         onChange={onChange}
@@ -167,7 +175,9 @@ export const TypeControl = ({
         value={value as any[]}
         isEmbeddedType={isEmbeddedType}
         onShowJsonViewerDialog={onShowJsonViewerDialog}
-      />
+      >
+        {children}
+      </ListControl>
     );
   } else {
     return <DefaultControl property={property} />;

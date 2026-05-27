@@ -29,7 +29,7 @@ export default class SwiftSchemaExporter extends SchemaExporter {
     this.appendLine('import Foundation');
     this.appendLine('import RealmSwift\n');
 
-    realm.schema.forEach(schema => {
+    realm.schema.forEach((schema) => {
       this.makeSchema(schema);
     });
     this.addFile(fsPath.parse(realm.path).name + '-model.swift', this.content);
@@ -42,7 +42,7 @@ export default class SwiftSchemaExporter extends SchemaExporter {
 
     // Properties
     const indexedProp: INamedObjectSchemaProperty[] = [];
-    filteredProperties(schema.properties).forEach(prop => {
+    filteredProperties(schema.properties).forEach((prop) => {
       this.appendLine('    ' + this.propertyLine(prop));
       if (prop.indexed && prop.name !== schema.primaryKey) {
         indexedProp.push(prop);
@@ -61,11 +61,11 @@ export default class SwiftSchemaExporter extends SchemaExporter {
     if (indexedProp.length > 0) {
       this.appendLine('');
       this.appendLine(
-        '    override static func indexedProperties() -> [String] {',
+        '    override static func indexedProperties() -> [String] {'
       );
 
       const indexedPropsStr = indexedProp
-        .map(prop => `"${prop.name}"`)
+        .map((prop) => `"${prop.name}"`)
         .join(', ');
       this.appendLine(`        return [${indexedPropsStr}]`);
       this.appendLine('    }');

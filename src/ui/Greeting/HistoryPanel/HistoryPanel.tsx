@@ -16,8 +16,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-import { remote } from 'electron';
-import React from 'react';
+import * as remote from '@electron/remote';
 
 import { HistoryEntry, IHistoryEntry } from './HistoryEntry';
 

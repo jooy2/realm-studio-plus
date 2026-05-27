@@ -40,7 +40,7 @@ export const StringCell = ({
   onClick,
   onFocus,
   property,
-  value,
+  value
 }: IStringCellProps) => {
   return (
     <Input
@@ -48,18 +48,18 @@ export const StringCell = ({
         'RealmBrowser__Table__StringCell',
         `RealmBrowser__Table__StringCell--${property.type}`,
         {
-          'RealmBrowser__Table__StringCell--null': value === null,
-        },
+          'RealmBrowser__Table__StringCell--null': value === null
+        }
       )}
       spellcheck={property.type === 'string' ? 'true' : 'false'}
       bsSize="sm"
       disabled={isDisabled}
       innerRef={getRef}
       onBlur={onBlur}
-      onChange={e => onChange(e.target.value)}
+      onChange={(e) => onChange(e.target.value)}
       onClick={onClick}
       onFocus={onFocus}
-      onKeyPress={e => e.key === 'Enter' && e.currentTarget.blur()}
+      onKeyPress={(e) => e.key === 'Enter' && e.currentTarget.blur()}
       value={value === null ? 'null' : value}
     />
   );

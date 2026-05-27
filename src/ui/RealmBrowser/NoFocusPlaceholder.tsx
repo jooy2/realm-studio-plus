@@ -16,8 +16,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-import React from 'react';
-
 export const NoFocusPlaceholder = () => (
   <div className="RealmBrowser__NoFocusPlaceholder" />
 );

@@ -69,7 +69,7 @@ export abstract class ActionSender {
     if (this.transport) {
       this.transport.removeListener(
         Transport.RESPONSE_EVENT_NAME,
-        this.onResponse,
+        this.onResponse
       );
     }
   }
@@ -78,7 +78,7 @@ export abstract class ActionSender {
     // Creating a placeholder, with values that should get overwritten before this method returns
     const requestHandle: Partial<IRequestHandle> = {
       // Creating the error here to provide a better stacktrace
-      error: new Error(),
+      error: new Error()
     };
     // Create the promise and override the handles .resolve
     requestHandle.promise = new Promise((resolve, reject) => {

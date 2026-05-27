@@ -17,7 +17,6 @@
 ////////////////////////////////////////////////////////////////////////////
 
 import moment from 'moment';
-import React from 'react';
 import { Button, Input, InputGroup } from 'reactstrap';
 
 import { parseDate } from '../../../parsers';
@@ -30,14 +29,14 @@ export const DateControl = ({
   children,
   onChange,
   property,
-  value,
+  value
 }: IBaseControlProps) => (
   <InputGroup className="CreateObjectDialog__DateControl">
     <Input
       className="CreateObjectDialog__DateControl__Input"
       type="datetime-local"
       step={0.001}
-      onChange={e => onChange(parseDate(e.target.value, property))}
+      onChange={(e) => onChange(parseDate(e.target.value, property))}
       required={!property.optional}
       placeholder={value === null ? 'null' : ''}
       value={value ? moment(value).format(DATETIME_LOCAL_FORMAT) : ''}

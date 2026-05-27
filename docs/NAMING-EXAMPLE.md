@@ -7,6 +7,7 @@ Lets say that we some place in the component tree have a simple "status" compone
 Initially this should be a single file, named `Status.tsx` exporting a single functional component like so:
 
 This is `Status.tsx`:
+
 ```
 import React from 'react';
 
@@ -18,6 +19,7 @@ export const Status = () => <p>Status is good!</p>;
 Now let's make the message a property of the React component, exporting the interface for the props as well.
 
 This is `Status.tsx`:
+
 ```
 import React from 'react';
 
@@ -33,6 +35,7 @@ export const Status = ({ message }: IStatusProps) => <p>{message}</p>;
 Let's say we wanted to style this component. We need to save a stylesheet next to the component and therefore we'll move the contents of `Status.tsx` into a folder named `Status` and rename it to `index.tsx`:
 
 This is `Status/index.tsx`:
+
 ```
 import React from 'react';
 
@@ -48,6 +51,7 @@ export const Status = ({ message }: IStatusProps) => (
 ```
 
 This is `Status/Status.scss`:
+
 ```
 .Status {
   background: green;
@@ -101,6 +105,7 @@ export { StatusContainer as Status };
 ```
 
 This is `Status/Status.tsx`:
+
 ```
 import React from 'react';
 
@@ -116,6 +121,7 @@ export const Status = ({ message }: IStatusProps) => (
 ```
 
 This is `Status/Status.scss`:
+
 ```
 .Status {
   background: green;

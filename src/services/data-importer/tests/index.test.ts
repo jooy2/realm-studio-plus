@@ -50,7 +50,7 @@ describe('Import CSV tests', () => {
       assert.strictEqual(Util.isInt('true'), false);
       assert.strictEqual(
         Util.isInt('A094E453-46FD-4F13-AD2F-7333E2C4ABCA'),
-        false,
+        false
       );
     });
 
@@ -73,7 +73,7 @@ describe('Import CSV tests', () => {
     assert.strictEqual(
       catSchema.name,
       'Cat',
-      'Expected to parse schema named (Cat)',
+      'Expected to parse schema named (Cat)'
     );
     assert.strictEqual(catSchema.properties.name, 'string?');
     assert.strictEqual(catSchema.properties.age, 'int?');
@@ -105,70 +105,70 @@ describe('Import CSV tests', () => {
       assert.strictEqual(
         fs.existsSync(REALM_FILE_PATH),
         true,
-        `Realm file was not found at the expected path: ${REALM_FILE_PATH}`,
+        `Realm file was not found at the expected path: ${REALM_FILE_PATH}`
       );
 
       assert.strictEqual(
         realm.schema.length,
         1,
-        'Expected to find one schema (Cat)',
+        'Expected to find one schema (Cat)'
       );
       const catSchema = realm.schema[0];
       assert.strictEqual(
         catSchema.name,
         'Cat',
-        'Expected Schema name to match (Cat)',
+        'Expected Schema name to match (Cat)'
       );
 
-      assert.strictEqual(catSchema.properties.hasOwnProperty('name'), true);
+      assert.strictEqual(Object.prototype.hasOwnProperty.call(catSchema.properties, 'name'), true);
       const nameProperty = catSchema.properties.name as ObjectSchemaProperty;
       assert.strictEqual(nameProperty.type, 'string');
       assert.strictEqual(nameProperty.optional, true);
       assert.strictEqual(nameProperty.indexed, false);
 
-      assert.strictEqual(catSchema.properties.hasOwnProperty('age'), true);
+      assert.strictEqual(Object.prototype.hasOwnProperty.call(catSchema.properties, 'age'), true);
       const ageProperty = catSchema.properties.age as ObjectSchemaProperty;
       assert.strictEqual(ageProperty.type, 'int');
       assert.strictEqual(ageProperty.optional, true);
       assert.strictEqual(ageProperty.indexed, false);
 
-      assert.strictEqual(catSchema.properties.hasOwnProperty('height'), true);
+      assert.strictEqual(Object.prototype.hasOwnProperty.call(catSchema.properties, 'height'), true);
       const heightProperty = catSchema.properties
         .height as ObjectSchemaProperty;
       assert.strictEqual(heightProperty.type, 'double');
       assert.strictEqual(heightProperty.optional, true);
       assert.strictEqual(heightProperty.indexed, false);
 
-      assert.strictEqual(catSchema.properties.hasOwnProperty('weight'), true);
+      assert.strictEqual(Object.prototype.hasOwnProperty.call(catSchema.properties, 'weight'), true);
       const weightProperty = catSchema.properties
         .weight as ObjectSchemaProperty;
       assert.strictEqual(weightProperty.type, 'int');
       assert.strictEqual(weightProperty.optional, true);
       assert.strictEqual(weightProperty.indexed, false);
 
-      assert.strictEqual(catSchema.properties.hasOwnProperty('hasTail'), true);
+      assert.strictEqual(Object.prototype.hasOwnProperty.call(catSchema.properties, 'hasTail'), true);
       const hasTailProperty = catSchema.properties
         .hasTail as ObjectSchemaProperty;
       assert.strictEqual(hasTailProperty.type, 'bool');
       assert.strictEqual(hasTailProperty.optional, true);
       assert.strictEqual(hasTailProperty.indexed, false);
 
-      assert.strictEqual(catSchema.properties.hasOwnProperty('birthday'), true);
+      assert.strictEqual(Object.prototype.hasOwnProperty.call(catSchema.properties, 'birthday'), true);
       const birthdayProperty = catSchema.properties
         .birthday as ObjectSchemaProperty;
       assert.strictEqual(birthdayProperty.type, 'string');
       assert.strictEqual(birthdayProperty.optional, true);
       assert.strictEqual(birthdayProperty.indexed, false);
 
-      assert.strictEqual(catSchema.properties.hasOwnProperty('owner'), true);
+      assert.strictEqual(Object.prototype.hasOwnProperty.call(catSchema.properties, 'owner'), true);
       const ownerProperty = catSchema.properties.owner as ObjectSchemaProperty;
       assert.strictEqual(ownerProperty.type, 'string');
       assert.strictEqual(ownerProperty.optional, true);
       assert.strictEqual(ownerProperty.indexed, false);
 
       assert.strictEqual(
-        catSchema.properties.hasOwnProperty('scaredOfDog'),
-        true,
+        Object.prototype.hasOwnProperty.call(catSchema.properties, 'scaredOfDog'),
+        true
       );
       const scaredOfDogProperty = catSchema.properties
         .scaredOfDog as ObjectSchemaProperty;
@@ -181,12 +181,12 @@ describe('Import CSV tests', () => {
 
     it('Populate a valid Cat Realm file', () => {
       const files: ImportableFile[] = [
-        { path: resolve(TESTS_PATH, 'csv/Cat.csv'), className: 'Cat' },
+        { path: resolve(TESTS_PATH, 'csv/Cat.csv'), className: 'Cat' }
       ];
 
       const schema = generateSchema(
         ImportFormat.CSV,
-        files.map(f => f.path),
+        files.map((f) => f.path)
       );
       const realm = new Realm({ path: REALM_FILE_PATH, schema });
       const csvImporter = new CSVDataImporter();
@@ -224,13 +224,13 @@ describe('Import CSV tests', () => {
       const files: ImportableFile[] = [
         {
           path: resolve(TESTS_PATH, 'csv/invalid_second_line.csv'),
-          className: 'invalid_second_line',
-        },
+          className: 'invalid_second_line'
+        }
       ];
 
       const schema = generateSchema(
         ImportFormat.CSV,
-        files.map(f => f.path),
+        files.map((f) => f.path)
       );
       const csvImporter = new CSVDataImporter();
 
@@ -242,12 +242,12 @@ describe('Import CSV tests', () => {
     it('Multiple CSV should generate one Realm file', () => {
       const files: ImportableFile[] = [
         { path: resolve(TESTS_PATH, 'csv/dogs.csv'), className: 'dogs' },
-        { path: resolve(TESTS_PATH, 'csv/people.csv'), className: 'people' },
+        { path: resolve(TESTS_PATH, 'csv/people.csv'), className: 'people' }
       ];
 
       const schema = generateSchema(
         ImportFormat.CSV,
-        files.map(f => f.path),
+        files.map((f) => f.path)
       );
       const realm = new Realm({ path: REALM_FILE_PATH, schema });
       const csvImporter = new CSVDataImporter();
@@ -264,13 +264,13 @@ describe('Import CSV tests', () => {
       const files: ImportableFile[] = [
         {
           path: resolve(TESTS_PATH, 'csv/optional.csv'),
-          className: 'optional',
-        },
+          className: 'optional'
+        }
       ];
 
       const schema = generateSchema(
         ImportFormat.CSV,
-        files.map(f => f.path),
+        files.map((f) => f.path)
       );
 
       const realm = new Realm({ path: REALM_FILE_PATH, schema });
@@ -294,13 +294,13 @@ describe('Import CSV tests', () => {
       const files: ImportableFile[] = [
         {
           path: resolve(TESTS_PATH, 'csv/inspections.csv'),
-          className: 'inspections',
-        },
+          className: 'inspections'
+        }
       ];
 
       const schema = generateSchema(
         ImportFormat.CSV,
-        files.map(f => f.path),
+        files.map((f) => f.path)
       );
       const csvImporter = new CSVDataImporter();
       const realm = new Realm({ path: REALM_FILE_PATH, schema });
@@ -313,7 +313,7 @@ describe('Import CSV tests', () => {
 
     it('Imports into existing Realm file', () => {
       const files: ImportableFile[] = [
-        { path: resolve(TESTS_PATH, 'csv/Dog.csv'), className: 'Dog' },
+        { path: resolve(TESTS_PATH, 'csv/Dog.csv'), className: 'Dog' }
       ];
 
       const csvImporter = new CSVDataImporter();
@@ -326,8 +326,8 @@ describe('Import CSV tests', () => {
       const assetRealm = new Realm({ path: temporaryPath });
       assert.strictEqual(assetRealm.schema.length, 4);
       assert.notStrictEqual(
-        assetRealm.schema.find(objectSchema => objectSchema.name === 'Dog'),
-        undefined,
+        assetRealm.schema.find((objectSchema) => objectSchema.name === 'Dog'),
+        undefined
       );
 
       assetRealm.beginTransaction();
@@ -357,7 +357,7 @@ describe('Import CSV tests', () => {
 
     it('Imports into existing Realm file fails', () => {
       const files: ImportableFile[] = [
-        { path: resolve(TESTS_PATH, 'csv/Cat.csv'), className: 'Cat' },
+        { path: resolve(TESTS_PATH, 'csv/Cat.csv'), className: 'Cat' }
       ];
 
       const csvImporter = new CSVDataImporter();
@@ -365,7 +365,7 @@ describe('Import CSV tests', () => {
       // the CSV Cat schema does not corespond to the existing Cat as defined in the Realm
       const assetRealm = new Realm({
         path: resolve(TESTS_PATH, 'csv/asset_file.realm'),
-        readOnly: true,
+        readOnly: true
       });
       assert.throws(() => csvImporter.import(assetRealm, files), Error);
       assetRealm.close();

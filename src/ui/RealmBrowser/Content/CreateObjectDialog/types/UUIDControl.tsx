@@ -32,7 +32,7 @@ export class UUIDControl extends React.PureComponent<
   IUUIDControlState
 > {
   state: IUUIDControlState = {
-    internalValue: this.props.value?.toHexString() ?? null,
+    internalValue: this.props.value?.toHexString() ?? null
   };
 
   render() {

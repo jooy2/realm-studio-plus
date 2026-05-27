@@ -29,9 +29,9 @@ describe('promise handle', () => {
     assert(handle.promise instanceof Promise);
   });
 
-  it('can resolve the promise', done => {
+  it('can resolve the promise', (done) => {
     const handle = createPromiseHandle();
-    handle.promise.then(result => {
+    handle.promise.then((result) => {
       assert.strictEqual(result, 'w00t');
       done();
     });
@@ -40,9 +40,9 @@ describe('promise handle', () => {
     });
   });
 
-  it('can reject the promise', done => {
+  it('can reject the promise', (done) => {
     const handle = createPromiseHandle();
-    handle.promise.catch(result => {
+    handle.promise.catch((result) => {
       assert.strictEqual(result, 'w00t');
       done();
     });

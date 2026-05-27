@@ -58,7 +58,7 @@ export const Sidebar = ({
   onToggle,
   outerRef,
   position,
-  width,
+  width
 }: ISidebarProps) => {
   const toggleDirection = getToggleDirection(position, isOpen);
   return (
@@ -71,9 +71,9 @@ export const Sidebar = ({
         `Sidebar--${isOpen ? 'opened' : 'closed'}`,
         {
           'Sidebar--resizing': isResizing,
-          'Sidebar--toggleable-closed': !isOpen && isToggleable,
+          'Sidebar--toggleable-closed': !isOpen && isToggleable
         },
-        className,
+        className
       )}
     >
       <div className={classNames('Sidebar__ContentWrapper')}>
@@ -82,7 +82,7 @@ export const Sidebar = ({
           className={classNames(
             'Sidebar__Content',
             `Sidebar__Content--${position}`,
-            contentClassName,
+            contentClassName
           )}
         >
           {children}
@@ -92,7 +92,7 @@ export const Sidebar = ({
         className={classNames(
           'Sidebar__ResizeHandle',
           `Sidebar__ResizeHandle--${position === 'left' ? 'right' : 'left'}`,
-          `Sidebar__ResizeHandle--${isOpen ? 'opened' : 'closed'}`,
+          `Sidebar__ResizeHandle--${isOpen ? 'opened' : 'closed'}`
         )}
         onMouseDown={onResizeStart}
       />
@@ -102,8 +102,8 @@ export const Sidebar = ({
           'Sidebar__ToggleButton',
           `Sidebar__ToggleButton--${position === 'left' ? 'right' : 'left'}`,
           {
-            'Sidebar__ToggleButton--visible': isToggleable,
-          },
+            'Sidebar__ToggleButton--visible': isToggleable
+          }
         )}
       >
         <i className={`fa fa-angle-${toggleDirection}`} />

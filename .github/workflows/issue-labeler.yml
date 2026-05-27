@@ -6,7 +6,7 @@
 name: Issue labeler (policy)
 on:
   issues:
-    types: [ opened ]
+    types: [opened]
 
 jobs:
   label-issues-policy:
@@ -16,19 +16,19 @@ jobs:
 
     strategy:
       matrix:
-        template: [ bug.yml, feature.yml ]
+        template: [bug.yml, feature.yml]
 
     steps:
       - uses: actions/checkout@v4
 
       - name: Parse issue form
-        uses: stefanbuck/github-issue-parser@c1a559d78bfb8dd05216dab9ffd2b91082ff5324  # v3.0.1
+        uses: stefanbuck/github-issue-parser@c1a559d78bfb8dd05216dab9ffd2b91082ff5324 # v3.0.1
         id: issue-parser
         with:
           template-path: .github/ISSUE_TEMPLATE/${{ matrix.template }}
 
       - name: Set labels based on policy
-        uses: redhat-plumbers-in-action/advanced-issue-labeler@6ee6fddfd744ee26b977e6a0436916f256896971  # v2.0.3
+        uses: redhat-plumbers-in-action/advanced-issue-labeler@6ee6fddfd744ee26b977e6a0436916f256896971 # v2.0.3
         with:
           issue-form: ${{ steps.issue-parser.outputs.jsonString }}
           template: ${{ matrix.template }}

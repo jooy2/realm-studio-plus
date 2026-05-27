@@ -50,7 +50,7 @@ export class StringCellContainer extends React.Component<
 
   public shouldComponentUpdate(
     nextProps: IStringCellContainerProps,
-    nextState: IStringCellContainerState,
+    nextState: IStringCellContainerState
   ) {
     return (
       this.props.editMode !== nextProps.editMode ||
@@ -95,7 +95,7 @@ export class StringCellContainer extends React.Component<
     }
   };
 
-  public onBlur = async (e: React.FocusEvent<HTMLInputElement>) => {
+  public onBlur = async (_e: React.FocusEvent<HTMLInputElement>) => {
     try {
       // Validate and propagate the change in value
       this.propagateChange();
@@ -104,7 +104,7 @@ export class StringCellContainer extends React.Component<
       const inputElement = this.inputElement;
       // The validation failed and the user is leaving the field - ask if they want to reset and leave
       const leave = this.showInvalidValueError(
-        err instanceof Error ? err.message : 'Expected an Error',
+        err instanceof Error ? err.message : 'Expected an Error'
       );
       if (leave) {
         // Reset the temporalValue and signal a valid value
@@ -148,7 +148,7 @@ export class StringCellContainer extends React.Component<
     });
   };
 
-  public onClick = (e: React.MouseEvent<any>): void => {
+  public onClick = (_e: React.MouseEvent<any>): void => {
     // We can only edit cells that are not readOnly and highlighted
     /*
     if (
@@ -219,7 +219,7 @@ export class StringCellContainer extends React.Component<
       }
     } else {
       throw new Error(
-        `parseAndValidate was called before temporalValue was sat: ${temporalValue}`,
+        `parseAndValidate was called before temporalValue was sat: ${temporalValue}`
       );
     }
   }
@@ -231,7 +231,7 @@ export class StringCellContainer extends React.Component<
       title: `Updating cell`,
       buttons: ['Leave without saving', 'Keep editing'],
       defaultId: 1,
-      cancelId: 1,
+      cancelId: 1
     });
     return answer === 0;
   }

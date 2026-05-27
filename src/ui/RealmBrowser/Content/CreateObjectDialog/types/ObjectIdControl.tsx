@@ -32,7 +32,7 @@ export class ObjectIdControl extends React.PureComponent<
   IObjectIdControlState
 > {
   state: IObjectIdControlState = {
-    internalValue: this.props.value?.toHexString() ?? null,
+    internalValue: this.props.value?.toHexString() ?? null
   };
 
   render() {

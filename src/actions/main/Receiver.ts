@@ -22,7 +22,7 @@ import {
   ActionReceiver,
   IActionHandlers,
   LoopbackTransport,
-  MainTransport,
+  MainTransport
 } from '..';
 
 export class Receiver extends ActionReceiver {
@@ -31,7 +31,7 @@ export class Receiver extends ActionReceiver {
       handlers,
       webContents
         ? new MainTransport(webContents)
-        : LoopbackTransport.getInstance(),
+        : LoopbackTransport.getInstance()
     );
   }
 }

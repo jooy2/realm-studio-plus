@@ -1,10 +1,20 @@
 # NOTE: This is a common file that is overwritten by realm/ci-actions sync service
 # and should only be modified in that repository.
 
-name: "Check PR Title"
+name: 'Check PR Title'
 on:
   pull_request:
-    types: [opened, synchronize, reopened, ready_for_review, labeled, unlabeled, converted_to_draft, edited]
+    types:
+      [
+        opened,
+        synchronize,
+        reopened,
+        ready_for_review,
+        labeled,
+        unlabeled,
+        converted_to_draft,
+        edited
+      ]
 
 jobs:
   check-pr-title:

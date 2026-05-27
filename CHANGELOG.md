@@ -1,44 +1,46 @@
 ## 15.2.1 (2024-06-20)
 
 ### Fixed
-* Fixed connecting to the server and opening synced Realms ([#1665](https://github.com/realm/realm-studio/issues/1665), since v15.0.0)
 
+- Fixed connecting to the server and opening synced Realms ([#1665](https://github.com/realm/realm-studio/issues/1665), since v15.0.0)
 
 ## 15.2.0 (2024-06-12)
 
 ### Enhancements
 
-* Improved data visualization for dictionaries and mixed types. ([#1663](https://github.com/realm/realm-studio/pull/1663/files))
-
+- Improved data visualization for dictionaries and mixed types. ([#1663](https://github.com/realm/realm-studio/pull/1663/files))
 
 ## 15.1.1 (2024-06-07)
-
 
 ## 15.1.0 (2024-06-07)
 
 ### Enhancements
-* Added support for displaying collections in mixed.
+
+- Added support for displaying collections in mixed.
 
 ### Internals
-* Upgraded Realm to `v12.9.0`. ([#1651](https://github.com/realm/realm-studio/pull/1651))
+
+- Upgraded Realm to `v12.9.0`. ([#1651](https://github.com/realm/realm-studio/pull/1651))
 
 ## 15.0.1 (2024-04-23)
 
 ### Fixed
-* Restored ability to open a synchronized Realm with Studio. [#1644](https://github.com/realm/realm-studio/issues/1644)
 
+- Restored ability to open a synchronized Realm with Studio. [#1644](https://github.com/realm/realm-studio/issues/1644)
 
 ## 15.0.0 (2024-03-26)
 
 ### Breaking Changes
 
-* Added support for reading / writing Realm files using Realm file format v24, supporting realm-js v12.7.0, realm-dart v2.0.0 and realm-swift v10.49.0. When opening a file which is using an older format, you will get prompted to upgrade (and optionally backup) the Realm file. NOTE: Once the file has been upgraded, there is no way to downgrade it again and it can only be used by the SDKs that support Realm file format v24.
+- Added support for reading / writing Realm files using Realm file format v24, supporting realm-js v12.7.0, realm-dart v2.0.0 and realm-swift v10.49.0. When opening a file which is using an older format, you will get prompted to upgrade (and optionally backup) the Realm file. NOTE: Once the file has been upgraded, there is no way to downgrade it again and it can only be used by the SDKs that support Realm file format v24.
 
 ### Enhancements
-* Added support for reading / writing Realm files using Realm file format v24.
+
+- Added support for reading / writing Realm files using Realm file format v24.
 
 ### Internals
-* Upgrading Realm to `v12.7.0-rc.0`. ([#1626](https://github.com/realm/realm-studio/pull/1626) & [#1638](https://github.com/realm/realm-studio/pull/1638))
+
+- Upgrading Realm to `v12.7.0-rc.0`. ([#1626](https://github.com/realm/realm-studio/pull/1626) & [#1638](https://github.com/realm/realm-studio/pull/1638))
 
 ## 14.1.2 (2023-11-24)
 
@@ -56,7 +58,6 @@
 
 - None
 
-
 ## 14.1.1 (2023-11-23)
 
 [Changes since v14.1.0](https://github.com/realm/realm-studio/compare/v14.1.0...v14.1.1)
@@ -72,7 +73,6 @@
 ### Internals
 
 - None
-
 
 ## 14.1.0 (2023-11-23)
 
@@ -92,7 +92,6 @@
 - Upgraded dependencies, including Electron to v24.8.6. ([#1570](https://github.com/realm/realm-studio/pull/1570) & [#1598](https://github.com/realm/realm-studio/pull/1598))
 - Upgraded Realm JS to v11.10.2. ([#1600](https://github.com/realm/realm-studio/pull/1600))
 
-
 ## 14.0.4 (2023-09-11)
 
 [Changes since v14.0.3](https://github.com/realm/realm-studio/compare/v14.0.3...v14.0.4)
@@ -110,7 +109,6 @@
 
 - None
 
-
 ## 14.0.3 (2023-05-10)
 
 [Changes since v14.0.2](https://github.com/realm/realm-studio/compare/v14.0.2...v14.0.3)
@@ -126,7 +124,6 @@
 ### Internals
 
 - None
-
 
 ## 14.0.2 (2023-04-26)
 
@@ -144,8 +141,8 @@
 
 - None
 
-
 ## Release
+
 ### Enhancements
 
 - None
@@ -174,14 +171,13 @@
 
 - None
 
-
 ## 14.0.0 (2023-04-13)
 
 [Changes since v13.0.2](https://github.com/realm/realm-studio/compare/v13.0.2...v14.0.0)
 
 ### Breaking Changes
 
-* The layout of the lock-file has changed, the lock file format version is bumped and all participants in a multiprocess scenario needs to be up to date so they expect the same format. ([realm/realm-core#1845](https://github.com/realm/realm-core/issues/1845))
+- The layout of the lock-file has changed, the lock file format version is bumped and all participants in a multiprocess scenario needs to be up to date so they expect the same format. ([realm/realm-core#1845](https://github.com/realm/realm-core/issues/1845))
 
 ### Enhancements
 
@@ -197,7 +193,6 @@
 - Upgraded a lot of dependencies. ([#1568](https://github.com/realm/realm-studio/pull/1568))
 - Upgraded Electron to v24.
 - Upgraded Realm JS to v11.8.0.
-
 
 ## 13.0.2 (2022-12-08)
 
@@ -215,15 +210,15 @@
 
 - None
 
-
 ## 13.0.0 (2022-11-24)
 
 [Changes since v12.0.0](https://github.com/realm/realm-studio/compare/v12.0.0...v13.0.0)
 
 ### Breaking Changes
-* File format version bumped. If Realm file contains any objects with set of `mixed` or dictionary properties, the file will go through an upgrade process.
-* The layout of the lock-file has changed, the lock file format version is bumped and all participants in a multiprocess scenario needs to be up to date so they expect the same format. ([realm/realm-core#5440](https://github.com/realm/realm-core/pull/5440))
-* Export data to JSON is using [`flatted`](https://www.npmjs.com/package/flatted), and if you are importing data in another application, you have to use `Flatted#parse`.
+
+- File format version bumped. If Realm file contains any objects with set of `mixed` or dictionary properties, the file will go through an upgrade process.
+- The layout of the lock-file has changed, the lock file format version is bumped and all participants in a multiprocess scenario needs to be up to date so they expect the same format. ([realm/realm-core#5440](https://github.com/realm/realm-core/pull/5440))
+- Export data to JSON is using [`flatted`](https://www.npmjs.com/package/flatted), and if you are importing data in another application, you have to use `Flatted#parse`.
 
 ### Enhancements
 
@@ -241,15 +236,14 @@
 
 Use this version of Realm Studio to read and write Realm database files, using the same lock file format as:
 
-| SDK              | Version          |
-| ---------------- | ---------------- |
-| Realm JavaScript | v11.3.0 - ? |
-| Realm Swift      |  |
-| Realm Kotlin     | v1.6.0- ? |
-| Realm DotNet     | v10.19.0 - ? |
+| SDK              | Version       |
+| ---------------- | ------------- |
+| Realm JavaScript | v11.3.0 - ?   |
+| Realm Swift      |               |
+| Realm Kotlin     | v1.6.0- ?     |
+| Realm DotNet     | v10.19.0 - ?  |
 | Realm Dart       | v0.9.0+rc - ? |
-| Realm Java       |  |
-
+| Realm Java       |               |
 
 ## 12.0.0 (2022-06-07)
 
@@ -281,7 +275,6 @@ Use this version of Realm Studio to read and write Realm database files, using t
 | Realm JavaScript | v10.18.0 - ? |
 | Realm Swift      | v10.27.0 - ? |
 
-
 ## 11.2.1 (2022-06-03)
 
 [Changes since v11.2.0](https://github.com/realm/realm-studio/compare/v11.2.0...v11.2.1)
@@ -298,7 +291,6 @@ Use this version of Realm Studio to read and write Realm database files, using t
 
 - None
 
-
 ## 11.2.0 (2022-06-02)
 
 [Changes since v11.1.2](https://github.com/realm/realm-studio/compare/v11.1.2...v11.2.0)
@@ -314,7 +306,6 @@ Use this version of Realm Studio to read and write Realm database files, using t
 ### Internals
 
 - Upgraded a lot of dependencies, including Electron to v19 ([#1507](https://github.com/realm/realm-studio/pull/1507), [#1506](https://github.com/realm/realm-studio/pull/1506), [#1505](https://github.com/realm/realm-studio/pull/1505))
-
 
 ## 11.1.2 (2022-04-12)
 
@@ -348,7 +339,6 @@ Use this version of Realm Studio to read and write Realm database files, using t
 
 - Upgrading all dependencies, including Electron to v16 and Bootstrap to v5 ([#1449](https://github.com/realm/realm-studio/pull/1449))
 
-
 ## 11.1.0 (2021-07-08)
 
 [Changes since v11.0.1](https://github.com/realm/realm-studio/compare/v11.0.1...v11.1.0)
@@ -365,7 +355,6 @@ Use this version of Realm Studio to read and write Realm database files, using t
 
 - Upgraded Realm JS to v10.6.0. ([#1443](https://github.com/realm/realm-studio/pull/1443))
 
-
 ## 11.0.1 (2021-06-29)
 
 [Changes since v11.0.0](https://github.com/realm/realm-studio/compare/v11.0.0...v11.0.1)
@@ -381,7 +370,6 @@ Use this version of Realm Studio to read and write Realm database files, using t
 ### Internals
 
 - None
-
 
 ## 11.0.0 (2021-06-24)
 
@@ -406,7 +394,6 @@ Use this version of Realm Studio to read and write Realm database files, using t
 
 - None
 
-
 ## 11.0.0-beta.1 (2021-05-21)
 
 [Changes since v11.0.0-beta.0](https://github.com/realm/realm-studio/compare/v11.0.0-beta.0...v11.0.0-beta.1)
@@ -422,7 +409,6 @@ Use this version of Realm Studio to read and write Realm database files, using t
 ### Internals
 
 - None
-
 
 ## 11.0.0-beta.0 (2021-05-18)
 
@@ -443,7 +429,6 @@ Use this version of Realm Studio to read and write Realm database files, using t
 ### Internals
 
 - None
-
 
 ## 11.0.0-alpha.0 (2021-05-03)
 
@@ -470,7 +455,6 @@ Use this version of Realm Studio to read and write Realm database files, using t
 
 - File format: Generates Realms with file format v21. Earlier file formats can be read and automatically upgraded to v21. But you will not be able to edit older file formats.
 
-
 ## 10.1.2 (2021-02-17)
 
 [Changes since v10.1.1](https://github.com/realm/realm-studio/compare/v10.1.1...v10.1.2)
@@ -487,7 +471,6 @@ Use this version of Realm Studio to read and write Realm database files, using t
 ### Internals
 
 - Migrated from tslint to eslint. ([#1388](https://github.com/realm/realm-studio/pull/1388))
-
 
 ## 10.1.1 (2021-01-28)
 
@@ -506,7 +489,6 @@ Use this version of Realm Studio to read and write Realm database files, using t
 
 - Upgraded Electron to v11. ([#1386](https://github.com/realm/realm-studio/pull/1386))
 
-
 ## 10.1.0 (2021-01-13)
 
 [Changes since v10.0.1](https://github.com/realm/realm-studio/compare/v10.0.1...v10.1.0)
@@ -522,7 +504,6 @@ Use this version of Realm Studio to read and write Realm database files, using t
 ### Internals
 
 - None
-
 
 ## 10.0.1 (2020-11-12)
 
@@ -540,17 +521,16 @@ Use this version of Realm Studio to read and write Realm database files, using t
 
 - None
 
-
 ## 10.0.0 (2020-10-16)
 
 [Changes since v5.0.0](https://github.com/realm/realm-studio/compare/v5.0.0...v10.0.0)
 
 This is the first release for MongoDB Realm to be used with the v10.0.0 versions of the Realm SDKs.
 
-NOTE: This version do not support Realm Cloud and Realm Object Server. Realm Studio 5.0.0 is the latest
-release that supports that.
+NOTE: This version do not support Realm Cloud and Realm Object Server. Realm Studio 5.0.0 is the latest release that supports that.
 
 ### Breaking Changes (compared to v5.0.0)
+
 - All functionality related to the Realm Object Server (ROS), such as connecting to a server, opening synchronized Realms from it and managing users and their permissions has been removed. ([#1282](https://github.com/realm/realm-studio/pull/1282))
 - All functionality related to the "legacy" Realm Cloud (available via https://cloud.realm.io/), such as authenticating and connecting to a server instance has been removed. ([#1282](https://github.com/realm/realm-studio/pull/1282))
 
@@ -585,7 +565,6 @@ release that supports that.
 - Electron v8.5.2
 - Realm v10.0.0
 
-
 ## 5.0.0 (2020-09-22)
 
 [Changes since v4.0.0](https://github.com/realm/realm-studio/compare/v4.0.0...v5.0.0)
@@ -617,7 +596,6 @@ Use this version of Realm Studio to read and write Realm database files, using t
 
 - Upgraded Realm to v6.1.2. ([#1331](https://github.com/realm/realm-studio/pull/1331))
 - Upgraded Electron to v9.3.1 and Spectron to v11.1.0 ([#1332](https://github.com/realm/realm-studio/pull/1332))
-
 
 ## 4.0.0 (2020-09-22)
 
@@ -652,7 +630,6 @@ Use this version of Realm Studio to read and write Realm database files, using t
 
 - Auto updating will now look for updates on the "major-4" channel.
 
-
 ## 3.10.1 (2020-09-18)
 
 [Changes since v3.10.0](https://github.com/realm/realm-studio/compare/v3.10.0...v3.10.1)
@@ -668,7 +645,6 @@ Use this version of Realm Studio to read and write Realm database files, using t
 ### Internals
 
 - Auto updating will now look for updates on the "major-3" channel.
-
 
 ## 3.11.0 (2020-05-06)
 
@@ -686,7 +662,6 @@ Use this version of Realm Studio to read and write Realm database files, using t
 
 - Upgraded dependencies, including Electron to v8 and Realm to v6.0.0. ([#1278](https://github.com/realm/realm-studio/pull/1278) & [#1284](https://github.com/realm/realm-studio/pull/1284))
 
-
 ## 3.10.0 (2020-03-06)
 
 [Changes since v3.9.0](https://github.com/realm/realm-studio/compare/v3.9.0...v3.10.0)
@@ -703,7 +678,6 @@ Use this version of Realm Studio to read and write Realm database files, using t
 
 - None
 
-
 ## 3.9.0 (2020-01-16)
 
 [Changes since v3.8.3](https://github.com/realm/realm-studio/compare/v3.8.3...v3.9.0)
@@ -719,7 +693,6 @@ Use this version of Realm Studio to read and write Realm database files, using t
 ### Internals
 
 - None
-
 
 ## 3.8.3 (2019-11-26)
 
@@ -738,7 +711,6 @@ Use this version of Realm Studio to read and write Realm database files, using t
 - Removed call-to-action and button to upgrade a full Realm to a query-based sync "reference" Realm. ([#1226](https://github.com/realm/realm-studio/pull/1226))
 - Upgraded dependencies, including Electron to v4. ([#1174](https://github.com/realm/realm-studio/pull/1174), [#1221](https://github.com/realm/realm-studio/pull/1221) & [#1228](https://github.com/realm/realm-studio/pull/1228))
 
-
 ## 3.8.2 (2019-11-12)
 
 [Changes since v3.8.1](https://github.com/realm/realm-studio/compare/v3.8.1...v3.8.2)
@@ -749,15 +721,13 @@ Use this version of Realm Studio to read and write Realm database files, using t
 
 ### Fixed
 
-- When saying no to upgrade Studio and restarting Studio, update to the newest version would happen at next start.
-This is fixed so you are always asked to confirm download when starting Studio ([#1209](https://github.com/realm/realm-studio/pull/1209), since v0.0.1-alpha.8)
+- When saying no to upgrade Studio and restarting Studio, update to the newest version would happen at next start. This is fixed so you are always asked to confirm download when starting Studio ([#1209](https://github.com/realm/realm-studio/pull/1209), since v0.0.1-alpha.8)
 - Now prompting users to download the 3.8.1-ros-3-19-0 compatibility version when connecting to ROS < 3.20.1. ([#1211](https://github.com/realm/realm-studio/pull/1211), since v3.8.0)
 - Fixed highlighting rows for editing in a `List`. ([#1216](https://github.com/realm/realm-studio/pull/1216), since v2.9.0)
 
 ### Internals
 
 - Switched to using "esModuleInterop", allowing `import Lib from 'lib'` instead of `import * as Lib from 'lib'`. ([#1210](https://github.com/realm/realm-studio/pull/1210))
-
 
 ## 3.8.1 (2019-10-18)
 
@@ -774,7 +744,6 @@ This is fixed so you are always asked to confirm download when starting Studio (
 ### Internals
 
 - Upgraded Realm JS to v3.3.0. ([#1196](https://github.com/realm/realm-studio/pull/1196), since v3.8.0)
-
 
 ## 3.8.0 (2019-10-17)
 
@@ -796,7 +765,6 @@ This is fixed so you are always asked to confirm download when starting Studio (
 
 - Upgraded Realm JS to v3.2.0. ([#1177](https://github.com/realm/realm-studio/pull/1177))
 
-
 ## 3.7.0 (2019-09-27)
 
 [Changes since v3.6.1](https://github.com/realm/realm-studio/compare/v3.6.1...v3.7.0)
@@ -813,7 +781,6 @@ This is fixed so you are always asked to confirm download when starting Studio (
 ### Internals
 
 - Upgraded a lot of dependencies to their latest versions. ([#1167](https://github.com/realm/realm-studio/pull/1167), [#1169](https://github.com/realm/realm-studio/pull/1169), [#1173](https://github.com/realm/realm-studio/pull/1173), [#1175](https://github.com/realm/realm-studio/pull/1175), [#1176](https://github.com/realm/realm-studio/pull/1176))
-
 
 ## 3.6.1 (2019-06-06)
 

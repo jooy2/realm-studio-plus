@@ -19,23 +19,21 @@
 import { IWindow } from './Window';
 import { app } from 'electron';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface IGreetingWindowProps {
-  // Tumbleweed
-}
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface IGreetingWindowProps {}
 
 export const GreetingWindow: IWindow = {
   getWindowOptions: () => ({
     title: app.name,
-    width: 700,
-    height: 400,
+    width: 750,
+    height: 500,
     resizable: false,
-    fullscreenable: false,
+    fullscreenable: false
   }),
   getComponent: () =>
     import(/* webpackChunkName: "greeting" */ '../ui/Greeting').then(
       // TODO: Fix the props for this to include a type
-      m => m.Greeting as any,
+      (m) => m.Greeting as any
     ),
-  getTrackedProperties: () => ({}),
+  getTrackedProperties: () => ({})
 };

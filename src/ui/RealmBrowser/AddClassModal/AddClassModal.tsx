@@ -33,7 +33,7 @@ import {
   Card,
   CardBody,
   CardText,
-  CardSubtitle,
+  CardSubtitle
 } from 'reactstrap';
 
 export const AddClassModal = ({
@@ -50,7 +50,7 @@ export const AddClassModal = ({
   embedded,
   primaryKey,
   primaryKeyName,
-  primaryKeyType,
+  primaryKeyType
 }: {
   isOpen: boolean;
   toggle: () => void;

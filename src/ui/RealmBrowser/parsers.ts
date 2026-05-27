@@ -23,7 +23,7 @@ const { ObjectId, UUID, Decimal128 } = BSON;
 
 export const parseObjectId = (
   value: string,
-  property: Realm.ObjectSchemaProperty,
+  property: Realm.ObjectSchemaProperty
 ) => {
   if (value === '' && property.optional) {
     return null;
@@ -32,7 +32,7 @@ export const parseObjectId = (
       return ObjectId.createFromHexString(value);
     } catch (_) {
       throw new Error(
-        `"${value}" is not a proper ${property.type}:\nUse a 24 character hexadecimal string`,
+        `"${value}" is not a proper ${property.type}:\nUse a 24 character hexadecimal string`
       );
     }
   }
@@ -40,7 +40,7 @@ export const parseObjectId = (
 
 export const parseUUID = (
   value: string,
-  property: Realm.ObjectSchemaProperty,
+  property: Realm.ObjectSchemaProperty
 ) => {
   if (value === '' && property.optional) {
     return null;
@@ -49,7 +49,7 @@ export const parseUUID = (
       return UUID.createFromHexString(value);
     } catch (_) {
       throw new Error(
-        `"${value}" is not a proper ${property.type}:\nUse a 32 or 36 character hexadecimal string (dashes excluded or included)`,
+        `"${value}" is not a proper ${property.type}:\nUse a 32 or 36 character hexadecimal string (dashes excluded or included)`
       );
     }
   }
@@ -57,7 +57,7 @@ export const parseUUID = (
 
 export const parseDecimal128 = (
   value: string,
-  property: Realm.ObjectSchemaProperty,
+  property: Realm.ObjectSchemaProperty
 ) => {
   if (value === '' && property.optional) {
     return null;
@@ -65,7 +65,7 @@ export const parseDecimal128 = (
     try {
       // Note: thousand separators are not supported by Decimal128, so we can help out the user by converting ',' to '.'.
       return Decimal128.fromString(value.replace(',', '.'));
-    } catch (err) {
+    } catch {
       throw new Error(`"${value}" is not a proper ${property.type}`);
     }
   }
@@ -73,7 +73,7 @@ export const parseDecimal128 = (
 
 export const parseNumber = (
   value: string,
-  property: Realm.ObjectSchemaProperty,
+  property: Realm.ObjectSchemaProperty
 ) => {
   if (value === '' && property.optional) {
     return null;
@@ -90,7 +90,7 @@ export const parseNumber = (
 
 export const parseBoolean = (
   value: string,
-  property: Realm.ObjectSchemaProperty,
+  property: Realm.ObjectSchemaProperty
 ) => {
   const normalizedValue = value.toString().trim().toLowerCase();
 
@@ -106,7 +106,7 @@ export const parseBoolean = (
         return false;
       default:
         throw new Error(
-          `"${value}" is not a boolean:\nUse "true", "false", "0" or "1"`,
+          `"${value}" is not a boolean:\nUse "true", "false", "0" or "1"`
         );
     }
   }
@@ -114,7 +114,7 @@ export const parseBoolean = (
 
 export const parseDate = (
   value: string,
-  property: Realm.ObjectSchemaProperty,
+  property: Realm.ObjectSchemaProperty
 ) => {
   if (value === '' && property.optional) {
     return null;

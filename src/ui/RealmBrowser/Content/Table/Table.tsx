@@ -16,12 +16,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-import React from 'react';
 import {
   Dimensions,
   Grid,
   GridCellProps,
-  ScrollSyncChildProps,
+  ScrollSyncChildProps
 } from 'react-virtualized';
 
 import { EditMode, ISorting } from '..';
@@ -38,7 +37,7 @@ import {
   ReorderingEndHandler,
   ReorderingStartHandler,
   rowHeights,
-  RowMouseDownHandler,
+  RowMouseDownHandler
 } from '.';
 import { AddColumnControl } from './AddColumnControl';
 import { ContentGrid } from './ContentGrid';
@@ -99,10 +98,10 @@ export const Table = ({
   onReorderingStart,
   onResetHighlight,
   onSortClick,
-  readOnly,
+  readOnly: _readOnly,
   scroll,
   sorting,
-  tableRef,
+  tableRef
 }: ITableProps) => {
   const { onScroll, scrollHeight, scrollLeft, scrollTop, scrollWidth } = scroll;
   const { height, width } = dimensions;
@@ -111,7 +110,7 @@ export const Table = ({
 
   return (
     <div
-      onContextMenu={e => {
+      onContextMenu={(e) => {
         if (onContextMenu) {
           onContextMenu(e);
         }

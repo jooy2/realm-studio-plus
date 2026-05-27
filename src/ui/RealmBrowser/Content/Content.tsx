@@ -26,20 +26,20 @@ import {
   EditMode,
   ISorting,
   QueryChangeHandler,
-  SortingChangeHandler,
+  SortingChangeHandler
 } from '.';
 import {
   CreateObjectDialog,
-  ICreateObjectDialogContainerProps,
+  ICreateObjectDialogContainerProps
 } from './CreateObjectDialog';
 import {
   DeleteObjectsDialog,
-  IDeleteObjectsDialogProps,
+  IDeleteObjectsDialogProps
 } from './DeleteObjectsDialog';
 import { ResponsiveTable } from './ResponsiveTable';
 import {
   ISelectObjectDialogContainerProps,
-  SelectObjectDialog,
+  SelectObjectDialog
 } from './SelectObjectDialog';
 import {
   CellChangeHandler,
@@ -50,7 +50,7 @@ import {
   IHighlight,
   ReorderingEndHandler,
   ReorderingStartHandler,
-  RowMouseDownHandler,
+  RowMouseDownHandler
 } from './Table';
 import { TopBar } from './TopBar';
 

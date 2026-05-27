@@ -52,19 +52,19 @@ export class SingleObjectCollection<T extends Realm.Object>
     return this.length === 0;
   }
 
-  public min(property: string): any {
+  public min(_property: string): any {
     throw new Error('Not implemented');
   }
 
-  public max(property: string): any {
+  public max(_property: string): any {
     throw new Error('Not implemented');
   }
 
-  public sum(property: string): any {
+  public sum(_property: string): any {
     throw new Error('Not implemented');
   }
 
-  public avg(property: string): any {
+  public avg(_property: string): any {
     throw new Error('Not implemented');
   }
 
@@ -80,14 +80,17 @@ export class SingleObjectCollection<T extends Realm.Object>
     return this;
   }
 
+  // @ts-expect-error ignore
   public *keys() {
     throw new Error('Not implemented');
   }
 
+  // @ts-expect-error ignore
   public *values() {
     throw new Error('Not implemented');
   }
 
+  // @ts-expect-error ignore
   public *entries() {
     throw new Error('Not implemented');
   }

@@ -26,17 +26,16 @@ import { isPrimitive } from '../../../primitives';
 import { ITypeControlProps, TypeControl } from './TypeControl';
 import { DefaultControl } from './DefaultControl';
 
-interface IItemProps
-  extends Pick<
-    ITypeControlProps,
-    | 'generateInitialValue'
-    | 'getClassFocus'
-    | 'onChange'
-    | 'value'
-    | 'property'
-    | 'isEmbeddedType'
-    | 'onShowJsonViewerDialog'
-  > {
+interface IItemProps extends Pick<
+  ITypeControlProps,
+  | 'generateInitialValue'
+  | 'getClassFocus'
+  | 'onChange'
+  | 'value'
+  | 'property'
+  | 'isEmbeddedType'
+  | 'onShowJsonViewerDialog'
+> {
   onDelete: () => void;
 }
 
@@ -48,7 +47,7 @@ const Item = ({
   onDelete,
   value,
   isEmbeddedType,
-  onShowJsonViewerDialog,
+  onShowJsonViewerDialog
 }: IItemProps) => (
   <section className="CreateObjectDialog__ListControl__Item">
     <TypeControl
@@ -69,16 +68,15 @@ const Item = ({
 
 // const SortableItem = SortableElement(Item);
 
-interface IListProps
-  extends Pick<
-    ITypeControlProps,
-    | 'generateInitialValue'
-    | 'getClassFocus'
-    | 'onChange'
-    | 'value'
-    | 'isEmbeddedType'
-    | 'onShowJsonViewerDialog'
-  > {
+interface IListProps extends Pick<
+  ITypeControlProps,
+  | 'generateInitialValue'
+  | 'getClassFocus'
+  | 'onChange'
+  | 'value'
+  | 'isEmbeddedType'
+  | 'onShowJsonViewerDialog'
+> {
   itemProperty: Realm.ObjectSchemaProperty;
 }
 
@@ -89,7 +87,7 @@ const List = ({
   onChange,
   value,
   isEmbeddedType,
-  onShowJsonViewerDialog,
+  onShowJsonViewerDialog
 }: IListProps) => (
   <section className="CreateObjectDialog__ListControl__Items">
     {Array.isArray(value) ? (
@@ -98,7 +96,7 @@ const List = ({
           generateInitialValue={generateInitialValue}
           getClassFocus={getClassFocus}
           key={index}
-          onChange={newItemValue => {
+          onChange={(newItemValue) => {
             const newList = value.slice();
             newList[index] = newItemValue;
             onChange(newList);
@@ -123,18 +121,18 @@ const List = ({
 // const SortableList = SortableContainer(List);
 
 const getItemProperty = (
-  property: Realm.ObjectSchemaProperty,
+  property: Realm.ObjectSchemaProperty
 ): Realm.PropertySchema => {
   if (property.objectType) {
     if (isPrimitive(property.objectType)) {
       return {
         ...property,
-        type: property.objectType,
+        type: property.objectType
       };
     } else {
       return {
         ...property,
-        type: 'object',
+        type: 'object'
       };
     }
   } else {
@@ -150,7 +148,7 @@ export const ListControl = ({
   property,
   value,
   isEmbeddedType,
-  onShowJsonViewerDialog,
+  onShowJsonViewerDialog
 }: ITypeControlProps): React.ReactElement<ITypeControlProps> => {
   if (!property.objectType) {
     return <Alert color="danger">Expected an objectType</Alert>;

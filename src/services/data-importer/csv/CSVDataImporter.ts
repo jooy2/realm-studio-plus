@@ -29,17 +29,17 @@ export class CSVDataImporter extends DataImporter {
   public import(realm: Realm, files: ImportableFile[]) {
     for (const file of files) {
       const className = file.className;
-      const schema = realm.schema.find(s => s.name === className);
+      const schema = realm.schema.find((s) => s.name === className);
       if (!schema) {
         throw new Error(
-          `Unable to import ${file.path}: Class name (${className}) missing from schema`,
+          `Unable to import ${file.path}: Class name (${className}) missing from schema`
         );
       }
 
       const rawCSV = fs.readFileSync(file.path, 'utf8');
       const data = papaparse.parse<any>(rawCSV, {
         header: true, // to avoid parsing first line as data
-        skipEmptyLines: true,
+        skipEmptyLines: true
       }).data;
 
       realm.beginTransaction();
@@ -59,14 +59,14 @@ export class CSVDataImporter extends DataImporter {
               } else {
                 object[propName] = this.convertToType(
                   dataValue,
-                  propertySchema.type,
+                  propertySchema.type
                 );
               }
             } catch (e) {
               // abort transaction and delete the Realm
               realm.cancelTransaction();
               throw new Error(
-                `Parsing error at line ${rowIndex}, expected type "${propertySchema.type}" but got "${dataValue}" for column "${propName}"\nError details: ${e}`,
+                `Parsing error at line ${rowIndex}, expected type "${propertySchema.type}" but got "${dataValue}" for column "${propName}"\nError details: ${e}`
               );
             }
           }

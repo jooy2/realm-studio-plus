@@ -52,43 +52,46 @@ export class MockedObjectCollection<T extends Realm.Object>
     return true;
   }
 
-  public min(property: string): any {
+  public min(_property: string): any {
     throw new Error('Not implemented');
   }
 
-  public max(property: string): any {
+  public max(_property: string): any {
     throw new Error('Not implemented');
   }
 
-  public sum(property: string): any {
+  public sum(_property: string): any {
     throw new Error('Not implemented');
   }
 
-  public avg(property: string): any {
+  public avg(_property: string): any {
     throw new Error('Not implemented');
   }
 
-  public filtered(): Realm.Results<T> {
+  public filtered(): Realm.Results<T> | any {
     return this;
   }
 
-  public sorted(): Realm.Results<T> {
+  public sorted(): Realm.Results<T> | any {
     return this;
   }
 
-  public snapshot(): Realm.Results<T> {
+  public snapshot(): Realm.Results<T> | any {
     return this;
   }
 
-  public *keys() {
+  // @ts-expect-error ignore
+  public *keys(): ArrayIterator<number> {
     throw new Error('Not implemented');
   }
 
-  public *values() {
+  // @ts-expect-error ignore
+  public *values(): ArrayIterator<T> {
     throw new Error('Not implemented');
   }
 
-  public *entries() {
+  // @ts-expect-error ignore
+  public *entries(): ArrayIterator<[number, T]> {
     throw new Error('Not implemented');
   }
 

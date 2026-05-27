@@ -24,7 +24,7 @@ import { IHighlight } from '../Table';
 
 import {
   ISelectObjectDialogProps,
-  SelectObjectDialog,
+  SelectObjectDialog
 } from './SelectObjectDialog';
 import { IsEmbeddedTypeChecker, JsonViewerDialogExecutor } from '../..';
 
@@ -42,14 +42,12 @@ export interface IOpenSelectObjectDialogContainerProps {
   onShowJsonViewerDialog: JsonViewerDialogExecutor;
 }
 
-export interface IOpenSelectSingleObjectDialogContainerProps
-  extends IOpenSelectObjectDialogContainerProps {
+export interface IOpenSelectSingleObjectDialogContainerProps extends IOpenSelectObjectDialogContainerProps {
   multiple: false;
   onSelect: (object: Realm.Object | null) => void;
 }
 
-export interface IOpenSelectMultipleObjectsDialogContainerProps
-  extends IOpenSelectObjectDialogContainerProps {
+export interface IOpenSelectMultipleObjectsDialogContainerProps extends IOpenSelectObjectDialogContainerProps {
   multiple: true;
   onSelect: (object: Realm.Object[]) => void;
 }
@@ -68,7 +66,7 @@ export class SelectObjectDialogContainer extends React.Component<
   ISelectObjectDialogContainerState
 > {
   public state: ISelectObjectDialogContainerState = {
-    selection: [],
+    selection: []
   };
 
   private contentInstance: Content | null = null;
@@ -81,7 +79,7 @@ export class SelectObjectDialogContainer extends React.Component<
   private getProps(): ISelectObjectDialogProps {
     const common = {
       onCancel: this.onCancel,
-      onSelect: this.onSelect,
+      onSelect: this.onSelect
     };
     if (this.props.isOpen) {
       return {
@@ -95,12 +93,12 @@ export class SelectObjectDialogContainer extends React.Component<
         selection: this.state.selection,
         multiple: this.props.multiple,
         isEmbeddedType: this.props.isEmbeddedType,
-        onShowJsonViewerDialog: this.props.onShowJsonViewerDialog,
+        onShowJsonViewerDialog: this.props.onShowJsonViewerDialog
       };
     } else {
       return {
         ...common,
-        isOpen: false,
+        isOpen: false
       };
     }
   }
@@ -111,11 +109,11 @@ export class SelectObjectDialogContainer extends React.Component<
 
   private onHighlightChange = (
     highlight: IHighlight | undefined,
-    collection: Realm.OrderedCollection<any>,
+    collection: Realm.OrderedCollection<any>
   ) => {
     // Gather the selected objects
     const selection = highlight
-      ? [...highlight.rows].map(index => collection[index])
+      ? [...highlight.rows].map((index) => collection[index])
       : [];
     this.setState({ selection });
   };

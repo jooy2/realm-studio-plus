@@ -17,7 +17,7 @@ on:
       dry_run:
         type: boolean
         default: false
-        description: "Skip creating and merging PRs, posting messages and uploading artifacts to a test bucket"
+        description: 'Skip creating and merging PRs, posting messages and uploading artifacts to a test bucket'
 
 env:
   GRS_CONFIG_USER1_USERNAME: ${{ secrets.grs_username }}
@@ -220,7 +220,7 @@ jobs:
             #dist/Realm Studio-${{ env.PACKAGE_VERSION }}-universal-mac.zip
   upload_release:
     name: Upload release artifacts to S3
-    needs: [ build_sign_m, build_sign_lw ]
+    needs: [build_sign_m, build_sign_lw]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -363,14 +363,14 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           number: ${{ steps.find-pull-request.outputs.number }}
           method: squash
-          
+
       - name: Publish Github Release
         uses: ncipollo/release-action@2c591bcc8ecdcd2db72b97d6147f871fcd833ba5
         if: ${{ inputs.dry_run == false }}
         with:
-          artifacts: "dist/*.exe,dist/*.dmg,dist/*.zip,dist/*.AppImage"
+          artifacts: 'dist/*.exe,dist/*.dmg,dist/*.zip,dist/*.AppImage'
           bodyFile: ./RELEASENOTES.md
-          commit:  ${{ steps.find-pull-request.outputs.base-ref }}
+          commit: ${{ steps.find-pull-request.outputs.base-ref }}
           tag: v${{ env.PACKAGE_VERSION }}
           token: ${{ secrets.GITHUB_TOKEN }}
           draft: false

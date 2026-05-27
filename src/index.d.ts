@@ -25,6 +25,9 @@ declare module '*.svg' {
   export default svg;
 }
 
+declare module '*.scss';
+declare module '*.css';
+
 // Adding module declarations for packages that has no types available
 
 declare module 'mixpanel-browser' {

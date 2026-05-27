@@ -16,7 +16,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-import React from 'react';
 import { Alert } from 'reactstrap';
 import Realm from 'realm';
 
@@ -31,7 +30,7 @@ export interface IDefaultControlProps {
 export const DefaultControl = ({
   property,
   message,
-  color = 'warning',
+  color = 'warning'
 }: IDefaultControlProps) => (
   <Alert color={color}>
     {message ?? `Creation of "${property.type}" is not yet implemented`}

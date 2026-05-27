@@ -5,8 +5,8 @@ export const IndexedTypes: Realm.ObjectSchema = {
     boolIndexed: { type: 'bool', indexed: true },
     intIndexed: { type: 'int', indexed: true },
     stringIndexed: { type: 'string', indexed: true },
-    dateIndexed: { type: 'date', indexed: true },
-  },
+    dateIndexed: { type: 'date', indexed: true }
+  }
 };
 
 export const OptionalTypes = {
@@ -30,8 +30,8 @@ export const OptionalTypes = {
     dateOptionalArray: 'date?[]',
     dataOptionalArray: 'data?[]',
     objectIdOptionalArray: 'objectId?[]',
-    decimal128OptionalArray: 'decimal128?[]',
-  },
+    decimal128OptionalArray: 'decimal128?[]'
+  }
 };
 
 export const RequiredTypes = {
@@ -55,8 +55,8 @@ export const RequiredTypes = {
     dataRequiredArray: 'data[]',
     objectIdRequiredArray: 'objectId[]',
     decimal128RequiredArray: 'decimal128[]',
-    objectRequiredArray: 'RequiredTypes[]',
-  },
+    objectRequiredArray: 'RequiredTypes[]'
+  }
 };
 
 export const LinkTypes: Realm.ObjectSchema = {
@@ -68,30 +68,30 @@ export const LinkTypes: Realm.ObjectSchema = {
     linkingObjects: {
       type: 'linkingObjects',
       objectType: 'ReverseType',
-      property: 'links',
-    },
-  },
+      property: 'links'
+    }
+  }
 };
 
 export const ReverseType = {
   name: 'ReverseType',
   properties: {
-    links: 'LinkTypes',
-  },
+    links: 'LinkTypes'
+  }
 };
 
 export const ChildEmbeddedType = {
   name: 'ChildEmbeddedType',
   embedded: true,
   properties: {
-    id: 'int',
-  },
+    id: 'int'
+  }
 };
 
 export const ParentEmbeddedType = {
   name: 'ParentEmbeddedType',
   properties: {
     embeddedObject: 'ChildEmbeddedType',
-    embeddedObjectList: 'ChildEmbeddedType[]',
-  },
+    embeddedObjectList: 'ChildEmbeddedType[]'
+  }
 };

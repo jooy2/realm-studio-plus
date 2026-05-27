@@ -5,7 +5,15 @@ const Realm = require('realm');
 const OBJECTS_PER_CLASS = 25;
 const MAX_LIST_LENGTH = 25;
 
-const PRIMITIVE_TYPES = ['bool', 'int', 'float', 'double', 'data', 'date', 'string'];
+const PRIMITIVE_TYPES = [
+  'bool',
+  'int',
+  'float',
+  'double',
+  'data',
+  'date',
+  'string'
+];
 
 const getOutputPath = () => {
   if (process.argv.length >= 3) {
@@ -15,16 +23,16 @@ const getOutputPath = () => {
   }
 };
 
-const isPrimitive = type => {
+const isPrimitive = (type) => {
   return PRIMITIVE_TYPES.indexOf(type) >= 0;
 };
 
 const generateValue = (realm, property, depth = 0) => {
-  if (typeof(property) === 'string' && isPrimitive(property)) {
+  if (typeof property === 'string' && isPrimitive(property)) {
     return generateValue(realm, {
-      type: property,
+      type: property
     });
-  } else if (typeof(property) === 'string') {
+  } else if (typeof property === 'string') {
     throw new Error(`Unsupported string property: ${property}`);
   }
   // This is strange - optional on lists refers to the elements
@@ -40,7 +48,7 @@ const generateValue = (realm, property, depth = 0) => {
     return faker.lorem.text();
   } else if (property.type === 'int') {
     return faker.random.number();
-  } else if (property.type === 'float' || property.type === 'double') {
+  } else if (property.type === 'float' || property.type === 'double') {
     return Math.sqrt(Number.MAX_SAFE_INTEGER) * Math.random();
   } else if (property.type === 'date') {
     return faker.date.past();
@@ -76,9 +84,11 @@ const generateValue = (realm, property, depth = 0) => {
 };
 
 const generateObject = (realm, schemaClass, depth = 0) => {
-  if (typeof(schemaClass) === 'string') {
+  if (typeof schemaClass === 'string') {
     // console.log(`Generating a ${schemaClass} (from string)`, depth);
-    const schemaClassObject = Object.values(realm.schema).find(s => s.name === schemaClass);
+    const schemaClassObject = Object.values(realm.schema).find(
+      (s) => s.name === schemaClass
+    );
     return generateObject(realm, schemaClassObject, depth + 1);
   } else {
     // console.log(`Generating a ${schemaClass.name}`, depth);
@@ -110,14 +120,18 @@ const outputPath = getOutputPath();
 const allTypesSchema = require('../src/services/schema-export/tests/models/all/AllTypes');
 const realm = new Realm({
   path: outputPath,
-  schema: Object.values(allTypesSchema),
+  schema: Object.values(allTypesSchema)
 });
 
 try {
   realm.write(() => {
     for (let schemaClass of realm.schema) {
       console.log(`Generating object for the '${schemaClass.name}' class`);
-      for (let objectIndex = 0; objectIndex < OBJECTS_PER_CLASS; objectIndex++) {
+      for (
+        let objectIndex = 0;
+        objectIndex < OBJECTS_PER_CLASS;
+        objectIndex++
+      ) {
         generateObject(realm, schemaClass);
       }
     }

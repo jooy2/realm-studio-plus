@@ -30,7 +30,7 @@ const enableTogglingInternalFeatures =
   process.env.REALM_STUDIO_INTERNAL_FEATURES === 'true'; // Show features only relevant for Realm employees
 
 export const getDefaultMenuTemplate = (
-  updateMenu: () => void,
+  updateMenu: () => void
 ): electron.MenuItemConstructorOptions[] => {
   const showInternalFeatures = store.shouldShowInternalFeatures();
   const template: electron.MenuItemConstructorOptions[] = [
@@ -43,7 +43,7 @@ export const getDefaultMenuTemplate = (
           accelerator: 'CmdOrCtrl+O',
           click: () => {
             main.showOpenLocalRealm();
-          },
+          }
         },
         { type: 'separator' },
         {
@@ -54,16 +54,16 @@ export const getDefaultMenuTemplate = (
               id: 'import-csv',
               label: 'CSV',
               click: () => {
-                main.showImportData(ImportFormat.CSV).catch(err => {
+                main.showImportData(ImportFormat.CSV).catch((err) => {
                   showError('Failed to import data', err);
                 });
-              },
-            },
-          ],
+              }
+            }
+          ]
         },
         { type: 'separator' },
-        { role: 'close', id: 'close' },
-      ],
+        { role: 'close', id: 'close' }
+      ]
     },
     {
       label: 'Edit',
@@ -76,8 +76,8 @@ export const getDefaultMenuTemplate = (
         { role: 'copy' },
         { role: 'paste' },
         { role: 'delete' },
-        { role: 'selectAll', id: 'select-all' },
-      ],
+        { role: 'selectAll', id: 'select-all' }
+      ]
     },
     {
       label: 'View',
@@ -90,7 +90,7 @@ export const getDefaultMenuTemplate = (
           click: () => {
             store.toggleShowInternalFeatures();
             updateMenu();
-          },
+          }
         },
         { role: 'reload', visible: showInternalFeatures },
         { role: 'toggleDevTools', visible: showInternalFeatures },
@@ -102,19 +102,19 @@ export const getDefaultMenuTemplate = (
           click: () => {
             store.toggleShowSystemClasses();
             updateMenu();
-          },
+          }
         },
         { type: 'separator' },
         { role: 'resetZoom' },
         { role: 'zoomIn' },
         { role: 'zoomOut' },
         { type: 'separator' },
-        { role: 'togglefullscreen' },
-      ],
+        { role: 'togglefullscreen' }
+      ]
     },
     {
       role: 'window',
-      submenu: [{ role: 'minimize' }, { role: 'zoom' }],
+      submenu: [{ role: 'minimize' }, { role: 'zoom' }]
     },
     {
       role: 'help',
@@ -123,13 +123,13 @@ export const getDefaultMenuTemplate = (
           label: 'Learn More...',
           click: () => {
             electronOrRemote.shell.openExternal('https://realm.io/docs');
-          },
+          }
         },
         {
           label: 'Clear Cache',
           click: () => {
             main.clearRendererCache();
-          },
+          }
         },
         {
           label: 'Open Cache folder',
@@ -140,10 +140,10 @@ export const getDefaultMenuTemplate = (
               .catch((err: unknown) => {
                 showError('Failed to open cache folder', err);
               });
-          },
-        },
-      ],
-    },
+          }
+        }
+      ]
+    }
   ];
 
   if (process.platform === 'darwin') {
@@ -156,7 +156,7 @@ export const getDefaultMenuTemplate = (
           label: 'Check for Updates...',
           click: () => {
             main.checkForUpdates();
-          },
+          }
         },
         { type: 'separator' },
         { role: 'services', submenu: [] },
@@ -165,8 +165,8 @@ export const getDefaultMenuTemplate = (
         { role: 'hideOthers' },
         { role: 'unhide' },
         { type: 'separator' },
-        { role: 'quit' },
-      ],
+        { role: 'quit' }
+      ]
     });
   }
 

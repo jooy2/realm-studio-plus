@@ -25,11 +25,11 @@ export const showOpenDialog = (format: ImportFormat = ImportFormat.CSV) => {
 
   if (format !== ImportFormat.CSV) {
     throw new Error(
-      `Currently, only CSV import is supported - format was ${format}`,
+      `Currently, only CSV import is supported - format was ${format}`
     );
   }
   return dialog.showOpenDialogSync({
     properties: ['openFile', 'multiSelections'],
-    filters: [{ name: 'CSV File(s)', extensions: ['csv', 'CSV'] }],
+    filters: [{ name: 'CSV File(s)', extensions: ['csv', 'CSV'] }]
   });
 };

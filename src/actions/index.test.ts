@@ -24,7 +24,7 @@ import { LoopbackTransport, Transport } from './transports';
 
 enum Actions {
   TestAction = 'test-action',
-  FailAction = 'fail-action',
+  FailAction = 'fail-action'
 }
 
 describe('Actions', () => {
@@ -49,7 +49,7 @@ describe('Actions', () => {
         super(
           {
             [Actions.TestAction]: (message: IEchoMessage) => {
-              return new Promise(resolve => {
+              return new Promise((resolve) => {
                 setTimeout(() => {
                   // Wait for it ...
                   resolve(`${message.echo} World!`);
@@ -63,9 +63,9 @@ describe('Actions', () => {
                   reject(err);
                 }, 10);
               });
-            },
+            }
           },
-          transport,
+          transport
         );
       }
     }

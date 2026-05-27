@@ -18,12 +18,12 @@
 
 import assert from 'assert';
 import { DOMWindow, JSDOM } from 'jsdom';
-import React from 'react';
-// @see https://reactjs.org/docs/test-utils.html
-import ReactTestUtils from 'react-dom/test-utils';
+import { createRoot } from 'react-dom/client';
+import { act } from 'react';
 // import { TestRealmObjectServer } from '../../../testing/TestRealmObjectServer';
 
 import { IRealmLoadingComponentState, RealmLoadingComponent } from './index';
+import { describe } from 'mocha';
 
 interface Global {
   document: Document;
@@ -64,10 +64,11 @@ describe('<RealmLoadingComponent />', () => {
     }
 
     it('renders, without loading or changing', () => {
-      const element = ReactTestUtils.renderIntoDocument(
-        <TestRealmLoadingComponent />,
-      );
-      assert(element);
+      const container = document.createElement('div');
+      const root = createRoot(container);
+      act(() => {
+        root.render(<TestRealmLoadingComponent />);
+      });
       assert.strictEqual(changes, 0, 'Expected no changes');
       assert.strictEqual(loads, 0, 'Expected no loads');
     });

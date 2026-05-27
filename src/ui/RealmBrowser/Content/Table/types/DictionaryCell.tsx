@@ -16,7 +16,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-import React from 'react';
 import { Badge } from 'reactstrap';
 import Realm from 'realm';
 import { prettifiedInspect } from '../../../../../utils/json';
@@ -28,24 +27,25 @@ const VALUE_STRING_LENGTH_LIMIT = 50;
 
 const displayValue = (
   property: Realm.ObjectSchemaProperty,
-  dictionary: Dictionary,
+  dictionary: Dictionary
 ) => {
   if (!dictionary) {
     return 'null';
   } else {
     return prettifiedInspect(dictionary, {
-      maxStringLength: VALUE_STRING_LENGTH_LIMIT,
+      maxStringLength: VALUE_STRING_LENGTH_LIMIT
     });
   }
 };
 
 export const DictionaryCell = ({
   property,
-  value,
+  value
 }: {
   property: Realm.ObjectSchemaProperty;
   value: any;
 }) => (
+  // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
   <div tabIndex={0} className="RealmBrowser__Table__DictionaryCell">
     <span className="RealmBrowser__Table__DictionaryCell__Value">
       {displayValue(property, value)}

@@ -1,4 +1,3 @@
-const path = require('path');
 const webpack = require('webpack');
 const { merge } = require('webpack-merge');
 
@@ -15,32 +14,32 @@ module.exports = (env, argv) => {
       rules: [
         {
           test: /\.tsx?$/,
-          use: 'ts-loader',
+          use: 'ts-loader'
         },
         {
           test: /\.html$/,
-          use: 'file-loader',
+          use: 'file-loader'
         },
         {
           test: /\.(scss|svg|png)$/,
-          use: 'null-loader',
-        },
-      ],
+          use: 'null-loader'
+        }
+      ]
     },
     output: {
       filename: 'main.bundle.js',
       // See https://github.com/webpack/hot-node-example#real-app
-      libraryTarget: 'commonjs2',
+      libraryTarget: 'commonjs2'
     },
     plugins: [
       // Prevent the windows from loading the UI components
       new webpack.IgnorePlugin({
         resourceRegExp: /\/ui/,
-        contextRegExp: /\/src\/windows$/,
+        contextRegExp: /\/src\/windows$/
       }),
-      ...(isDevelopment ? [new webpack.HotModuleReplacementPlugin()] : []),
+      ...(isDevelopment ? [new webpack.HotModuleReplacementPlugin()] : [])
     ],
     target: 'electron-main',
-    watch: isDevelopment,
+    watch: isDevelopment
   });
 };

@@ -43,5 +43,5 @@ export interface INamedObjectSchemaProperty extends Realm.ObjectSchemaProperty {
 export const filteredProperties = (propsMap: Realm.PropertiesTypes) => {
   const props = Object.values(propsMap) as INamedObjectSchemaProperty[];
 
-  return props.filter(prop => prop.type !== 'linkingObjects');
+  return props.filter((prop) => prop.type !== 'linkingObjects');
 };

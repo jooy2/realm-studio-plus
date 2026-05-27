@@ -16,7 +16,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-import React from 'react';
 import {
   Button,
   CardBody,
@@ -25,7 +24,7 @@ import {
   Modal,
   ModalBody,
   ModalFooter,
-  ModalHeader,
+  ModalHeader
 } from 'reactstrap';
 
 export interface IJSonViewerDialogProps {
@@ -37,7 +36,7 @@ export interface IJSonViewerDialogProps {
 export const JsonViewerDialog = ({
   onCancel,
   visible,
-  json,
+  json
 }: IJSonViewerDialogProps) => (
   <Modal isOpen={visible} toggle={onCancel}>
     <Form>

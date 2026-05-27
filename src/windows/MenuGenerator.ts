@@ -26,7 +26,7 @@ import { getDefaultMenuTemplate } from '../main/MainMenu';
 export interface IMenuGenerator {
   generateMenu(
     template: MenuItemConstructorOptions[],
-    updateMenu: () => void,
+    updateMenu: () => void
   ): MenuItemConstructorOptions[];
 }
 
@@ -36,7 +36,7 @@ export interface IMenuGeneratorProps {
 
 export const generateMenu = (
   generator: IMenuGenerator | undefined,
-  updateMenu: () => void,
+  updateMenu: () => void
 ) => {
   const defaultTemplate = getDefaultMenuTemplate(updateMenu);
   const template = generator

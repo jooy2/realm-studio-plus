@@ -23,7 +23,7 @@ import { QuerySearch } from './QuerySearch';
 export interface IQuerySearchContainerProps {
   onQueryChange: (query: string) => void;
   onQueryHelp?: () => void;
-  queryHelpTooltip?: JSX.Element;
+  queryHelpTooltip?: React.JSX.Element;
   query: string;
   queryError?: Error;
   placeholder: string;
@@ -40,7 +40,7 @@ class QuerySearchContainer extends React.Component<
   IQuerySearchContainerState
 > {
   public state: IQuerySearchContainerState = {
-    isPopoverOpen: false,
+    isPopoverOpen: false
   };
 
   public render() {

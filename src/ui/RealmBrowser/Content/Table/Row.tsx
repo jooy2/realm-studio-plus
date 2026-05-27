@@ -16,6 +16,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
+import { useSortable } from '@dnd-kit/sortable';
 import classNames from 'classnames';
 import React from 'react';
 
@@ -24,6 +25,7 @@ import { IGridRowProps } from './rowCellRangeRenderer';
 
 export interface IRowProps extends IGridRowProps {
   isHighlighted?: boolean;
+  isSortable?: boolean;
   isSorting?: boolean;
   onRowMouseDown?: RowMouseDownHandler;
 }
@@ -31,22 +33,43 @@ export interface IRowProps extends IGridRowProps {
 export const Row = ({
   children,
   isHighlighted,
+  isSortable,
   isSorting,
   rowIndex,
   style,
-  onRowMouseDown,
+  onRowMouseDown
 }: IRowProps) => {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging
+  } = useSortable({ id: rowIndex, disabled: !isSortable });
+
+  const sortableStyle: React.CSSProperties = {
+    ...style,
+    transform: transform ? `translate3d(0px, ${transform.y}px, 0)` : undefined,
+    transition,
+    zIndex: isDragging ? 1 : undefined
+  };
+
   return (
     <div
+      ref={setNodeRef}
       className={classNames('RealmBrowser__Table__Row', {
         'RealmBrowser__Table__Row--highlighted': isHighlighted,
         'RealmBrowser__Table__Row--striped': rowIndex % 2 === 1 && !isSorting,
         'RealmBrowser__Table__Row--sorting': isSorting,
+        'RealmBrowser__Table__Row--sorting-selected': isDragging
       })}
-      style={style}
+      style={sortableStyle}
       onMouseDown={
-        onRowMouseDown ? e => onRowMouseDown(e, rowIndex) : undefined
+        onRowMouseDown ? (e) => onRowMouseDown(e, rowIndex) : undefined
       }
+      {...attributes}
+      {...listeners}
     >
       {children}
     </div>

@@ -23,7 +23,7 @@ import './ErrorOverlay.scss';
 
 interface IErrorOverlayProps {
   error: Error;
-  info: React.ErrorInfo;
+  info: React.ErrorInfo | any;
   eventId?: string;
 }
 
@@ -39,7 +39,7 @@ export const ErrorOverlay = ({ error, info, eventId }: IErrorOverlayProps) => {
       {eventId ? (
         <p className="ErrorOverlay__IdExplanation">
           Send this id our way to help us fix the issue - or{' '}
-          <a href={gitHubUrl} target="_blank">
+          <a href={gitHubUrl} target="_blank" rel="noreferrer">
             click here to create an issue on GitHub
           </a>
         </p>

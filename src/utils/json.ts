@@ -2,7 +2,7 @@ import { display as displayDataCell } from '../ui/RealmBrowser/Content/Table/typ
 import { InspectOptions, inspect } from 'util';
 // TODO: Investigate better solution.
 const $REF_MATCHER =
-  /\s*\"\$ref[Id]*\" *: *(\"(.*?)\"(,|\s|)|\s*\{(.*?)\}(,|\s|))/g;
+  /\s*"\$ref[Id]*" *: *("(.*?)"(,|\s|)|\s*\{(.*?)\}(,|\s|))/g;
 
 const DEFAULT_POSTFIX = ' (...)';
 const INDENTATION = 2;
@@ -17,7 +17,7 @@ type SafeJsonOptions = {
 
 export const prettifiedInspect = (
   object: unknown,
-  options?: InspectOptions,
+  options?: InspectOptions
 ) => {
   // If it is possible to serialize the object to a simpler structure with toJSON, do it.
   const simplifiedObject =
@@ -34,13 +34,13 @@ export const prettifiedInspect = (
     depth: 0,
     breakLength: 80,
     showHidden: false,
-    ...options,
+    ...options
   });
 };
 
 export const asSafeJsonString = (
   value: unknown,
-  options: SafeJsonOptions = {},
+  options: SafeJsonOptions = {}
 ): string => {
   let json: string;
   const indentation = options.pretty ? INDENTATION : undefined;
@@ -57,7 +57,7 @@ export const asSafeJsonString = (
     json = JSON.stringify(
       Object.fromEntries(shallowObjectEntries),
       null,
-      indentation,
+      indentation
     );
   } else {
     try {
@@ -90,7 +90,7 @@ export const asSafeJsonString = (
  */
 export const canUseJsonViewer = (
   property: Realm.ObjectSchemaProperty,
-  value: any,
+  value: any
 ): boolean => {
   if (property.type === 'dictionary' || property.type === 'set') {
     return true;
@@ -118,7 +118,7 @@ const VALUE_STRING_LENGTH_LIMIT = 50;
 
 export const getCellStringRepresentation = (
   property: Realm.ObjectSchemaProperty,
-  value: any,
+  value: any
 ): string => {
   if (value === null || typeof value === 'undefined') {
     return 'null';
@@ -144,13 +144,13 @@ export const getCellStringRepresentation = (
       : asSafeJsonString(value, {
           cleanupRefs: true,
           maxLength: VALUE_STRING_LENGTH_LIMIT,
-          shallow: true,
+          shallow: true
         });
   }
 
   if (canUseJsonViewer(property, value)) {
     return prettifiedInspect(value, {
-      maxStringLength: VALUE_STRING_LENGTH_LIMIT,
+      maxStringLength: VALUE_STRING_LENGTH_LIMIT
     });
   }
 

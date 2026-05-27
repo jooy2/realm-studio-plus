@@ -22,7 +22,7 @@ import {
   GridCellProps,
   GridCellRenderer,
   GridProps,
-  Index,
+  Index
 } from 'react-virtualized';
 
 import { ISorting } from '..';
@@ -44,11 +44,11 @@ export interface IHeaderGridProps extends Partial<GridProps> {
 export class HeaderGrid extends React.PureComponent<IHeaderGridProps> {
   private cellRenderers: GridCellRenderer[] = [];
 
-  public componentWillMount() {
+  public UNSAFE_componentWillMount() {
     this.generateRenderers(this.props);
   }
 
-  public componentWillUpdate(nextProps: IHeaderGridProps) {
+  public UNSAFE_componentWillUpdate(nextProps: IHeaderGridProps) {
     if (this.props.properties !== nextProps.properties) {
       this.generateRenderers(nextProps);
     }
@@ -70,7 +70,7 @@ export class HeaderGrid extends React.PureComponent<IHeaderGridProps> {
         style={{
           // This could be moved to the CSS,
           // but it would require the use of the !important keyword
-          overflowX: 'hidden',
+          overflowX: 'hidden'
         }}
       />
     );
@@ -91,6 +91,7 @@ export class HeaderGrid extends React.PureComponent<IHeaderGridProps> {
       const onWidthChanged = (newWidth: number) =>
         this.props.onColumnWidthChanged(index, newWidth);
       const onSortClick = () => this.props.onSortClick(property);
+      // eslint-disable-next-line react/display-name
       return (cellProps: GridCellProps) => {
         return (
           <HeaderCell

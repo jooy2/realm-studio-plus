@@ -34,7 +34,7 @@ export class CSVSchemaGenerator extends SchemaGenerator {
   public generate(): Realm.ObjectSchema[] {
     const schemas = Array<Realm.ObjectSchema>();
 
-    this.paths.map(path => {
+    this.paths.map((path) => {
       const name = basename(path, extname(path));
       const schema = new ImportObjectSchema(name);
       let rawCSV = fs.readFileSync(path, 'utf8');
@@ -42,12 +42,12 @@ export class CSVSchemaGenerator extends SchemaGenerator {
       // Read header only
       const content = papaparse.parse(rawCSV, {
         header: true,
-        preview: 1,
+        preview: 1
       });
       rawCSV = '';
       const headers: string[] = content.meta.fields || [];
       const data: any[] = content.data;
-      headers.forEach(header => {
+      headers.forEach((header) => {
         const value: string = data[0][header];
         schema.properties[header] = Util.isBoolean(value)
           ? 'bool?'

@@ -16,7 +16,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-import React from 'react';
 import { Badge } from 'reactstrap';
 
 import { ClassFocussedHandler } from '..';
@@ -30,7 +29,7 @@ interface IParentObjectFocusProps {
 
 export const ParentObjectFocus = ({
   focus,
-  onClassFocussed,
+  onClassFocussed
 }: IParentObjectFocusProps) => (
   <div className="LeftSidebar__List">
     <div className="LeftSidebar__List__Name">

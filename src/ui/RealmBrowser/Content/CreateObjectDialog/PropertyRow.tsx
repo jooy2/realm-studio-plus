@@ -16,7 +16,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-import React from 'react';
 import { Badge, FormGroup, Label } from 'reactstrap';
 import Realm from 'realm';
 
@@ -46,7 +45,7 @@ export const PropertyRow = ({
   propertyName,
   value,
   isEmbeddedType,
-  onShowJsonViewerDialog,
+  onShowJsonViewerDialog
 }: IPropertyRowProps) => (
   <FormGroup className="CreateObjectDialog__PropertyRow">
     <Label

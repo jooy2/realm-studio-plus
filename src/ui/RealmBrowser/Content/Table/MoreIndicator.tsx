@@ -17,11 +17,10 @@
 ////////////////////////////////////////////////////////////////////////////
 
 import classNames from 'classnames';
-import React from 'react';
 
 export const MoreIndicator = ({
   position,
-  visible,
+  visible
 }: {
   position: 'top' | 'bottom' | 'left' | 'right';
   visible: boolean;
@@ -31,8 +30,8 @@ export const MoreIndicator = ({
       'RealmBrowser__Table__More',
       `RealmBrowser__Table__More--${position}`,
       {
-        'RealmBrowser__Table__More--visible': visible,
-      },
+        'RealmBrowser__Table__More--visible': visible
+      }
     )}
   />
 );

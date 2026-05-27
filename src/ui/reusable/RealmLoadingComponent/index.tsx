@@ -19,11 +19,7 @@
 import Realm from 'realm';
 import React from 'react';
 
-import {
-  RealmLoadingMode,
-  RealmToLoad,
-  hydrateCredentials,
-} from '../../../utils/realms';
+import { RealmLoadingMode, RealmToLoad } from '../../../utils/realms';
 import { ILoadingProgress } from '../LoadingOverlay';
 
 export interface IRealmLoadingComponentState {
@@ -32,7 +28,7 @@ export interface IRealmLoadingComponentState {
 
 export abstract class RealmLoadingComponent<
   P,
-  S extends IRealmLoadingComponentState,
+  S extends IRealmLoadingComponentState
 > extends React.Component<P, S> {
   protected abstract onRealmChanged: () => void;
   protected abstract onRealmSchemaChanged: () => void;
@@ -49,13 +45,13 @@ export abstract class RealmLoadingComponent<
 
   protected cancelLoadingRealms() {
     // Iterate over everything that can be cancelled
-    this.cancellations.forEach(cancel => cancel());
+    this.cancellations.forEach((cancel) => cancel());
   }
 
   protected async loadRealm(
     realm: RealmToLoad,
     schema?: Realm.ObjectSchema[],
-    schemaVersion?: number,
+    schemaVersion?: number
   ) {
     // Close the realm - if open
     this.closeRealm();
@@ -103,14 +99,14 @@ export abstract class RealmLoadingComponent<
     const trimmedSummary = summary.replace(/ Path:$/, '');
     const details = message.substring(backtraceStart);
     this.setState({
-      progress: { message: trimmedSummary, details, status: 'failed' },
+      progress: { message: trimmedSummary, details, status: 'failed' }
     });
   }
 
   private async openRealm(
     realm: RealmToLoad | undefined,
     schema?: Realm.ObjectSchema[],
-    schemaVersion?: number,
+    schemaVersion?: number
   ): Promise<Realm> {
     if (realm) {
       if (realm.mode === RealmLoadingMode.Local) {
@@ -121,7 +117,7 @@ export abstract class RealmLoadingComponent<
             disableFormatUpgrade: realm.enableFormatUpgrade ? false : true,
             openSyncedRealmLocally: realm.sync,
             schema,
-            schemaVersion,
+            schemaVersion
           } satisfies Realm.Configuration & {
             openSyncedRealmLocally?: boolean;
           } as any);
@@ -131,10 +127,10 @@ export abstract class RealmLoadingComponent<
             (error.message.includes('Incompatible histories.') ||
               error.message.includes('History type not consistent') ||
               error.message.startsWith(
-                'History type (as specified by the Replication implementation passed to the DB constructor) was not consistent across the session',
+                'History type (as specified by the Replication implementation passed to the DB constructor) was not consistent across the session'
               ) ||
               error.message.includes(
-                'Synchronized Realms cannot be opened in non-sync mode',
+                'Synchronized Realms cannot be opened in non-sync mode'
               )) &&
             realm.sync !== true
           ) {
@@ -143,38 +139,12 @@ export abstract class RealmLoadingComponent<
             return this.openRealm(
               { ...realm, sync: true },
               schema,
-              schemaVersion,
+              schemaVersion
             );
           }
           // Other errors, propagate it.
           throw error;
         }
-      } else if (realm.mode === RealmLoadingMode.Synced) {
-        const app = new Realm.App({
-          id: realm.appId,
-          baseUrl: realm.serverUrl,
-        });
-        const credentials = hydrateCredentials(realm.credentials);
-        const user = await app.logIn(credentials);
-        return Realm.open({
-          encryptionKey: realm.encryptionKey,
-          sync: {
-            user,
-            flexible: true,
-            /*
-            initialSubscriptions: {
-              update(subs, realm) {
-                for (const schema of realm.schema) {
-                  const query = realm.objects(schema.name);
-                  subs.add(query);
-                }
-              },
-            },
-            */
-          },
-          schema,
-          schemaVersion,
-        });
       } else {
         throw new Error('Unexpected mode');
       }

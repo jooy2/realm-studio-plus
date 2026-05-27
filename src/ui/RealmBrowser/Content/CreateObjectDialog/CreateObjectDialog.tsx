@@ -16,7 +16,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-import React from 'react';
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 import Realm from 'realm';
 
@@ -33,13 +32,11 @@ interface IBaseCreateObjectDialogProps {
   values: { [propertyName: string]: any };
 }
 
-export interface IClosedCreateObjectDialogProps
-  extends IBaseCreateObjectDialogProps {
+export interface IClosedCreateObjectDialogProps extends IBaseCreateObjectDialogProps {
   isOpen: false;
 }
 
-export interface IOpenCreateObjectDialogProps
-  extends IBaseCreateObjectDialogProps {
+export interface IOpenCreateObjectDialogProps extends IBaseCreateObjectDialogProps {
   getClassFocus: (className: string) => IClassFocus;
   isOpen: true;
   schema: Realm.ObjectSchema;
@@ -65,13 +62,13 @@ export const CreateObjectDialog = ({
     </ModalHeader>
     <ModalBody>
       {props.isOpen
-        ? Object.keys(props.schema.properties).map(propertyName => (
+        ? Object.keys(props.schema.properties).map((propertyName) => (
             <PropertyRow
               generateInitialValue={generateInitialValue}
               getClassFocus={props.getClassFocus}
               isPrimary={props.schema.primaryKey === propertyName}
               key={propertyName}
-              onValueChange={value => onValueChange(propertyName, value)}
+              onValueChange={(value) => onValueChange(propertyName, value)}
               property={
                 props.schema.properties[
                   propertyName

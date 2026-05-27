@@ -1,6 +1,8 @@
 const path = require('path');
-const webpack = require('webpack');
 const { merge } = require('webpack-merge');
+
+const projectRoot = path.resolve(__dirname, '..');
+const nodeModulesDir = path.resolve(__dirname, '../node_modules');
 
 module.exports = (env, argv) => {
   const isDevelopment = argv.mode === 'development';
@@ -9,20 +11,18 @@ module.exports = (env, argv) => {
 
   return merge(baseConfig, {
     entry: {
-      renderer: isDevelopment
-        ? ['react-hot-loader/patch', './src/renderer.tsx']
-        : './src/renderer.tsx',
-      sentry: './src/sentry.ts',
+      renderer: isDevelopment ? ['./src/renderer.tsx'] : './src/renderer.tsx',
+      sentry: './src/sentry.ts'
     },
     module: {
       rules: [
         {
           test: /\.tsx?$/,
-          use: 'ts-loader',
+          use: 'ts-loader'
         },
         {
           test: /\.html$/,
-          use: 'file-loader',
+          use: 'file-loader'
         },
         {
           test: /\.scss$/,
@@ -34,32 +34,35 @@ module.exports = (env, argv) => {
               loader: 'sass-loader',
               options: {
                 /** Hides the sass warnings for dependencies */
-                sassOptions: { quietDeps: true },
-              },
-            },
-          ],
+                sassOptions: {
+                  quietDeps: true,
+                  loadPaths: [projectRoot, nodeModulesDir]
+                }
+              }
+            }
+          ]
         },
         {
           test: /\.(jpe?g|png|gif)$/i,
-          type: 'asset/resource',
+          type: 'asset/resource'
         },
         {
           test: /\.svg$/,
           use: 'svg-sprite-loader',
-          include: path.resolve(__dirname, '../static/svgs'),
+          include: path.resolve(__dirname, '../static/svgs')
         },
         {
           test: /\.(eot|svg|ttf|woff|woff2)$/,
           type: 'asset/resource',
-          exclude: path.resolve(__dirname, '../static/svgs'),
-        },
-      ],
+          exclude: path.resolve(__dirname, '../static/svgs')
+        }
+      ]
     },
     output: {
       filename: '[name].bundle.js',
       chunkFilename: '[name].renderer.bundle.js',
-      publicPath: isDevelopment ? 'http://localhost:8080/' : '',
+      publicPath: isDevelopment ? 'http://localhost:8080/' : ''
     },
-    target: 'electron-renderer',
+    target: 'electron-renderer'
   });
 };

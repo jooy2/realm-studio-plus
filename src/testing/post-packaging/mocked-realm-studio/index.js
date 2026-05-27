@@ -13,7 +13,7 @@ electron.app.once('ready', () => {
   });
   */
   fs.writeFileSync(p, 'Hello from a future Realm Studio!', {
-    encoding: 'utf8',
+    encoding: 'utf8'
   });
   // Exit ...
   process.exit();

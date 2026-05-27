@@ -47,7 +47,7 @@ export function changeRendererProcessDirectory() {
   assert.strictEqual(
     process.type,
     'renderer',
-    'This should only be called from a renderer process',
+    'This should only be called from a renderer process'
   );
   // Determine the window type from the options passed in through the window.location
   const options = getWindowOptions();
@@ -59,7 +59,7 @@ export function changeMainProcessDirectory() {
   assert.strictEqual(
     process.type,
     'browser',
-    'This should only be called from a main process',
+    'This should only be called from a main process'
   );
   return changeProcessDirectory('main');
 }
@@ -67,9 +67,9 @@ export function changeMainProcessDirectory() {
 export function removeRendererDirectories() {
   const directories = fs
     .readdirSync(userDataPath)
-    .filter(name => rendererPattern.test(name))
-    .map(name => resolve(userDataPath, name))
-    .map(directory => fs.remove(directory));
+    .filter((name) => rendererPattern.test(name))
+    .map((name) => resolve(userDataPath, name))
+    .map((directory) => fs.remove(directory));
   return Promise.all(directories);
 }
 

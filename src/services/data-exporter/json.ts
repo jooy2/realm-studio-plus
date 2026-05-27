@@ -39,7 +39,7 @@ export class JSONExportEngine implements IExportEngine {
         }
         return map;
       },
-      {},
+      {}
     );
 
     // Write the stringified data to a file

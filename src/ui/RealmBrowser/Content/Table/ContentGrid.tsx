@@ -16,15 +16,26 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
+import {
+  DndContext,
+  DragEndEvent,
+  PointerSensor,
+  useSensor,
+  useSensors
+} from '@dnd-kit/core';
+import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
+import {
+  SortableContext,
+  verticalListSortingStrategy
+} from '@dnd-kit/sortable';
 import React from 'react';
-import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import {
   Grid,
   GridCellProps,
   GridCellRangeRenderer,
   GridCellRenderer,
   GridProps,
-  Index,
+  Index
 } from 'react-virtualized';
 
 import { EditMode } from '..';
@@ -39,20 +50,15 @@ import {
   IHighlight,
   ReorderingEndHandler,
   ReorderingStartHandler,
-  RowMouseDownHandler,
+  RowMouseDownHandler
 } from '.';
 import { Cell } from './Cell';
 import { Row } from './Row';
 import {
   GridRowRenderer,
   IGridRowProps,
-  rowCellRangeRenderer,
+  rowCellRangeRenderer
 } from './rowCellRangeRenderer';
-
-// Must pass Grid as any - due to a bug in the types
-const SortableGrid = SortableContainer<GridProps>(Grid as any, {
-  withRef: true,
-});
 
 export interface IContentGridProps extends Partial<GridProps> {
   columnWidths: number[];
@@ -81,7 +87,7 @@ export interface IContentGridProps extends Partial<GridProps> {
 
 const isRowHighlighted = (
   highlight: IHighlight | undefined,
-  rowIndex: number,
+  rowIndex: number
 ): boolean => {
   return highlight ? highlight.rows.has(rowIndex) : false;
 };
@@ -89,60 +95,55 @@ const isRowHighlighted = (
 export class ContentGrid extends React.PureComponent<IContentGridProps> {
   private cellRangeRenderer?: GridCellRangeRenderer;
   private cellRenderers: GridCellRenderer[] = [];
+  // Cached so SortableContext doesn't see a new items array on every render.
+  private getSortableItems = memoizeItems();
 
-  public componentWillMount() {
+  public UNSAFE_componentWillMount() {
     this.generateRenderers(this.props);
   }
 
-  public componentWillUpdate(nextProps: IContentGridProps) {
+  public UNSAFE_componentWillUpdate(nextProps: IContentGridProps) {
     if (this.props.properties !== nextProps.properties) {
       this.generateRenderers(nextProps);
     }
   }
 
   public render() {
-    const {
-      filteredSortedResults,
-      gridRef,
-      highlight,
-      onReorderingEnd,
-      onReorderingStart,
-      properties,
-    } = this.props;
+    const { filteredSortedResults, gridRef, highlight } = this.props;
 
     // Create an object of props that will be passed to the container wrapping the grid
     const containerProps = {
       // Using mouse down as the rows can prevent clicks on these
-      onMouseDown: this.onContainerMouseDown,
+      onMouseDown: this.onContainerMouseDown
     };
 
+    const rowCount = filteredSortedResults.length;
+    const items = this.getSortableItems(rowCount);
+
     return (
-      <SortableGrid
-        {...this.props}
-        lockAxis="y"
-        helperClass="RealmBrowser__Table__Row--sorting-selected"
-        cellRangeRenderer={this.cellRangeRenderer}
-        cellRenderer={this.getCellRenderer}
-        className="RealmBrowser__Table__ContentGrid"
-        columnWidth={this.getColumnWidth}
-        columnCount={properties.length}
-        containerProps={containerProps}
-        distance={5}
-        onSortEnd={onReorderingEnd}
-        onSortStart={onReorderingStart}
-        ref={(sortableContainer: any) => {
-          if (sortableContainer) {
-            gridRef(sortableContainer.getWrappedInstance());
+      <SortableGridDnd
+        items={items}
+        onReorderingStart={this.props.onReorderingStart}
+        onReorderingEnd={this.props.onReorderingEnd}
+      >
+        <Grid
+          {...this.props}
+          cellRangeRenderer={this.cellRangeRenderer}
+          cellRenderer={this.getCellRenderer}
+          className="RealmBrowser__Table__ContentGrid"
+          columnWidth={this.getColumnWidth}
+          columnCount={this.props.properties.length}
+          containerProps={containerProps}
+          ref={gridRef}
+          rowCount={rowCount}
+          scrollToAlignment={
+            highlight && highlight.scrollTo && highlight.scrollTo.center
+              ? 'center'
+              : 'auto'
           }
-        }}
-        rowCount={filteredSortedResults.length}
-        scrollToAlignment={
-          highlight && highlight.scrollTo && highlight.scrollTo.center
-            ? 'center'
-            : 'auto'
-        }
-        noContentRenderer={this.getNoContentDiv}
-      />
+          noContentRenderer={this.getNoContentDiv}
+        />
+      </SortableGridDnd>
     );
   }
 
@@ -150,11 +151,12 @@ export class ContentGrid extends React.PureComponent<IContentGridProps> {
     const { properties } = props;
 
     const rowRenderer: GridRowRenderer = (rowProps: IGridRowProps) => {
-      const { highlight, isSorting, onRowMouseDown } = this.props;
+      const { highlight, isSortable, isSorting, onRowMouseDown } = this.props;
 
       return (
         <Row
           isHighlighted={isRowHighlighted(highlight, rowProps.rowIndex)}
+          isSortable={isSortable}
           isSorting={isSorting}
           onRowMouseDown={onRowMouseDown}
           {...rowProps}
@@ -162,20 +164,9 @@ export class ContentGrid extends React.PureComponent<IContentGridProps> {
       );
     };
 
-    const SortableRow = SortableElement<IGridRowProps>(rowRenderer);
+    this.cellRangeRenderer = rowCellRangeRenderer(rowRenderer);
 
-    this.cellRangeRenderer = rowCellRangeRenderer(rowProps => {
-      const { isSortable } = this.props;
-      return (
-        <SortableRow
-          disabled={!isSortable}
-          index={rowProps.rowIndex}
-          {...rowProps}
-        />
-      );
-    });
-
-    this.cellRenderers = properties.map(property => {
+    this.cellRenderers = properties.map((property) => {
       return (cellProps: GridCellProps) => {
         try {
           const {
@@ -187,7 +178,7 @@ export class ContentGrid extends React.PureComponent<IContentGridProps> {
             onCellClick,
             onCellHighlighted,
             onCellValidated,
-            onContextMenu,
+            onContextMenu
           } = this.props;
           const { rowIndex, columnIndex } = cellProps;
           const rowObject = filteredSortedResults[cellProps.rowIndex];
@@ -202,7 +193,7 @@ export class ContentGrid extends React.PureComponent<IContentGridProps> {
               editMode={property.isPrimaryKey ? EditMode.Disabled : editMode}
               isHighlighted={isCellHighlighted}
               key={cellProps.key}
-              onCellClick={e => {
+              onCellClick={(e) => {
                 if (onCellClick) {
                   onCellClick(
                     {
@@ -210,18 +201,18 @@ export class ContentGrid extends React.PureComponent<IContentGridProps> {
                       columnIndex,
                       property,
                       rowIndex,
-                      rowObject,
+                      rowObject
                     },
-                    e,
+                    e
                   );
                 }
               }}
-              onValidated={valid => {
+              onValidated={(valid) => {
                 if (onCellValidated) {
                   onCellValidated(rowIndex, columnIndex, valid);
                 }
               }}
-              onContextMenu={e => {
+              onContextMenu={(e) => {
                 e.stopPropagation();
                 // Open the context menu
                 if (onContextMenu) {
@@ -230,7 +221,7 @@ export class ContentGrid extends React.PureComponent<IContentGridProps> {
                     columnIndex,
                     property,
                     rowIndex,
-                    rowObject,
+                    rowObject
                   });
                 }
               }}
@@ -238,17 +229,17 @@ export class ContentGrid extends React.PureComponent<IContentGridProps> {
                 if (onCellHighlighted) {
                   onCellHighlighted({
                     rowIndex,
-                    columnIndex,
+                    columnIndex
                   });
                 }
               }}
-              onUpdateValue={value => {
+              onUpdateValue={(value) => {
                 if (onCellChange) {
                   onCellChange({
                     cellValue: value,
                     parent: filteredSortedResults,
                     property,
-                    rowIndex,
+                    rowIndex
                   });
                 }
               }}
@@ -286,7 +277,7 @@ export class ContentGrid extends React.PureComponent<IContentGridProps> {
       <div
         style={{
           height: this.props.height,
-          width,
+          width
         }}
       />
     );
@@ -294,10 +285,79 @@ export class ContentGrid extends React.PureComponent<IContentGridProps> {
 
   private onContainerMouseDown: React.EventHandler<
     React.MouseEvent<HTMLElement>
-  > = e => {
+  > = () => {
     const { onResetHighlight } = this.props;
     if (onResetHighlight) {
       onResetHighlight();
     }
   };
 }
+
+// Cache the items array between renders to avoid invalidating SortableContext
+// when only unrelated props change.
+function memoizeItems() {
+  let cachedCount = -1;
+  let cachedItems: number[] = [];
+  return (count: number) => {
+    if (count !== cachedCount) {
+      cachedCount = count;
+      cachedItems = Array.from({ length: count }, (_, i) => i);
+    }
+    return cachedItems;
+  };
+}
+
+interface ISortableGridDndProps {
+  items: number[];
+  onReorderingStart?: ReorderingStartHandler;
+  onReorderingEnd?: ReorderingEndHandler;
+  children: React.ReactNode;
+}
+
+const SortableGridDnd: React.FC<ISortableGridDndProps> = ({
+  items,
+  onReorderingStart,
+  onReorderingEnd,
+  children
+}) => {
+  // Mirror react-sortable-hoc's `distance={5}` so clicks aren't mistaken for drags.
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } })
+  );
+
+  const handleDragStart = () => {
+    if (onReorderingStart) {
+      onReorderingStart();
+    }
+  };
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) {
+      if (onReorderingEnd) {
+        const index = Number(active.id);
+        onReorderingEnd({ oldIndex: index, newIndex: index });
+      }
+      return;
+    }
+    if (onReorderingEnd) {
+      onReorderingEnd({
+        oldIndex: Number(active.id),
+        newIndex: Number(over.id)
+      });
+    }
+  };
+
+  return (
+    <DndContext
+      sensors={sensors}
+      modifiers={[restrictToVerticalAxis]}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+    >
+      <SortableContext items={items} strategy={verticalListSortingStrategy}>
+        {children}
+      </SortableContext>
+    </DndContext>
+  );
+};

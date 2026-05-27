@@ -21,7 +21,7 @@ if (process.type === 'browser') {
   throw new Error('This module should not be imported from the main process');
 }
 
-import * as sentry from '@sentry/electron';
+import * as sentry from '@sentry/electron/renderer';
 import * as remote from '@electron/remote';
 import React from 'react';
 
@@ -30,7 +30,7 @@ import { mixpanel } from '../services/mixpanel';
 import {
   generateMenu,
   IMenuGenerator,
-  IMenuGeneratorProps,
+  IMenuGeneratorProps
 } from './MenuGenerator';
 import { SentryErrorBoundary } from './SentryErrorBoundary';
 import { getWindowClass, InnerWindowComponent } from './Window';
@@ -43,7 +43,7 @@ interface ITrackedProperties {
   [name: string]: string;
 }
 
-export abstract class WindowComponent
+export class WindowComponent
   extends React.Component
   implements IMenuGeneratorProps
 {
@@ -55,18 +55,18 @@ export abstract class WindowComponent
   public componentDidMount() {
     const trackedProperties: ITrackedProperties = {
       ...this.CurrentWindow.getTrackedProperties(this.options.props),
-      type: this.options.type,
+      type: this.options.type
     };
 
     mixpanel.track('Window opened', trackedProperties);
     sentry.addBreadcrumb({
       category: 'ui.window',
-      message: `Opened '${this.options.type}' window`,
+      message: `Opened '${this.options.type}' window`
     });
     // Generate the menu whenever the window gets focus
     window.addEventListener('focus', this.onFocussed);
 
-    this.CurrentWindow.getComponent().then(CurrentWindowComponent => {
+    this.CurrentWindow.getComponent().then((CurrentWindowComponent) => {
       this.CurrentWindowComponent = CurrentWindowComponent;
       this.forceUpdate();
     });
@@ -106,12 +106,10 @@ export abstract class WindowComponent
 
   private onFocussed = () => {
     this.updateMenu();
-    sentry.configureScope(scope => {
-      scope.setTag('window-type', this.options.type);
-    });
+    sentry.setTag('window-type', this.options.type);
     sentry.addBreadcrumb({
       category: 'ui.window',
-      message: `Focussed '${this.options.type}' window`,
+      message: `Focussed '${this.options.type}' window`
     });
   };
 }

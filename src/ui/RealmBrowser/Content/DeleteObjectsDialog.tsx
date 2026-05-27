@@ -15,8 +15,6 @@
 // limitations under the License.
 //
 ////////////////////////////////////////////////////////////////////////////
-
-import React from 'react';
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 
 interface IClosedDeleteObjectsDialogProps {

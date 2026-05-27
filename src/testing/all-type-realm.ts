@@ -29,8 +29,8 @@ const CustomClass: Realm.ObjectSchema = {
   primaryKey: 'id',
   properties: {
     id: 'string',
-    number: 'int',
-  },
+    number: 'int'
+  }
 };
 
 const optionalVariations = [{ optional: true }, { optional: false }];
@@ -62,13 +62,13 @@ function generateSchema() {
     // Elements or list of elements
     const typeVariations: Realm.PropertySchema[] = [
       { type, objectType: type === 'object' ? 'CustomClass' : undefined },
-      { type: 'list', objectType: type },
+      { type: 'list', objectType: type }
     ];
     for (const typeVariation of typeVariations) {
       for (const optionalVariation of optionalVariations) {
         const property: Realm.PropertySchema = {
           ...typeVariation,
-          ...optionalVariation,
+          ...optionalVariation
         };
         // Skip the optional list of CustomClass
         if (
@@ -101,7 +101,7 @@ export const create = () => {
     realm.close();
     // Delete the Realm file
     Realm.deleteFile({
-      path: realm.path,
+      path: realm.path
     });
     // Delete the temporary directory
     tempDirectory.removeCallback();

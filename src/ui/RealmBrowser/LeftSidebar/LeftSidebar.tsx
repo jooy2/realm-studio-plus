@@ -17,7 +17,6 @@
 ////////////////////////////////////////////////////////////////////////////
 
 import classNames from 'classnames';
-import React from 'react';
 import { Badge, Button } from 'reactstrap';
 
 import { ClassFocussedHandler } from '..';
@@ -25,7 +24,6 @@ import { ILoadingProgress, Sidebar } from '../../reusable';
 import { Focus, IListFocus } from '../focus';
 
 import { ParentObjectFocus } from './ParentObjectFocus';
-import { SubscriptionList } from './SubscriptionList';
 
 import './LeftSidebar.scss';
 
@@ -55,13 +53,10 @@ export interface ILeftSidebarProps {
   hiddenClassCount: number;
   isOpen: boolean;
   onClassFocussed: ClassFocussedHandler;
-  onSubscriptionRemoved: (subscription: Realm.App.Sync.Subscription) => void;
   onToggle: () => void;
   progress: ILoadingProgress;
   readOnly: boolean;
-  subscriptions: Realm.App.Sync.SubscriptionSet | undefined;
   toggleAddClass: () => void;
-  toggleAddSubscription: () => void;
 }
 
 export const LeftSidebar = ({
@@ -72,13 +67,10 @@ export const LeftSidebar = ({
   hiddenClassCount,
   isOpen,
   onClassFocussed,
-  onSubscriptionRemoved,
   onToggle,
   progress,
   readOnly,
-  subscriptions,
-  toggleAddClass,
-  toggleAddSubscription,
+  toggleAddClass
 }: ILeftSidebarProps) => (
   <Sidebar
     className={className}
@@ -99,12 +91,12 @@ export const LeftSidebar = ({
     <div className="LeftSidebar__Classes">
       {classes && classes.length > 0 ? (
         <ul className="LeftSidebar__ClassList">
-          {classes.map(schema => {
+          {classes.map((schema) => {
             const selected = isSelected(focus, schema.name);
             const highlighted = selected && focus && focus.kind === 'class';
             const schemaClass = classNames('LeftSidebar__Class__Info', {
               'LeftSidebar__Class__Info--selected': selected,
-              'LeftSidebar__Class__Info--highlighted': highlighted,
+              'LeftSidebar__Class__Info--highlighted': highlighted
             });
             return (
               <li
@@ -153,24 +145,10 @@ export const LeftSidebar = ({
         </p>
       ) : null}
       {readOnly ? (
-        <p className="LeftSidebar__ReadOnlyHint">Opened as "Read Only"</p>
+        <p className="LeftSidebar__ReadOnlyHint">
+          Opened as &#34;Read Only&#34;
+        </p>
       ) : null}
     </div>
-    {(focus?.kind === 'class' || focus?.kind === 'list') && subscriptions && (
-      <>
-        <div className="LeftSidebar__Header">
-          <span>subscriptions</span>
-          <Button size="sm" onClick={toggleAddSubscription}>
-            <i className="fa fa-plus" />
-          </Button>
-        </div>
-        <SubscriptionList
-          subscriptions={[...subscriptions].filter(
-            sub => sub.objectType === getFocusedSchemaName(focus),
-          )}
-          onSubscriptionRemoved={onSubscriptionRemoved}
-        />
-      </>
-    )}
   </Sidebar>
 );

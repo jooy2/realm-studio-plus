@@ -7,7 +7,6 @@
 # Currently it's not possible to use strings containing ,␣ in the dropdown menus in the issue forms.
 
 ---
-
 policy:
   - template: [bug.yml, feature.yml]
     section:

@@ -26,9 +26,9 @@ export class ResponsiveTable extends React.PureComponent<IBaseTableContainerProp
     return (
       <div className="RealmBrowser__Table">
         <AutoSizer>
-          {sizeProps => (
+          {(sizeProps) => (
             <ScrollSync>
-              {scrollProps => (
+              {(scrollProps) => (
                 <Table
                   {...this.props}
                   scroll={scrollProps}

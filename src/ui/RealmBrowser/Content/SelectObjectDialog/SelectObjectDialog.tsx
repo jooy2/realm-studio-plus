@@ -16,6 +16,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
+/* eslint-disable react-hooks/refs */
+
 import React from 'react';
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 
@@ -43,7 +45,7 @@ interface IOpenSelectObjectDialogProps extends IBaseSelectObjectDialogProps {
   onDeselect: () => void;
   onHighlightChange: (
     highlight: IHighlight | undefined,
-    collection: Realm.OrderedCollection<any>,
+    collection: Realm.OrderedCollection<any>
   ) => void;
   multiple: boolean;
   isEmbeddedType: IsEmbeddedTypeChecker;

@@ -38,7 +38,7 @@ export class MainTransport extends Transport {
       Transport.REQUEST_EVENT_NAME,
       requestId,
       action,
-      ...args,
+      ...args
     );
   }
 
@@ -50,7 +50,7 @@ export class MainTransport extends Transport {
         Transport.RESPONSE_EVENT_NAME,
         requestId,
         result,
-        success,
+        success
       );
     }
   }

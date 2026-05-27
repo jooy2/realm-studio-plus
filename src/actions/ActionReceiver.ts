@@ -53,7 +53,7 @@ export abstract class ActionReceiver {
     if (this.transport) {
       this.transport.removeListener(
         Transport.REQUEST_EVENT_NAME,
-        this.onRequest,
+        this.onRequest
       );
     }
   }

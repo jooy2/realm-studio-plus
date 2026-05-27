@@ -39,7 +39,7 @@ class ImportDialogContainer extends React.Component<
   IImportDialogContainerState
 > {
   public state: IImportDialogContainerState = {
-    pathClassMapping: {},
+    pathClassMapping: {}
   };
 
   public render() {
@@ -60,8 +60,8 @@ class ImportDialogContainer extends React.Component<
     this.setState({
       pathClassMapping: {
         ...this.state.pathClassMapping,
-        [filePath]: className,
-      },
+        [filePath]: className
+      }
     });
   };
 
@@ -69,7 +69,7 @@ class ImportDialogContainer extends React.Component<
     e.preventDefault();
     this.props.onHide();
     const importableFiles: ImportableFile[] = Object.entries(
-      this.state.pathClassMapping,
+      this.state.pathClassMapping
     ).map(([filePath, className]) => ({ path: filePath, className }));
     this.props.onImport(ImportFormat.CSV, importableFiles);
   };

@@ -27,7 +27,7 @@ import {
   Modal,
   ModalBody,
   ModalFooter,
-  ModalHeader,
+  ModalHeader
 } from 'reactstrap';
 
 import { IClassFocus } from '../focus';
@@ -48,7 +48,7 @@ export const View = ({
   optional,
   toggle,
   type,
-  typeOptions,
+  typeOptions
 }: {
   focus: IClassFocus;
   isList: boolean;
@@ -108,7 +108,7 @@ export const View = ({
                     >
                       {option.value}
                     </option>
-                  ),
+                  )
               )}
             </Input>
           </FormGroup>
@@ -127,7 +127,7 @@ export const View = ({
             check
             style={{
               visibility:
-                !primitiveTypeSelected && isList ? 'hidden' : 'visible',
+                !primitiveTypeSelected && isList ? 'hidden' : 'visible'
             }}
           >
             <Label check>

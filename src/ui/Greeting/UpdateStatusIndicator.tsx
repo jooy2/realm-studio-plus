@@ -17,7 +17,6 @@
 ////////////////////////////////////////////////////////////////////////////
 
 import classNames from 'classnames';
-import React from 'react';
 import { Progress } from 'reactstrap';
 
 import { IUpdateStatus } from '../../main/Updater';
@@ -83,7 +82,7 @@ const getIsBusy = (status: IUpdateStatus) => {
 
 export const UpdateStatusIndicator = ({
   onCheckForUpdates,
-  status,
+  status
 }: {
   onCheckForUpdates: () => void;
   status: IUpdateStatus;
@@ -94,7 +93,7 @@ export const UpdateStatusIndicator = ({
   return (
     <div
       className={classNames('Greeting__UpdateStatusIndicator', {
-        'Greeting__UpdateStatusIndicator--busy': isBusy,
+        'Greeting__UpdateStatusIndicator--busy': isBusy
       })}
       onClick={!isBusy ? onCheckForUpdates : undefined}
     >
@@ -103,7 +102,7 @@ export const UpdateStatusIndicator = ({
           className={classNames(
             'Greeting__UpdateStatusIndicator__Icon',
             'fa',
-            icon,
+            icon
           )}
           aria-hidden="true"
         />

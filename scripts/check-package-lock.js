@@ -1,13 +1,13 @@
-const assert = require("assert");
-const semver = require("semver");
+const assert = require('assert');
+const semver = require('semver');
 
-const package = require("../package.json");
-const packageLock = require("../package-lock.json");
+const package = require('../package.json');
+const packageLock = require('../package-lock.json');
 
 function checkVersion(name, version, lockVersion) {
   const bothGit =
-    lockVersion.startsWith("git+https://") &&
-    version.startsWith("git+https://");
+    lockVersion.startsWith('git+https://') &&
+    version.startsWith('git+https://');
   assert(
     bothGit ||
       lockVersion === version ||
@@ -17,10 +17,10 @@ function checkVersion(name, version, lockVersion) {
 }
 
 try {
-  assert.strictEqual(package.name, packageLock.name, "Name changed");
-  assert.strictEqual(package.version, packageLock.version, "Version changed");
+  assert.strictEqual(package.name, packageLock.name, 'Name changed');
+  assert.strictEqual(package.version, packageLock.version, 'Version changed');
   // Check that all package.json dependencies are semantically compatible with the lock
-  Object.keys(package.dependencies).forEach(name => {
+  Object.keys(package.dependencies).forEach((name) => {
     const version = package.dependencies[name];
     // Check if the package exists in the lock
     const lockPackage = packageLock.dependencies[name];
@@ -29,7 +29,7 @@ try {
     checkVersion(name, version, lockPackage.version);
   });
   // And the same for the devDependencies
-  Object.keys(package.devDependencies).forEach(name => {
+  Object.keys(package.devDependencies).forEach((name) => {
     const version = package.devDependencies[name];
     // Check if the package exists in the lock
     const lockPackage = packageLock.dependencies[name];
@@ -48,4 +48,4 @@ try {
   process.exit(-1);
 }
 
-console.log("Looking good!");
+console.log('Looking good!');

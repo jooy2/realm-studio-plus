@@ -26,7 +26,7 @@ export const TYPES: Realm.PropertyTypeName[] = [
   'decimal128',
   'string',
   'data',
-  'date',
+  'date'
 ];
 
 export function isPrimitive(type: string): type is Realm.PropertyTypeName {

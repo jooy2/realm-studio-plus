@@ -20,7 +20,7 @@ import React from 'react';
 import {
   GridCellProps,
   GridCellRangeProps,
-  SizeAndPositionData,
+  SizeAndPositionData
 } from 'react-virtualized';
 
 /**
@@ -38,7 +38,7 @@ export interface IGridRowProps {
   style: React.CSSProperties;
 }
 
-export type GridRowRenderer = (props: IGridRowProps) => JSX.Element;
+export type GridRowRenderer = (props: IGridRowProps) => React.JSX.Element;
 
 export const cellRangeRenderer = (
   rowIndex: number,
@@ -57,8 +57,8 @@ export const cellRangeRenderer = (
     styleCache,
     verticalOffsetAdjustment,
     visibleColumnIndices,
-    visibleRowIndices,
-  }: GridCellRangeProps,
+    visibleRowIndices
+  }: GridCellRangeProps
 ) => {
   const renderedCells: React.ReactNode[] = [];
 
@@ -96,7 +96,7 @@ export const cellRangeRenderer = (
           left: 0,
           position: 'absolute',
           top: 0,
-          width: 'auto',
+          width: 'auto'
         };
       } else {
         cellStyle = {
@@ -104,7 +104,7 @@ export const cellRangeRenderer = (
           left: columnDatum.offset + horizontalOffsetAdjustment,
           position: 'absolute',
           top: 0,
-          width: columnDatum.size,
+          width: columnDatum.size
         };
 
         styleCache[cellKey] = cellStyle;
@@ -118,7 +118,7 @@ export const cellRangeRenderer = (
       key: cellKey,
       parent,
       rowIndex,
-      style: cellStyle,
+      style: cellStyle
     };
 
     let renderedCell: React.ReactNode;
@@ -147,7 +147,7 @@ export const cellRangeRenderer = (
       renderedCell = cellRenderer(cellRendererParams);
     }
 
-    if (renderedCell == null || renderedCell === false) {
+    if (renderedCell === null || renderedCell === undefined || renderedCell === false) {
       continue;
     }
 
@@ -173,7 +173,7 @@ export const rowCellRangeRenderer =
       rowStopIndex,
       styleCache,
       verticalOffsetAdjustment,
-      visibleRowIndices,
+      visibleRowIndices
     } = props;
 
     const renderedRows: React.ReactNode[] = [];
@@ -209,7 +209,7 @@ export const rowCellRangeRenderer =
           left: 0,
           position: 'absolute',
           right: 0,
-          top: rowDatum.offset + verticalOffsetAdjustment,
+          top: rowDatum.offset + verticalOffsetAdjustment
         };
 
         styleCache[rowKey] = rowStyle;
@@ -220,14 +220,14 @@ export const rowCellRangeRenderer =
           children: cellRangeRenderer(rowIndex, rowDatum, canCacheStyle, {
             ...props,
             columnStartIndex: 0,
-            columnStopIndex: columnSizeAndPositionManager.getCellCount() - 1,
+            columnStopIndex: columnSizeAndPositionManager.getCellCount() - 1
           }),
           isScrolling,
           isVisible: isRowVisible,
           key: rowKey,
           parent,
           rowIndex,
-          style: rowStyle,
+          style: rowStyle
         };
         return rowRenderer(rowRendererParams);
       };
@@ -259,7 +259,7 @@ export const rowCellRangeRenderer =
         renderedRow = renderRow();
       }
 
-      if (renderedRow == null) {
+      if (renderedRow === null || renderedRow === undefined) {
         continue;
       }
 
@@ -290,7 +290,7 @@ function warnAboutMissingStyle(parent: any, renderedCell: any) {
   ) {
     parent.__warnedAboutMissingStyle = true;
     console.warn(
-      'Rendered cell should include style property for positioning.',
+      'Rendered cell should include style property for positioning.'
     );
   }
 }

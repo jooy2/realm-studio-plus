@@ -32,7 +32,7 @@ import {
   ObjectCell,
   SetCell,
   StringCell,
-  ErrorCell,
+  ErrorCell
 } from './types';
 
 const getCellContent = ({
@@ -42,7 +42,7 @@ const getCellContent = ({
   onUpdateValue,
   onValidated,
   property,
-  value,
+  value
 }: {
   editMode: EditMode;
   isHighlighted?: boolean;
@@ -80,7 +80,7 @@ const getCellContent = ({
           value={value}
           valueToString={
             property.type === 'date'
-              ? v => (v ? v.toISOString() : v)
+              ? (v) => (v ? v.toISOString() : v)
               : undefined
           }
         />
@@ -140,7 +140,7 @@ export const Cell = (props: PropertyCellProps | ErrorCellProps) => {
     return (
       <div
         className={classNames('RealmBrowser__Table__Cell', {
-          'RealmBrowser__Table__Cell--highlighted': isHighlighted,
+          'RealmBrowser__Table__Cell--highlighted': isHighlighted
         })}
         onClick={onCellClick}
         onContextMenu={onContextMenu}

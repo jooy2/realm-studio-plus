@@ -17,16 +17,15 @@
 ////////////////////////////////////////////////////////////////////////////
 
 import classNames from 'classnames';
-import React from 'react';
 import Realm from 'realm';
 import {
   canUseJsonViewer,
-  getCellStringRepresentation,
+  getCellStringRepresentation
 } from '../../../../../utils/json';
 
 export const MixedCell = ({
   property,
-  value,
+  value
 }: {
   property: Realm.ObjectSchemaProperty;
   value: any;
@@ -38,7 +37,7 @@ export const MixedCell = ({
     <div
       className={classNames('RealmBrowser__Table__MixedCell', {
         'RealmBrowser__Table__MixedCell--disabled': !willShowInJsonViewerDialog,
-        'RealmBrowser__Table__MixedCell--link': willShowInJsonViewerDialog,
+        'RealmBrowser__Table__MixedCell--link': willShowInJsonViewerDialog
       })}
     >
       <span className="RealmBrowser__Table__MixedCell__Value">

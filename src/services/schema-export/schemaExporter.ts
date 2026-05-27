@@ -48,7 +48,7 @@ export abstract class SchemaExporter implements ISchemaExporter {
   public addFile(filename: string, content: string) {
     this.files.push({
       filename,
-      content,
+      content
     });
   }
 
@@ -58,14 +58,14 @@ export abstract class SchemaExporter implements ISchemaExporter {
     this.realmName = fsPath.parse(realm.path).name;
     this.realm = realm;
 
-    realm.schema.forEach(schema => {
+    realm.schema.forEach((schema) => {
       this.makeSchema(schema);
     });
     return this.files;
   }
 
   public writeFilesToDisk(path: string) {
-    this.files.forEach(file => {
+    this.files.forEach((file) => {
       const fullpath = fsPath.resolve(path, file.filename);
       fs.outputFileSync(fullpath, file.content);
     });

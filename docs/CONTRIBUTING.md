@@ -86,8 +86,7 @@ The application has support for some parameters that can be supplied when starti
 
       DISPLAY=1 npm run dev
 
-- If the `REALM_STUDIO_DEV_TOOLS` environment variable is set every window being opened will have the developer
-  tools opened.
+- If the `REALM_STUDIO_DEV_TOOLS` environment variable is set every window being opened will have the developer tools opened.
 
         REALM_STUDIO_DEV_TOOLS=true npm run dev
 
@@ -113,8 +112,7 @@ When developing on a specific feature, you can run a specific test each time fil
 
     npm test -- -w src/ui/reusable/realm-loading-component/index.test.ts
 
-`-w` starts mocha-webpack in watch-mode and `src/ui/reusable/realm-loading-component/index.test.ts` is the relative path
-of a test that will run every time a file in the project gets saved.
+`-w` starts mocha-webpack in watch-mode and `src/ui/reusable/realm-loading-component/index.test.ts` is the relative path of a test that will run every time a file in the project gets saved.
 
 ## Building
 
@@ -126,8 +124,7 @@ To build releasable packages for the various installable formats, run the `packa
 
     npm run package
 
-This will clean the `./build` folder and run `build` internally, before using
-[electron-builder](https://www.npmjs.com/package/electron-builder) to produce an Electron app ready for distribution.
+This will clean the `./build` folder and run `build` internally, before using [electron-builder](https://www.npmjs.com/package/electron-builder) to produce an Electron app ready for distribution.
 
 ## Releasing
 

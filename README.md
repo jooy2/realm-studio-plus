@@ -1,13 +1,17 @@
-# Realm Studio
+# Realm Studio Plus
 
-Realm Studio is the tool, any developer or system administrator would use when building and maintaining their app built
-on the Realm Mobile Platform.
+> Forked from https://github.com/realm/realm-studio
+
+Realm Studio Plus ensures that existing Realm Studio installations remain operational in anticipation of the end of support for the original version, while also offering enhanced features.
+
+Realm Studio is the tool, any developer or system administrator would use when building and maintaining their app built on the Realm Mobile Platform.
 
 Visit https://docs.mongodb.com/realm/studio/ for more information on Realm Studio.
 
 ## Installing
 
 Click the links below to download the latest version of Realm Studio for
+
 - [MacOS](https://studio-releases.realm.io/latest/download/mac-dmg)
 - [Windows](https://studio-releases.realm.io/latest/download/win-setup)
 - [Linux](https://studio-releases.realm.io/latest/download/linux-appimage)
@@ -16,9 +20,7 @@ To download a specific version of Realm Studio, see https://studio-releases.real
 
 ## Code of Conduct
 
-This project adheres to the [MongoDB Code of Conduct](https://www.mongodb.com/community-code-of-conduct).
-By participating, you are expected to uphold this code. Please report
-unacceptable behavior to [community-conduct@mongodb.com](mailto:community-conduct@mongodb.com).
+This project adheres to the [MongoDB Code of Conduct](https://www.mongodb.com/community-code-of-conduct). By participating, you are expected to uphold this code. Please report unacceptable behavior to [community-conduct@mongodb.com](mailto:community-conduct@mongodb.com).
 
 ## Developing and contributing
 

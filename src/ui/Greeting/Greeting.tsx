@@ -17,14 +17,11 @@
 ////////////////////////////////////////////////////////////////////////////
 
 import * as remote from '@electron/remote';
-import React from 'react';
 import { Button } from 'reactstrap';
 
 import { IUpdateStatus } from '../../main/Updater';
 
 import realmLogo from '../../../static/svgs/realm-logo.svg';
-import { MarketingPanel } from './MarketingPanel';
-import { SignupOverlay } from './SignupOverlay';
 import { UpdateStatusIndicator } from './UpdateStatusIndicator';
 
 import './Greeting.scss';
@@ -34,13 +31,11 @@ const { app } = remote;
 export const Greeting = ({
   onCheckForUpdates,
   onOpenLocalRealm,
-  onConnectToServer,
   updateStatus,
-  version,
+  version
 }: {
   onCheckForUpdates: () => void;
   onOpenLocalRealm: () => void;
-  onConnectToServer: () => void;
   updateStatus: IUpdateStatus;
   version: string;
 }) => (
@@ -61,11 +56,6 @@ export const Greeting = ({
         <div className="Greeting__Action">
           <Button onClick={onOpenLocalRealm}>Open Realm file</Button>
         </div>
-        <div className="Greeting__Action">
-          <Button onClick={onConnectToServer}>
-            Connect via Atlas Device Sync
-          </Button>
-        </div>
       </div>
       <div className="Greeting__DownloadDemo">
         <span>New to realm? </span>
@@ -77,7 +67,5 @@ export const Greeting = ({
         </a>
       </div>
     </div>
-    <MarketingPanel className="Greeting__MarketingPanel" />
-    <SignupOverlay />
   </div>
 );

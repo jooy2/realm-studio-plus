@@ -50,7 +50,7 @@ export default class JSSchemaExporter extends SchemaExporter {
   }
 
   public exportSchema(realm: Realm): ISchemaFile[] {
-    realm.schema.forEach(schema => {
+    realm.schema.forEach((schema) => {
       this.makeSchema(schema);
     });
     this.addFile(fsPath.parse(realm.path).name + '-model.js', this.content);

@@ -9,9 +9,7 @@
       "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron",
       "program": "${workspaceRoot}/build/main.js",
       "preLaunchTask": "build",
-      "outFiles": [
-        "${workspaceRoot}/build/**/*.js"
-      ],
+      "outFiles": ["${workspaceRoot}/build/**/*.js"],
       "sourceMaps": true
     }
   ]

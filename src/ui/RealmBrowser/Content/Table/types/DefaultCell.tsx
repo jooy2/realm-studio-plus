@@ -17,7 +17,6 @@
 ////////////////////////////////////////////////////////////////////////////
 
 import classNames from 'classnames';
-import React from 'react';
 import Realm from 'realm';
 import { getCellStringRepresentation } from '../../../../../utils/json';
 
@@ -35,7 +34,7 @@ const displayValue = (property: Realm.ObjectSchemaProperty, value: any) => {
 
 export const DefaultCell = ({
   property,
-  value,
+  value
 }: {
   property: Realm.ObjectSchemaProperty;
   value: any;
@@ -43,7 +42,7 @@ export const DefaultCell = ({
   <div
     className={classNames(
       'RealmBrowser__Table__StringCell',
-      'RealmBrowser__Table__StringCell--disabled',
+      'RealmBrowser__Table__StringCell--disabled'
     )}
   >
     {displayValue(property, value)}

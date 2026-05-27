@@ -16,9 +16,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-import React from 'react';
-import Realm from 'realm';
-
 import { ILoadingProgress, LoadingOverlay } from '../reusable/LoadingOverlay';
 import { ImportableFile, ImportFormat } from '../../services/data-importer';
 
@@ -27,7 +24,7 @@ import {
   ListFocussedHandler,
   IsEmbeddedTypeChecker,
   SingleListFocussedHandler,
-  JsonViewerDialogExecutor,
+  JsonViewerDialogExecutor
 } from '.';
 import { AddClassModal } from './AddClassModal';
 import { AddPropertyModal } from './AddPropertyModal';
@@ -37,7 +34,6 @@ import { EncryptionDialog } from './EncryptionDialog';
 import { Focus, IClassFocus } from './focus';
 import { LeftSidebar } from './LeftSidebar';
 import { NoFocusPlaceholder } from './NoFocusPlaceholder';
-import { NoSubscriptionsPlaceholder } from './NoSubscriptionsPlaceholder';
 import { EmbeddedFocusPlaceholder } from './EmbeddedFocusPlaceholder';
 import { ImportDialog } from './ImportDialog';
 import { JsonViewerDialog } from './JsonViewerDialog';
@@ -132,12 +128,8 @@ export const RealmBrowser = ({
   toggleAddClassProperty,
   toggleAddSubscription,
   validateQuery,
-  isEmbeddedType,
+  isEmbeddedType
 }: IRealmBrowserProps) => {
-  const focussedClassMissingSubscriptions =
-    focus?.kind === 'class' &&
-    realm?.syncSession?.config.flexible &&
-    ![...realm.subscriptions].some(sub => sub.objectType === focus.className);
   return (
     <div className="RealmBrowser">
       <LeftSidebar
@@ -150,17 +142,11 @@ export const RealmBrowser = ({
         onToggle={onLeftSidebarToggle}
         progress={progress}
         readOnly={editMode === EditMode.Disabled}
-        subscriptions={
-          realm?.syncSession?.config.flexible ? realm.subscriptions : undefined
-        }
         toggleAddClass={toggleAddClass}
-        toggleAddSubscription={toggleAddSubscription}
       />
 
       <div className="RealmBrowser__Wrapper">
-        {focussedClassMissingSubscriptions ? (
-          <NoSubscriptionsPlaceholder />
-        ) : focus && realm ? (
+        {focus && realm ? (
           <Content
             dataVersion={dataVersion}
             dataVersionAtBeginning={dataVersionAtBeginning}

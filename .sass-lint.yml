@@ -5,11 +5,14 @@ rules:
   class-name-format:
     - 1
     - convention: '^[A-Z][A-Za-z0-9]+(?:__[A-Za-z0-9\-]+)*(?:--[A-Za-z0-9\-]+)?$'
-    - convention-explanation: "Class should be written in hyphenated BEM (Block Element Modifier) format"
+    - convention-explanation: 'Class should be written in hyphenated BEM (Block Element Modifier) format'
   nesting-depth:
     - 1
     - max-depth: 3
   quotes:
     - 1
-    - style: "double"
+    - style: 'double'
   no-vendor-prefixes: 0
+  leading-zero: 0
+  indentation: 0
+  force-pseudo-nesting: 0

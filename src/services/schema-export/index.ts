@@ -32,7 +32,7 @@ export enum Language {
   JS = 'JavaScript',
   ObjC = 'Objective-C',
   Swift = 'Swift',
-  TS = 'TypeScript',
+  TS = 'TypeScript'
 }
 
 export const SchemaExporter = (language: Language): ISchemaExporter => {

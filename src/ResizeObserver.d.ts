@@ -58,7 +58,7 @@ declare class ResizeObserver {
  */
 type ResizeObserverCallback = (
   entries: ResizeObserverEntry[],
-  observer: ResizeObserver,
+  observer: ResizeObserver
 ) => void;
 
 declare class ResizeObserverEntry {

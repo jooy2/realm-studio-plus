@@ -8,14 +8,14 @@ export const SampleTypes: Realm.ObjectSchema = {
     listOfOptionalDates: 'date?[]',
     indexedInt: {
       type: 'int',
-      indexed: true,
+      indexed: true
     },
     linkToObject: 'SampleTypes',
     listOfObjects: 'SampleTypes[]',
     objectsLinkingToThisObject: {
       type: 'linkingObjects',
       objectType: 'SampleTypes',
-      property: 'linkToObject',
-    },
-  },
+      property: 'linkToObject'
+    }
+  }
 };

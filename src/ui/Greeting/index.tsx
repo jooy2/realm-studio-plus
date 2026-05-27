@@ -43,9 +43,9 @@ class GreetingContainer extends React.Component<
     isCloudInstancesDropdownOpen: false,
     isSyncEnabled: false,
     updateStatus: {
-      state: 'up-to-date',
+      state: 'up-to-date'
     },
-    version: remote.app.getVersion() || 'unknown',
+    version: remote.app.getVersion() || 'unknown'
   };
 
   public componentDidMount() {
@@ -53,10 +53,10 @@ class GreetingContainer extends React.Component<
     // Require realm and check update state with the sync support
     // Using nextTick to prevent blocking when loading realm
     process.nextTick(() => {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       const Realm = require('realm');
       this.setState({
-        isSyncEnabled: !!Realm.Sync,
+        isSyncEnabled: !!Realm.Sync
       });
     });
   }
@@ -64,7 +64,7 @@ class GreetingContainer extends React.Component<
   public componentWillUnmount() {
     electron.ipcRenderer.removeListener(
       'update-status',
-      this.updateStatusChanged,
+      this.updateStatusChanged
     );
   }
 
@@ -76,17 +76,13 @@ class GreetingContainer extends React.Component<
     main.showOpenLocalRealm();
   };
 
-  public onConnectToServer = () => {
-    main.showConnectToServer();
-  };
-
   public onCheckForUpdates = () => {
     main.checkForUpdates();
   };
 
   public updateStatusChanged = (
     e: Electron.IpcRendererEvent,
-    status: IUpdateStatus,
+    status: IUpdateStatus
   ) => {
     this.setState({ updateStatus: status });
   };

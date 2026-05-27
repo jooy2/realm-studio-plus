@@ -24,7 +24,7 @@ import {
   Modal,
   ModalBody,
   ModalFooter,
-  ModalHeader,
+  ModalHeader
 } from 'reactstrap';
 
 export interface IEncryptionDialogProps {
@@ -38,15 +38,15 @@ export const EncryptionDialog = ({
   onExit,
   onKeyChange,
   onSubmit,
-  visible,
+  visible
 }: IEncryptionDialogProps) => (
   <Modal isOpen={visible} onExit={onExit}>
     <Form onSubmit={onSubmit}>
       <ModalHeader>The Realm might be encrypted</ModalHeader>
       <ModalBody>
-        <p>Either this is not a Realm file or it's encrypted.</p>
+        <p>Either this is not a Realm file or it&apos;s encrypted.</p>
         <Input
-          onChange={e => {
+          onChange={(e) => {
             onKeyChange(e.target.value);
           }}
           pattern="[a-fA-F0-9]{128}"

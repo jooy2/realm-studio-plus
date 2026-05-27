@@ -63,7 +63,7 @@ export const getPropertyDisplayed = (property: IPropertyWithName) => {
     getPropertyType(property),
     getOptionalMark(property),
     property.isEmbedded ? ' (Embedded)' : '',
-    property.isPrimaryKey ? ' (Primary Key)' : '',
+    property.isPrimaryKey ? ' (Primary Key)' : ''
   ].join('');
 };
 
@@ -93,14 +93,15 @@ export class HeaderCell extends React.Component<
   IHeaderCellState
 > {
   public state: IHeaderCellState = {
-    isDragging: false,
+    isDragging: false
   };
 
   private handle: React.ReactNode;
+  private handleRef = React.createRef<HTMLDivElement>();
 
   public shouldComponentUpdate(
     nextProps: IHeaderCellProps,
-    nextState: IHeaderCellState,
+    nextState: IHeaderCellState
   ) {
     return (
       this.props.property !== nextProps.property ||
@@ -111,13 +112,13 @@ export class HeaderCell extends React.Component<
     );
   }
 
-  public componentWillMount() {
+  public UNSAFE_componentWillMount() {
     this.generateHandle(this.state);
   }
 
-  public componentWillUpdate(
+  public UNSAFE_componentWillUpdate(
     nextProps: IHeaderCellProps,
-    nextState: IHeaderCellState,
+    nextState: IHeaderCellState
   ) {
     if (this.state.isDragging !== nextState.isDragging) {
       this.generateHandle(nextState);
@@ -134,7 +135,7 @@ export class HeaderCell extends React.Component<
         style={style}
         className={classNames('RealmBrowser__Table__HeaderCell', {
           'RealmBrowser__Table__HeaderCell--sorting': isSorting,
-          'RealmBrowser__Table__HeaderCell--sortable': isSortable,
+          'RealmBrowser__Table__HeaderCell--sortable': isSortable
         })}
         onClick={isSortable ? this.onSortClick : undefined}
         title={property.name || ''}
@@ -143,14 +144,14 @@ export class HeaderCell extends React.Component<
           <div
             className={classNames('RealmBrowser__Table__HeaderName', {
               'RealmBrowser__Table__HeaderName--primitive':
-                property.name === null,
+                property.name === null
             })}
           >
             {property.name}
           </div>
           <div
             className={classNames('RealmBrowser__Table__HeaderType', {
-              'RealmBrowser__Table__HeaderType--sortable': isSortable,
+              'RealmBrowser__Table__HeaderType--sortable': isSortable
             })}
           >
             {getPropertyDisplayed(property)}
@@ -159,7 +160,7 @@ export class HeaderCell extends React.Component<
         {isSortable ? (
           <div
             className={classNames('RealmBrowser__Table__HeaderSort', {
-              'RealmBrowser__Table__HeaderSort--active': isSorting,
+              'RealmBrowser__Table__HeaderSort--active': isSorting
             })}
           >
             <i
@@ -172,7 +173,7 @@ export class HeaderCell extends React.Component<
                 'fa-sort-desc':
                   sorting &&
                   sorting.property.name === property.name &&
-                  sorting.reverse,
+                  sorting.reverse
               })}
             />
           </div>
@@ -186,13 +187,15 @@ export class HeaderCell extends React.Component<
     // This is rendered only when the state.isDragging is updated to avoid unnessesary renders
     this.handle = (
       <DraggableCore
+        nodeRef={this.handleRef}
         onDrag={this.onDrag}
         onStart={this.onDragStart}
         onStop={this.onDragStop}
       >
         <div
+          ref={this.handleRef}
           className={classNames('RealmBrowser__Table__HeaderHandle', {
-            'RealmBrowser__Table__HeaderHandle--dragging': state.isDragging,
+            'RealmBrowser__Table__HeaderHandle--dragging': state.isDragging
           })}
           onClick={this.onHandleClick}
         />
@@ -204,7 +207,7 @@ export class HeaderCell extends React.Component<
     this.props.onWidthChanged(data.x + Math.ceil(HANDLE_WIDTH / 2));
   };
 
-  private onDragStart: DraggableEventHandler = e => {
+  private onDragStart: DraggableEventHandler = () => {
     this.setState({ isDragging: true });
   };
 
@@ -216,7 +219,7 @@ export class HeaderCell extends React.Component<
     e.stopPropagation(); // Prevent a click of the handle to trigger sorting
   };
 
-  private onSortClick = (e: React.MouseEvent) => {
+  private onSortClick = () => {
     this.props.onSortClick(this.props.property);
   };
 }

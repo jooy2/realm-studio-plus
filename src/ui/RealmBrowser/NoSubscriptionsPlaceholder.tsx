@@ -16,8 +16,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-import React from 'react';
-
 export const NoSubscriptionsPlaceholder = () => (
   <div className="RealmBrowser__NoSubscriptionsPlaceholder" />
 );

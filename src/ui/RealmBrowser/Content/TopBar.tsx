@@ -16,7 +16,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-import React from 'react';
 import { Button } from 'reactstrap';
 
 import { QuerySearch } from '../../reusable/QuerySearch';
@@ -43,7 +42,7 @@ export const TopBar = ({
   query,
   queryError,
   readOnly,
-  allowCreate,
+  allowCreate
 }: ITopBarProps) => {
   const className = getClassName(focus);
   return (

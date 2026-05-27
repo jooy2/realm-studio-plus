@@ -35,7 +35,7 @@ export interface IAddSubscriptionModalState {
 
 const initialState: IAddSubscriptionModalState = {
   query: '',
-  queryError: null,
+  queryError: null
 };
 
 class AddSubscriptionModalContainer extends React.Component<
@@ -53,7 +53,7 @@ class AddSubscriptionModalContainer extends React.Component<
     this.props.onAddSubscription(
       this.props.schemaName,
       // Fallback to selecting all objects
-      this.state.query || 'TRUEPREDICATE',
+      this.state.query || 'TRUEPREDICATE'
     );
     this.props.toggle();
     this.setState(initialState);
@@ -66,8 +66,8 @@ class AddSubscriptionModalContainer extends React.Component<
       queryError: this.props.validateQuery(
         this.props.schemaName,
         // Fallback to selecting all objects
-        query || 'TRUEPREDICATE',
-      ),
+        query || 'TRUEPREDICATE'
+      )
     });
   };
 }

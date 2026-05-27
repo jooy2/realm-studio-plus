@@ -32,7 +32,7 @@ export class Decimal128Control extends React.PureComponent<
   IDecimal128ControlState
 > {
   state: IDecimal128ControlState = {
-    internalValue: this.props.value?.toString() ?? null,
+    internalValue: this.props.value?.toString() ?? null
   };
 
   render() {

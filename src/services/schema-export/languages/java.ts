@@ -34,7 +34,7 @@ export default class JavaSchemaExporter extends SchemaExporter {
   }
 
   public exportSchema(realm: Realm): ISchemaFile[] {
-    realm.schema.forEach(schema => {
+    realm.schema.forEach((schema) => {
       this.makeSchema(schema);
     });
 
@@ -43,7 +43,7 @@ export default class JavaSchemaExporter extends SchemaExporter {
 
   public makeSchema(schema: Realm.ObjectSchema) {
     this.appendLine(
-      '// Please note : @LinkingObjects and default values are not represented in the schema and thus will not be part of the generated models',
+      '// Please note : @LinkingObjects and default values are not represented in the schema and thus will not be part of the generated models'
     );
     this.appendLine('package your.package.name.here;');
     this.appendLine('');
@@ -57,7 +57,7 @@ export default class JavaSchemaExporter extends SchemaExporter {
     this.fieldsContent += `public class ${schema.name} extends RealmObject {\n`;
 
     // Properties
-    filteredProperties(schema.properties).forEach(prop => {
+    filteredProperties(schema.properties).forEach((prop) => {
       this.propertyLine(prop, schema.primaryKey);
       if (prop.indexed && prop.name !== schema.primaryKey) {
         this.realmImports.add('import io.realm.annotations.Index;');
@@ -74,7 +74,7 @@ export default class JavaSchemaExporter extends SchemaExporter {
     }
 
     // Add all Realm imports
-    this.realmImports.forEach(line => {
+    this.realmImports.forEach((line) => {
       this.appendLine(line);
     });
     this.appendLine('');
@@ -120,14 +120,14 @@ export default class JavaSchemaExporter extends SchemaExporter {
     this.gettersSetterContent += `${
       JavaSchemaExporter.PADDING
     }public void set${this.capitalizedString(
-      prop.name,
+      prop.name
     )}(${this.javaNameForProperty(prop)} ${prop.name}) { this.${prop.name} = ${
       prop.name
     }; }\n\n`;
   }
 
   private javaPropertyTypeCanBeMarkedRequired(
-    property: Realm.ObjectSchemaProperty,
+    property: Realm.ObjectSchemaProperty
   ): boolean {
     switch (property.type) {
       case 'bool':

@@ -31,6 +31,6 @@ export abstract class Transport extends EventEmitter {
   public abstract sendResponse(
     requestId: string,
     result: any,
-    success: boolean,
+    success: boolean
   ): void;
 }

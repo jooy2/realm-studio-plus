@@ -26,7 +26,7 @@ import {
   ModalBody,
   ModalFooter,
   ModalHeader,
-  Table,
+  Table
 } from 'reactstrap';
 
 export interface IImportDialogProps {
@@ -46,7 +46,7 @@ export const ImportDialog = ({
   visible,
   filePaths,
   classNames,
-  pathClassMapping,
+  pathClassMapping
 }: IImportDialogProps) => (
   <Modal isOpen={visible} onExit={onCancel}>
     <Form onSubmit={onSubmit}>
@@ -61,13 +61,13 @@ export const ImportDialog = ({
             </tr>
           </thead>
           <tbody>
-            {filePaths.map(filePath => (
+            {filePaths.map((filePath) => (
               <tr key={filePath}>
                 <td>{path.basename(filePath)}</td>
                 <td>
                   <Input
                     type="select"
-                    onChange={e => onClassChange(filePath, e.target.value)}
+                    onChange={(e) => onClassChange(filePath, e.target.value)}
                     value={pathClassMapping[filePath]}
                   >
                     <option
@@ -76,7 +76,7 @@ export const ImportDialog = ({
                     >
                       Select a class
                     </option>
-                    {classNames.map(className => (
+                    {classNames.map((className) => (
                       <option key={className} value={className}>
                         {className}
                       </option>

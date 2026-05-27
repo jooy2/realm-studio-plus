@@ -25,11 +25,11 @@ export default class TSSchemaExporter extends SchemaExporter {
   public exportSchema(realm: Realm): ISchemaFile[] {
     this.appendLine('import * as Realm from "realm";\n');
 
-    realm.schema.forEach(schema => {
+    realm.schema.forEach((schema) => {
       this.makeSchema(schema);
     });
 
-    const schemaNames = realm.schema.map(schema => schema.name + 'Schema');
+    const schemaNames = realm.schema.map((schema) => schema.name + 'Schema');
     this.appendLine(`export const Schema = [${schemaNames.join(', ')}];`);
 
     this.addFile(fsPath.parse(realm.path).name + '-model.ts', this.content);
@@ -41,7 +41,7 @@ export default class TSSchemaExporter extends SchemaExporter {
     // TypeScript Type
 
     this.appendLine(`export type ${schema.name} = {`);
-    filteredProperties(schema.properties).forEach(prop => {
+    filteredProperties(schema.properties).forEach((prop) => {
       this.appendLine('  ' + this.propertyLine(prop));
     });
     this.appendLine(`};\n`);

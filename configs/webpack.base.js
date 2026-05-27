@@ -2,7 +2,6 @@ const { resolve } = require('path');
 const nodeExternals = require('webpack-node-externals');
 const webpack = require('webpack');
 const SentryPlugin = require('@sentry/webpack-plugin');
-const SentryCli = require('@sentry/cli');
 
 const package = require('../package.json');
 
@@ -12,6 +11,17 @@ module.exports = (env, argv) => {
   return {
     devServer: {
       hot: true,
+      port: 8080,
+      allowedHosts: 'all',
+      headers: {
+        'Access-Control-Allow-Origin': '*'
+      },
+      client: {
+        overlay: {
+          errors: true,
+          warnings: false
+        }
+      }
     },
     devtool: isDevelopment ? 'inline-source-map' : 'source-map',
     externals: [
@@ -21,26 +31,26 @@ module.exports = (env, argv) => {
           /webpack(\/.*)?/,
           'electron-devtools-installer',
           /svg-baker-runtime(\/.*)?/,
-          /svg-sprite-loader(\/.*)?/,
-        ],
-      }),
+          /svg-sprite-loader(\/.*)?/
+        ]
+      })
     ],
     module: {
-      rules: [],
+      rules: []
     },
     node: {
       // This will make __dirname equal the bundles path
-      __dirname: false,
+      __dirname: false
     },
     output: {
-      path: resolve(__dirname, '../build'),
+      path: resolve(__dirname, '../build')
     },
     plugins: [
       new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify(
-          isDevelopment ? 'development' : 'production',
-        ),
-      }),
+          isDevelopment ? 'development' : 'production'
+        )
+      })
     ].concat(
       !isDevelopment
         ? [
@@ -51,17 +61,17 @@ module.exports = (env, argv) => {
               configFile: resolve(__dirname, 'sentry.properties'),
               ext: ['map', 'js'],
               urlPrefix: '~/build/',
-              dryRun: !process.env.SENTRY_AUTH_TOKEN,
-            }),
+              dryRun: !process.env.SENTRY_AUTH_TOKEN
+            })
           ]
-        : [],
+        : []
     ),
     resolve: {
       alias: {
         'realm-studio-styles': resolve(__dirname, '../styles'),
-        'realm-studio-svgs': resolve(__dirname, '../static/svgs'),
+        'realm-studio-svgs': resolve(__dirname, '../static/svgs')
       },
-      extensions: ['.ts', '.tsx', '.js', '.jsx', '.html', '.scss', '.svg'],
-    },
+      extensions: ['.ts', '.tsx', '.js', '.jsx', '.html', '.scss', '.svg']
+    }
   };
 };

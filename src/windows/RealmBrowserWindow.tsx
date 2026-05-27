@@ -41,13 +41,13 @@ export const RealmBrowserWindow: IWindow = {
           ? props.realm.path
           : props.realm.appId,
       width: 900,
-      height: 600,
+      height: 600
     };
   },
   getComponent: () =>
     import(/* webpackChunkName: "realm-browser" */ '../ui/RealmBrowser').then(
       // TODO: Fix the props for this to include a type
-      m => m.RealmBrowser as any,
+      (m) => m.RealmBrowser as any
     ),
   getSingletonKey: (props: IRealmBrowserWindowProps) => {
     const { realm } = props;
@@ -57,11 +57,11 @@ export const RealmBrowserWindow: IWindow = {
       return [
         realm.appId,
         realm.serverUrl,
-        JSON.stringify(realm.credentials),
+        JSON.stringify(realm.credentials)
       ].join('+');
     }
   },
   getTrackedProperties: (props: IRealmBrowserWindowProps) => ({
-    mode: props.realm.mode,
-  }),
+    mode: props.realm.mode
+  })
 };

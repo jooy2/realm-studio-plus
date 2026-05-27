@@ -29,18 +29,18 @@ const mockPackageJson = fs.readJsonSync(mockPackagePath);
 
 const mockZipPath = path.resolve(
   mockPath,
-  `dist/${mockPackageJson.build.productName}-${mockPackageJson.version}-mac.zip`,
+  `dist/${mockPackageJson.build.productName}-${mockPackageJson.version}-mac.zip`
 );
 
 function sendFile(
   res: http.ServerResponse,
   contentPath: string,
-  contentType: string,
+  contentType: string
 ) {
   const { size } = fs.statSync(contentPath);
   res.writeHead(200, {
     'Content-Type': contentType,
-    'Content-Length': size,
+    'Content-Length': size
   });
   // Create a read stream
   const readStream = fs.createReadStream(contentPath);
@@ -77,7 +77,7 @@ export function createServer() {
   return new Promise<http.Server>((resolve, reject) => {
     const server = new http.Server(handle);
     // If an error occurs - reject it
-    server.once('error', err => {
+    server.once('error', (err) => {
       reject(err);
     });
     // Start listening

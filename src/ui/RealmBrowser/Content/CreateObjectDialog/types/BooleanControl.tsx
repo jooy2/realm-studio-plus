@@ -32,7 +32,7 @@ const BooleanButton = ({
   children,
   onChange,
   selectedValue,
-  value,
+  value
 }: IBooleanButtonProps) => (
   <Button
     onClick={() => onChange(value)}
@@ -47,7 +47,7 @@ export const BooleanControl = ({
   children,
   onChange,
   property,
-  value,
+  value
 }: IBaseControlProps) => (
   <InputGroup className="CreateObjectDialog__BooleanControl">
     <div className="CreateObjectDialog__BooleanControl__Buttons form-control">

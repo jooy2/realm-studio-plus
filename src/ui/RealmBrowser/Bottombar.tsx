@@ -17,7 +17,6 @@
 ////////////////////////////////////////////////////////////////////////////
 
 import classNames from 'classnames';
-import React from 'react';
 import { Button } from 'reactstrap';
 
 export interface IBottombarProps {
@@ -31,11 +30,11 @@ export const Bottombar = ({
   inTransaction,
   changeCount,
   onCancelTransaction,
-  onCommitTransaction,
+  onCommitTransaction
 }: IBottombarProps) => (
   <section
     className={classNames('RealmBrowser__Bottombar', {
-      'RealmBrowser__Bottombar--visible': inTransaction,
+      'RealmBrowser__Bottombar--visible': inTransaction
     })}
   >
     {inTransaction ? (

@@ -26,24 +26,24 @@ interface IMenuModification {
 
 export const performModification = (
   items: MenuItemConstructorOptions[],
-  modification: IMenuModification,
+  modification: IMenuModification
 ): MenuItemConstructorOptions[] => {
   const result = [...items];
   // Locate the item (if any) that this modification applies to
-  const index = items.findIndex(item => item.id === modification.id);
+  const index = items.findIndex((item) => item.id === modification.id);
   if (index !== -1) {
     result.splice(
       modification.action === 'append' ? index + 1 : index,
       modification.action === 'replace' ? modification.items.length : 0,
-      ...modification.items,
+      ...modification.items
     );
   }
   // Complete a mapping that performs modifications on submenus
-  return result.map(item => {
+  return result.map((item) => {
     if (Array.isArray(item.submenu)) {
       return {
         ...item,
-        submenu: performModification(item.submenu, modification),
+        submenu: performModification(item.submenu, modification)
       };
     } else {
       return item;
@@ -53,7 +53,7 @@ export const performModification = (
 
 export const performModifications = (
   items: MenuItemConstructorOptions[],
-  modifications: IMenuModification[],
+  modifications: IMenuModification[]
 ) => {
   return modifications.reduce((modifiedItems, modification) => {
     return performModification(modifiedItems, modification);

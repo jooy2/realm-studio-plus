@@ -24,10 +24,7 @@ import { CLOUD_PROTOCOL, STUDIO_PROTOCOL } from '../constants';
 import * as dataImporter from '../services/data-importer';
 import { showError } from '../ui/reusable/errors';
 import { RealmLoadingMode } from '../utils/realms';
-import {
-  IRealmBrowserWindowProps,
-  IConnectToServerWindowProps,
-} from '../windows/WindowProps';
+import { IRealmBrowserWindowProps } from '../windows/WindowProps';
 
 import { removeRendererDirectories } from '../utils';
 import { CertificateManager } from './CertificateManager';
@@ -53,9 +50,6 @@ export class Application {
     [MainActions.ShowOpenLocalRealm]: () => {
       return this.showOpenLocalRealm();
     },
-    [MainActions.ShowConnectToServer]: (url?: string) => {
-      return this.showConnectToServer({ url });
-    },
     [MainActions.ShowRealmBrowser]: (props: IRealmBrowserWindowProps) => {
       return this.showRealmBrowser(props);
     },
@@ -63,7 +57,7 @@ export class Application {
       await this.windowManager.closeAllWindows();
       await removeRendererDirectories();
       await this.showGreeting();
-    },
+    }
   };
 
   // Instantiate a receiver that will receive actions from the main process itself.
@@ -115,14 +109,14 @@ export class Application {
   public showGreeting(): Promise<void> {
     const { window, existing } = this.windowManager.createWindow({
       type: 'greeting',
-      props: {},
+      props: {}
     });
 
     if (existing) {
       window.focus();
       return Promise.resolve();
     } else {
-      return new Promise(resolve => {
+      return new Promise((resolve) => {
         // Save this for later
         // Show the window, the first time its ready-to-show
         window.once('ready-to-show', () => {
@@ -146,35 +140,14 @@ export class Application {
       properties: ['openFile', 'multiSelections'],
       filters: [
         { name: 'Realm Files', extensions: ['realm'] },
-        { name: 'All Files', extensions: ['*'] },
-      ],
+        { name: 'All Files', extensions: ['*'] }
+      ]
     });
-    const realmsLoaded = response.filePaths.map(filePath =>
-      this.openLocalRealmAtPath(filePath),
+    const realmsLoaded = response.filePaths.map((filePath) =>
+      this.openLocalRealmAtPath(filePath)
     );
     // Resolves when all realms are opened or rejects when a single realm fails
     return Promise.all(realmsLoaded);
-  }
-
-  public showConnectToServer(
-    props: IConnectToServerWindowProps,
-  ): Promise<void> {
-    const { window, existing } = this.windowManager.createWindow({
-      type: 'connect-to-server',
-      props,
-    });
-
-    if (existing) {
-      window.focus();
-      return Promise.resolve();
-    } else {
-      return new Promise(resolve => {
-        window.show();
-        window.webContents.once('did-finish-load', () => {
-          resolve();
-        });
-      });
-    }
   }
 
   public showImportData(format: dataImporter.ImportFormat) {
@@ -187,14 +160,14 @@ export class Application {
     // Generate the Realm from the provided CSV file(s)
     const schema = dataImporter.generateSchema(
       dataImporter.ImportFormat.CSV,
-      paths,
+      paths
     );
     // Start the import
     const defaultPath = path.dirname(paths[0]) + '/default.realm';
     const destinationPath = dialog.showSaveDialogSync({
       defaultPath,
       title: 'Choose where to store the imported data',
-      filters: [{ name: 'Realm file', extensions: ['realm'] }],
+      filters: [{ name: 'Realm file', extensions: ['realm'] }]
     });
     if (!destinationPath) {
       // Don't do anything if the user cancelled or selected no files
@@ -204,23 +177,23 @@ export class Application {
     return this.showRealmBrowser({
       realm: {
         mode: RealmLoadingMode.Local,
-        path: destinationPath,
+        path: destinationPath
       },
-      import: { format, paths, schema },
+      import: { format, paths, schema }
     });
   }
 
   public showRealmBrowser(props: IRealmBrowserWindowProps): Promise<void> {
     const { window, existing } = this.windowManager.createWindow({
       type: 'realm-browser',
-      props,
+      props
     });
 
     if (existing) {
       window.focus();
       return Promise.resolve();
     } else {
-      return new Promise(resolve => {
+      return new Promise((resolve) => {
         // Set the represented filename
         if (process.platform === 'darwin' && props.realm.mode === 'local') {
           window.setRepresentedFilename(props.realm.path);
@@ -277,8 +250,8 @@ export class Application {
     if (!app.isReady()) {
       this.delayedRealmOpens.push(filePath);
     } else {
-      this.openLocalRealmAtPath(filePath).catch(err =>
-        showError(`Failed opening the file "${filePath}"`, err),
+      this.openLocalRealmAtPath(filePath).catch((err) =>
+        showError(`Failed opening the file "${filePath}"`, err)
       );
     }
   };
@@ -293,7 +266,7 @@ export class Application {
 
   private onWebContentsCreated = (
     event: Electron.Event,
-    webContents: Electron.WebContents,
+    webContents: Electron.WebContents
   ) => {
     const receiver = new MainReceiver(this.actionHandlers, webContents);
     webContents.once('destroyed', () => {
@@ -315,7 +288,7 @@ export class Application {
       if (!success) {
         dialog.showErrorBox(
           'Failed when registering protocols',
-          `Studio could not register the ${protocol}:// protocol.`,
+          `Studio could not register the ${protocol}:// protocol.`
         );
       }
     }
@@ -341,33 +314,27 @@ export class Application {
     return this.showRealmBrowser({
       realm: {
         mode: RealmLoadingMode.Local,
-        path: filePath,
-      },
+        path: filePath
+      }
     });
   };
 
   private processArguments(argv: string[]) {
-    this.delayedRealmOpens = argv.filter(arg => {
+    this.delayedRealmOpens = argv.filter((arg) => {
       return arg.endsWith('.realm');
     });
   }
 
   private async performDelayedTasks() {
     // Open all the realms to be loaded
-    const realmsLoaded = this.delayedRealmOpens.map(realmPath => {
+    const realmsLoaded = this.delayedRealmOpens.map((realmPath) => {
       return this.openLocalRealmAtPath(realmPath);
     });
     // Reset the array to prevent double loading
     this.delayedRealmOpens = [];
     // Wait for all realms to open or show an error on failure
-    await Promise.all(realmsLoaded).catch(err =>
-      showError(`Failed opening Realm`, err),
+    await Promise.all(realmsLoaded).catch((err) =>
+      showError(`Failed opening Realm`, err)
     );
   }
-}
-
-if (module.hot) {
-  module.hot.dispose(() => {
-    Application.sharedApplication.destroy();
-  });
 }

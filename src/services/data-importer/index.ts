@@ -23,7 +23,7 @@ export * from './ui';
 export * from './DataImporter';
 
 export enum ImportFormat {
-  CSV = 'csv',
+  CSV = 'csv'
   // JSON = 'json',
 }
 

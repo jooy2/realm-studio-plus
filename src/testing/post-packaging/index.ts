@@ -49,7 +49,7 @@ function getAutoUpdaterCacheDir(appName: string) {
       'Library',
       'Application Support',
       'Caches',
-      appName,
+      appName
     );
   } else {
     return process.env.XDG_CACHE_HOME || path.join(homedir, '.cache', appName);
@@ -67,13 +67,13 @@ function pruneAutoUpdaterCache() {
 function changeS3Endpoint(temporaryMacPath: string, serverUrl: string) {
   const appUpdateYmlPath = path.resolve(
     temporaryMacPath,
-    `${productName}.app/Contents/Resources/app-update.yml`,
+    `${productName}.app/Contents/Resources/app-update.yml`
   );
   const appUpdateYml = fs.readFileSync(appUpdateYmlPath, { encoding: 'utf8' });
   const lines = appUpdateYml.split('\n');
   // Find and overwrite the line defining the endpoint or add a new line
   const endpointLineIndex = lines.findIndex(
-    line => line.indexOf('endpoint') === 0,
+    (line) => line.indexOf('endpoint') === 0
   );
   const updatedEndpointLine = `endpoint: ${serverUrl}`;
   if (endpointLineIndex === -1) {
@@ -91,14 +91,14 @@ function buildMockedRealmStudio() {
   if (!fs.existsSync(path.resolve(mockedRealmStudioPath, 'node_modules'))) {
     cp.spawnSync('npm', ['install'], {
       cwd: mockedRealmStudioPath,
-      stdio: 'inherit',
+      stdio: 'inherit'
     });
   }
   // Build a packaged version of the app
   if (!fs.existsSync(path.resolve(mockedRealmStudioPath, 'dist'))) {
     cp.spawnSync('npx', ['electron-builder', '--mac', '--publish', 'never'], {
       cwd: mockedRealmStudioPath,
-      stdio: 'inherit',
+      stdio: 'inherit'
     });
   }
 }
@@ -106,12 +106,12 @@ function buildMockedRealmStudio() {
 assert.strictEqual(
   os.platform(),
   'darwin',
-  'Currently, the post-package tests can only run on MacOS',
+  'Currently, the post-package tests can only run on MacOS'
 );
 
 assert(
   fs.existsSync(distPath),
-  'Build the app before running the post-package tests',
+  'Build the app before running the post-package tests'
 );
 
 assert.strictEqual(typeof productName, 'string', 'Expected a product name');
@@ -136,7 +136,7 @@ describe('Realm Studio packaged', () => {
       'Making a copy of the mac app from',
       originalMacPath,
       'to',
-      temporaryMacPath,
+      temporaryMacPath
     );
     fs.copySync(originalMacPath, temporaryMacPath);
     // Package the app with the mocked server URL
@@ -164,14 +164,14 @@ describe('Realm Studio packaged', () => {
     // Assemble the app path
     const appPath = path.resolve(
       temporaryMacPath,
-      `${productName}.app/Contents/MacOS/${productName}`,
+      `${productName}.app/Contents/MacOS/${productName}`
     );
     // Start the app
     appProcess = cp.spawn(appPath, {
       stdio: 'inherit',
       env: {
-        REALM_STUDIO_DISABLE_UPDATE_PROMPT: 'true',
-      },
+        REALM_STUDIO_DISABLE_UPDATE_PROMPT: 'true'
+      }
     });
 
     let respawnTimer;
@@ -181,20 +181,20 @@ describe('Realm Studio packaged', () => {
       const readySignalPath = path.resolve(temporaryMacPath, 'ready.signal');
       let updateCount = 0;
 
-      appProcess.on('close', code => {
+      appProcess.on('close', (code) => {
         console.log(`App closed (status code ${code})`);
         if (code !== 0) {
           reject(
             new Error(
-              `${productName} closed with unexpected exit code (${code})`,
-            ),
+              `${productName} closed with unexpected exit code (${code})`
+            )
           );
         } else {
           // If for some reason the mocked app doesn't start automatically, try restarting it manually
           respawnTimer = setTimeout(() => {
             console.log(
               'Got tired of waiting for the mocked app, trying a respawn of',
-              appPath,
+              appPath
             );
             const result = cp.spawnSync(appPath, { stdio: 'inherit' });
             console.log(`Respawned mock app closed (status ${result.status})`);
@@ -212,7 +212,7 @@ describe('Realm Studio packaged', () => {
         } else if (updateCount === 1) {
           updateCount++;
           const content = fs.readFileSync(readySignalPath, {
-            encoding: 'utf8',
+            encoding: 'utf8'
           });
           assert.strictEqual(content, `Hello from a future ${productName}!`);
           // Stop watching the file
@@ -220,7 +220,7 @@ describe('Realm Studio packaged', () => {
           resolve();
         } else {
           reject(
-            new Error(`ready.signal changed unexpectedly (#${updateCount})`),
+            new Error(`ready.signal changed unexpectedly (#${updateCount})`)
           );
         }
       }
@@ -230,7 +230,7 @@ describe('Realm Studio packaged', () => {
       fs.watchFile(
         readySignalPath,
         { persistent: false, interval: 1000 },
-        readySignalChanged,
+        readySignalChanged
       );
     });
 

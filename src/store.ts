@@ -64,7 +64,7 @@ class RealmStudioStore {
   // Window option related methods
   public setWindowOptions(
     type: WindowType,
-    options: IWindowConstructorOptions,
+    options: IWindowConstructorOptions
   ) {
     const key = `${KEY_WINDOW_OPTIONS}.${type}`;
     this.store.set(key, options);
@@ -93,7 +93,7 @@ class RealmStudioStore {
 
   public onDidChange(
     key: string,
-    callback: (newValue: any, oldValue: any) => void,
+    callback: (newValue: any, oldValue: any) => void
   ) {
     const removalCallback = this.store.onDidChange(key, callback);
     // The store actually returns a function that can be called to remove the listener

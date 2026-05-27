@@ -31,17 +31,18 @@ const doubleClickIfEnter = (e: React.KeyboardEvent<HTMLDivElement>) => {
 };
 
 export const ObjectCell = ({
-  property,
-  value,
+  property: _property,
+  value
 }: {
   property: Realm.ObjectSchemaProperty;
   value: Realm.Object;
 }) => {
   return (
     <div
+      // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
       tabIndex={0}
       className={classNames('RealmBrowser__Table__ObjectCell', {
-        'RealmBrowser__Table__ObjectCell--null': value === null,
+        'RealmBrowser__Table__ObjectCell--null': value === null
       })}
       onKeyPress={doubleClickIfEnter}
     >

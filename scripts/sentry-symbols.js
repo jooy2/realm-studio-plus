@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 const { resolve } = require('path');
 
 let SentryCli;
@@ -8,13 +6,14 @@ let download;
 try {
   SentryCli = require('@sentry/cli');
   download = require('electron-download');
-} catch (e) {
+} catch {
   console.error('ERROR: Missing required packages, please run:');
   console.error('npm install --save-dev @sentry/cli electron-download');
   process.exit(1);
 }
 
-const VERSION = /\bv?(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-[\da-z-]+(?:\.[\da-z-]+)*)?(?:\+[\da-z-]+(?:\.[\da-z-]+)*)?\b/i;
+const VERSION =
+  /\bv?(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-[\da-z-]+(?:\.[\da-z-]+)*)?(?:\+[\da-z-]+(?:\.[\da-z-]+)*)?\b/i;
 const SYMBOL_CACHE_FOLDER = resolve(__dirname, '../.electron-symbols');
 const package = require('../package.json');
 const sentryPropertiesPath = resolve(__dirname, '../configs/sentry.properties');
@@ -39,7 +38,7 @@ async function main() {
   console.log('We are starting to download all possible electron symbols');
   console.log('We need it in order to symbolicate native crashes');
   console.log(
-    'This step is only needed once whenever you update your electron version',
+    'This step is only needed once whenever you update your electron version'
   );
   console.log('Just call this script again it should do everything for you.');
 
@@ -47,7 +46,7 @@ async function main() {
     version,
     platform: 'darwin',
     arch: 'x64',
-    dsym: true,
+    dsym: true
   });
   await sentryCli.execute(['upload-dif', '-t', 'dsym', zipPath], true);
 
@@ -55,7 +54,7 @@ async function main() {
     version,
     platform: 'win32',
     arch: 'ia32',
-    symbols: true,
+    symbols: true
   });
   await sentryCli.execute(['upload-dif', '-t', 'breakpad', zipPath], true);
 
@@ -63,7 +62,7 @@ async function main() {
     version,
     platform: 'win32',
     arch: 'x64',
-    symbols: true,
+    symbols: true
   });
   await sentryCli.execute(['upload-dif', '-t', 'breakpad', zipPath], true);
 
@@ -71,7 +70,7 @@ async function main() {
     version,
     platform: 'linux',
     arch: 'x64',
-    symbols: true,
+    symbols: true
   });
   await sentryCli.execute(['upload-dif', '-t', 'breakpad', zipPath], true);
 
@@ -101,7 +100,7 @@ async function downloadSymbols(options) {
     download(
       {
         ...options,
-        cache: SYMBOL_CACHE_FOLDER,
+        cache: SYMBOL_CACHE_FOLDER
       },
       (err, zipPath) => {
         if (err) {
@@ -109,9 +108,9 @@ async function downloadSymbols(options) {
         } else {
           resolve(zipPath);
         }
-      },
+      }
     );
   });
 }
 
-main().catch(e => console.error(e));
+main().catch((e) => console.error(e));

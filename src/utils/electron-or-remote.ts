@@ -6,7 +6,8 @@ export function getElectronOrRemote(): typeof electron | typeof Remote {
     return getRemote();
   } else if (process.type === 'browser') {
     // We need a require to prevent the remote module from being loaded
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
+
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     return require('electron');
   } else {
     throw new Error('getElectronOrRemote called outside of electron process');
@@ -16,7 +17,8 @@ export function getElectronOrRemote(): typeof electron | typeof Remote {
 export function getRemote(): typeof Remote {
   if (process.type === 'renderer') {
     // We need a require to prevent the remote module from being loaded
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
+
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     return require('@electron/remote');
   } else {
     throw new Error('Only loadable via a renderer process');

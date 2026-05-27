@@ -54,14 +54,14 @@ class ObjectControlContainer extends React.Component<
   IObjectControlContainerState
 > {
   public state: IObjectControlContainerState = {
-    selectObjectDialog: { isOpen: false },
+    selectObjectDialog: { isOpen: false }
   };
 
   public componentDidMount() {
     if (this.props.property.objectType) {
       const className = this.props.property.objectType;
       this.setState({
-        focus: this.props.getClassFocus(className),
+        focus: this.props.getClassFocus(className)
       });
     }
   }
@@ -69,13 +69,14 @@ class ObjectControlContainer extends React.Component<
   public render() {
     return (
       <ObjectControl
-        children={this.props.children}
         selectObjectDialog={this.state.selectObjectDialog}
         property={this.props.property}
         onShowSelectObjectDialog={this.onShowSelectObjectDialog}
         updateObjectReference={this.updateObjectReference}
         value={this.props.value}
-      />
+      >
+        {this.props.children}
+      </ObjectControl>
     );
   }
 
@@ -90,8 +91,8 @@ class ObjectControlContainer extends React.Component<
           onCancel: this.onCancelSelectObjectDialog,
           onSelect: this.updateObjectReference,
           isEmbeddedType: this.props.isEmbeddedType,
-          onShowJsonViewerDialog: this.props.onShowJsonViewerDialog,
-        },
+          onShowJsonViewerDialog: this.props.onShowJsonViewerDialog
+        }
       });
     }
   };

@@ -18,15 +18,19 @@
 
 import React from 'react';
 import {
-  SortEndHandler as ReorderingEndHandler,
-  SortStartHandler as ReorderingStartHandler,
-} from 'react-sortable-hoc';
-import {
   Dimensions,
   Grid,
   GridCellProps,
-  ScrollSyncChildProps,
+  ScrollSyncChildProps
 } from 'react-virtualized';
+
+export interface IReorderingEvent {
+  oldIndex: number;
+  newIndex: number;
+}
+
+export type ReorderingStartHandler = () => void;
+export type ReorderingEndHandler = (event: IReorderingEvent) => void;
 
 import { EditMode, ISorting, SortingChangeHandler } from '..';
 import { IPropertyWithName } from '../..';
@@ -34,7 +38,7 @@ import { Focus, generateKey } from '../../focus';
 
 export const rowHeights = {
   header: 50,
-  content: 2 * (1 + 8) + 17,
+  content: 2 * (1 + 8) + 17
 };
 
 export type CellChangeHandler = (params: {
@@ -52,7 +56,7 @@ export type CellClickHandler = (
     rowIndex: number;
     rowObject: any;
   },
-  e?: React.MouseEvent<any>,
+  e?: React.MouseEvent<any>
 ) => void;
 
 export type CellContextMenuHandler = (
@@ -63,7 +67,7 @@ export type CellContextMenuHandler = (
     cellValue: any;
     rowIndex: number;
     columnIndex: number;
-  },
+  }
 ) => void;
 
 export type CellHighlightedHandler = (cell: {
@@ -74,12 +78,12 @@ export type CellHighlightedHandler = (cell: {
 export type CellValidatedHandler = (
   rowIndex: number,
   columnIndex: number,
-  valid: boolean,
+  valid: boolean
 ) => void;
 
 export type RowMouseDownHandler = (
   e: React.MouseEvent<HTMLElement>,
-  rowIndex: number,
+  rowIndex: number
 ) => void;
 
 export interface IHighlight {
@@ -137,7 +141,7 @@ class TableContainer extends React.PureComponent<
   public static columnWidthCache: { [focusKey: string]: number[] } = {};
 
   public static generateDefaultColumnWidths(properties: IPropertyWithName[]) {
-    return properties.map(property => {
+    return properties.map((property) => {
       switch (property.type) {
         case 'int':
           return property.name === '#' ? 50 : 100;
@@ -155,7 +159,7 @@ class TableContainer extends React.PureComponent<
 
   public state: ITableContainerState = {
     columnWidths: [],
-    isSorting: false,
+    isSorting: false
   };
   // A reference to the grid inside the content container is needed to resize collumns
   private gridContent: Grid | null = null;
@@ -203,13 +207,13 @@ class TableContainer extends React.PureComponent<
     }
   }
 
-  public componentWillMount() {
+  public UNSAFE_componentWillMount() {
     this.setColumnWidths();
   }
 
   public componentDidUpdate(
     prevProps: ITableContainerProps,
-    prevState: ITableContainerState,
+    prevState: ITableContainerState
   ) {
     if (this.gridContent && this.props.highlight) {
       const rowsChanged =
@@ -218,7 +222,7 @@ class TableContainer extends React.PureComponent<
       if (rowsChanged && this.props.highlight.scrollTo) {
         this.gridContent.scrollToCell({
           columnIndex: this.props.highlight.scrollTo.column || 0,
-          rowIndex: this.props.highlight.scrollTo.row,
+          rowIndex: this.props.highlight.scrollTo.row
         });
       }
     }
@@ -269,6 +273,9 @@ class TableContainer extends React.PureComponent<
     // If a single row is highlighted
     if (highlight && highlight.rows.size === 1 && onCellHighlighted) {
       const rowIndex = highlight.rows.values().next().value;
+      if (rowIndex === undefined) {
+        return;
+      }
       const columnIndex = highlight.scrollTo
         ? highlight.scrollTo.column || 0
         : 0;
@@ -292,29 +299,29 @@ class TableContainer extends React.PureComponent<
     if (!sorting || sorting.property.name !== property.name) {
       this.props.onSortingChange({
         property,
-        reverse: false,
+        reverse: false
       });
     } else if (sorting.property.name === property.name && !sorting.reverse) {
       this.props.onSortingChange({
         property,
-        reverse: true,
+        reverse: true
       });
     } else {
       this.props.onSortingChange(undefined);
     }
   };
 
-  private onReorderingEnd: ReorderingEndHandler = (sortEvent, e) => {
+  private onReorderingEnd: ReorderingEndHandler = (event) => {
     this.setState({ isSorting: false });
     if (this.props.onReorderingEnd) {
-      this.props.onReorderingEnd(sortEvent, e);
+      this.props.onReorderingEnd(event);
     }
   };
 
-  private onReorderingStart: ReorderingStartHandler = (sortEvent, e) => {
+  private onReorderingStart: ReorderingStartHandler = () => {
     this.setState({ isSorting: true });
     if (this.props.onReorderingStart) {
-      this.props.onReorderingStart(sortEvent, e);
+      this.props.onReorderingStart();
     }
   };
 
@@ -331,7 +338,7 @@ class TableContainer extends React.PureComponent<
     const focusKey = generateKey(focus);
     const cachedColumnWidths = TableContainer.columnWidthCache[focusKey];
     const defaultColumnWidths = TableContainer.generateDefaultColumnWidths(
-      focus.properties,
+      focus.properties
     );
     if (cachedColumnWidths) {
       // Reuse as many of the cached column widths as we need
@@ -346,4 +353,3 @@ class TableContainer extends React.PureComponent<
 }
 
 export { TableContainer as Table };
-export { ReorderingEndHandler, ReorderingStartHandler };

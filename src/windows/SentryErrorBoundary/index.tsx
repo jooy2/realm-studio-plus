@@ -16,7 +16,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-import * as sentry from '@sentry/electron';
+import * as sentry from '@sentry/electron/renderer';
 import electron from 'electron';
 import React from 'react';
 
@@ -24,7 +24,7 @@ import { IPC_EVENT_ID, IPC_SEND_EVENT_ID } from '../../sentry';
 import { ErrorOverlay } from './ErrorOverlay';
 
 interface ISentryErrorBoundaryProps {
-  children: React.ReactChild;
+  children: React.ReactNode;
 }
 
 interface INormalState {
@@ -49,7 +49,7 @@ export class SentryErrorBoundary extends React.Component<
   ISentryErrorBoundaryState
 > {
   public state: ISentryErrorBoundaryState = {
-    status: 'normal',
+    status: 'normal'
   };
 
   public componentDidMount() {
@@ -75,12 +75,11 @@ export class SentryErrorBoundary extends React.Component<
   public componentDidCatch(error: Error, info: React.ErrorInfo) {
     // Ask the main process to send the event id
     electron.ipcRenderer.send(IPC_SEND_EVENT_ID);
-    // Configure the scope to include the componentStack
-    sentry.configureScope(scope => {
+    // Attach the componentStack only to this captured event
+    sentry.withScope((scope) => {
       scope.setExtra('componentStack', info.componentStack);
+      sentry.captureException(error);
     });
-    // Capture the event
-    sentry.captureException(error);
     // Update the state
     this.setState({ status: 'error', error, info });
   }

@@ -39,7 +39,7 @@ export class CertificateManager {
     url: string,
     error: string,
     certificate: electron.Certificate,
-    callback: (isTrusted: boolean) => void,
+    callback: (isTrusted: boolean) => void
   ) => {
     event.preventDefault();
     // Check if this fingerprint is already trusted
@@ -52,7 +52,7 @@ export class CertificateManager {
         url,
         certificate,
         // The showCertificateTrustDialog is not supported on Linux
-        process.platform !== 'linux',
+        process.platform !== 'linux'
       );
       if (isTrusted) {
         this.trustedFingerprints.push(certificate.fingerprint);
@@ -65,7 +65,7 @@ export class CertificateManager {
     return [
       `Fingerprint: ${certificate.fingerprint}`,
       `Subject: ${certificate.subjectName}`,
-      `Issuer: ${certificate.issuerName}`,
+      `Issuer: ${certificate.issuerName}`
     ].join('\n');
   }
 
@@ -73,7 +73,7 @@ export class CertificateManager {
     window: electron.BrowserWindow | null,
     url: string,
     certificate: electron.Certificate,
-    enableDetailedButton = true,
+    enableDetailedButton = true
   ): Promise<boolean> {
     const parsedUrl = new URL(url);
     const coreMessage = `The server (${parsedUrl.host}) is using a certificate that cannot be automatically trusted.`;
@@ -86,7 +86,7 @@ export class CertificateManager {
     const messageOptions: MessageBoxSyncOptions = {
       type: 'warning',
       message: `${coreMessage}\n\n${description}\n\nDo you trust this certificate?`,
-      buttons,
+      buttons
     };
     const response = window
       ? electron.dialog.showMessageBoxSync(window, messageOptions)
@@ -94,16 +94,16 @@ export class CertificateManager {
     if (enableDetailedButton && response === 2) {
       const certificateDialogOptions = {
         certificate,
-        message: coreMessage,
+        message: coreMessage
       };
       if (window) {
         await electron.dialog.showCertificateTrustDialog(
           window,
-          certificateDialogOptions,
+          certificateDialogOptions
         );
       } else {
         await electron.dialog.showCertificateTrustDialog(
-          certificateDialogOptions,
+          certificateDialogOptions
         );
       }
       return this.showCertificateTrustDialog(window, url, certificate, false);

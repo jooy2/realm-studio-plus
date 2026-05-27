@@ -16,7 +16,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-import * as sentry from '@sentry/electron';
+import * as sentry from '@sentry/electron/main';
 import { app, BrowserWindow, screen, shell } from 'electron';
 import path from 'path';
 import url from 'url';
@@ -26,7 +26,7 @@ import { store } from '../store';
 import {
   getSingletonKey,
   getWindowOptions,
-  IWindowConstructorOptions,
+  IWindowConstructorOptions
 } from '../windows/Window';
 import { WindowOptions, WindowType } from '../windows/WindowOptions';
 
@@ -46,8 +46,10 @@ const isDevelopment = process.env.NODE_ENV === 'development';
 
 function getRendererHtmlPath() {
   const indexModule = isDevelopment
-    ? require('../../static/index.development.html')
-    : require('../../static/index.html');
+    ? // eslint-disable-next-line @typescript-eslint/no-require-imports
+      require('../../static/index.development.html')
+    : // eslint-disable-next-line @typescript-eslint/no-require-imports
+      require('../../static/index.html');
   // __dirname is the directory of the bundle
   return path.resolve(__dirname, indexModule.default);
 }
@@ -71,13 +73,13 @@ export class WindowManager {
    * defined by the window type and the props provided as argument.
    */
   public createWindow<W extends BrowserWindow>(
-    options: WindowOptions,
+    options: WindowOptions
   ): ICreatedWindow<W> {
     // Generate a singleton key
     const singletonKey = getSingletonKey(options);
     // Find a window of the same type and unique id
     const existing = this.windows.find(
-      w => w.type === options.type && w.singletonKey === singletonKey,
+      (w) => w.type === options.type && w.singletonKey === singletonKey
     );
     // Return the window if another window of the same type and singleton key exists
     if (existing) {
@@ -97,7 +99,7 @@ export class WindowManager {
     // @see https://github.com/realm/realm-studio/issues/962
     savedWindowOptions.height = Math.max(
       defaultWindowOptions.height || 600,
-      savedWindowOptions.height || 0,
+      savedWindowOptions.height || 0
     );
     // Combine these with general default options
     const combinedWindowOptions: IWindowConstructorOptions = {
@@ -123,8 +125,8 @@ export class WindowManager {
         // sentry.js is not emitted to the build folder.
         preload: isDevelopment
           ? undefined
-          : path.resolve(__dirname, './sentry.bundle.js'),
-      },
+          : path.resolve(__dirname, './sentry.bundle.js')
+      }
     };
 
     // Prefix the title of the window, if an update is pending
@@ -141,8 +143,8 @@ export class WindowManager {
       category: 'ui.window',
       message: `Opening '${options.type}' window`,
       data: {
-        title: windowOptions.title,
-      },
+        title: windowOptions.title
+      }
     });
 
     // Construct the window
@@ -150,7 +152,7 @@ export class WindowManager {
     this.windows.push({
       window,
       type: options.type,
-      singletonKey,
+      singletonKey
     });
 
     // Allow the remote API
@@ -167,7 +169,7 @@ export class WindowManager {
     if (process.env.REALM_STUDIO_DEV_TOOLS) {
       window.webContents.once('did-finish-load', () => {
         window.webContents.openDevTools({
-          mode: 'detach',
+          mode: 'detach'
         });
         // Focus to original window, to prevent the dev tools from overlaying itself
         setTimeout(() => {
@@ -183,7 +185,7 @@ export class WindowManager {
     }
 
     const query: { [key: string]: string } = {
-      options: JSON.stringify(options),
+      options: JSON.stringify(options)
     };
 
     // @see https://reactjs.org/blog/2016/11/16/react-v15.4.0.html#profiling-components-with-chrome-timeline
@@ -197,17 +199,17 @@ export class WindowManager {
         pathname: getRendererHtmlPath(),
         protocol: 'file:',
         query,
-        slashes: true,
-      }),
+        slashes: true
+      })
     );
 
-    window.on('page-title-updated', event => {
+    window.on('page-title-updated', (event) => {
       // Prevents windows from updating their title
       event.preventDefault();
     });
 
     // Open all links in the external browser
-    window.webContents.setWindowOpenHandler(details => {
+    window.webContents.setWindowOpenHandler((details) => {
       if (details.url.indexOf('http') === 0) {
         shell.openExternal(details.url);
         return { action: 'deny' };
@@ -228,12 +230,14 @@ export class WindowManager {
         x,
         y,
         maximize: isMaximized,
-        fullscreen,
+        fullscreen
       });
     });
 
     window.once('closed', () => {
-      const index = this.windows.findIndex(handle => handle.window === window);
+      const index = this.windows.findIndex(
+        (handle) => handle.window === window
+      );
       if (index > -1) {
         // Remove the window
         this.windows.splice(index, 1);
@@ -241,7 +245,7 @@ export class WindowManager {
       // Loaded
       sentry.addBreadcrumb({
         category: 'ui.window',
-        message: `Closed '${options.type}' window`,
+        message: `Closed '${options.type}' window`
       });
     });
 
@@ -253,13 +257,13 @@ export class WindowManager {
       // Creates a new array using the mapping as closing the windows will remove them from the
       // this.windows collection
       this.windows
-        .map(handle => handle.window)
-        .map(window => {
-          return new Promise<void>(resolve => {
+        .map((handle) => handle.window)
+        .map((window) => {
+          return new Promise<void>((resolve) => {
             window.once('closed', resolve);
             window.close();
           });
-        }),
+        })
     );
   }
 
@@ -290,7 +294,7 @@ export class WindowManager {
    */
   private setWindowOptions(
     type: WindowType,
-    options: IWindowConstructorOptions,
+    options: IWindowConstructorOptions
   ) {
     store.setWindowOptions(type, options);
   }
@@ -311,14 +315,14 @@ export class WindowManager {
 
   private positionWindowOnDisplay(
     window: Electron.BrowserWindow,
-    display: Electron.Display,
+    display: Electron.Display
   ) {
     const [width, height] = window.getSize();
     const x = Math.floor(
-      display.workArea.x + display.workArea.width / 2 - width / 2,
+      display.workArea.x + display.workArea.width / 2 - width / 2
     );
     const y = Math.floor(
-      display.workArea.y + display.workArea.height / 2 - height / 2,
+      display.workArea.y + display.workArea.height / 2 - height / 2
     );
     window.setPosition(x, y);
   }

@@ -44,7 +44,7 @@ export default class CSharpSchemaExporter extends SchemaExporter {
   }
 
   public exportSchema(realm: Realm): ISchemaFile[] {
-    realm.schema.forEach(schema => {
+    realm.schema.forEach((schema) => {
       this.makeSchema(schema);
     });
 
@@ -55,13 +55,13 @@ export default class CSharpSchemaExporter extends SchemaExporter {
     const properties = new Array<ICSharpProperty>();
     const additionalUsing = new Set<string>();
 
-    filteredProperties(schema.properties).forEach(prop => {
+    filteredProperties(schema.properties).forEach((prop) => {
       const csharpProperty = {
         name: this.capitalizedString(prop.name),
         mappedTo: prop.name,
         attributes: new Array<string>(),
         setter: ' set;',
-        type: '',
+        type: ''
       };
 
       if (prop.name === schema.primaryKey) {
@@ -81,7 +81,7 @@ export default class CSharpSchemaExporter extends SchemaExporter {
           prop.objectType,
           prop.objectType,
           prop.optional,
-          csharpProperty.attributes,
+          csharpProperty.attributes
         );
 
         csharpProperty.type = `IList<${type}>`;
@@ -90,7 +90,7 @@ export default class CSharpSchemaExporter extends SchemaExporter {
           prop.type,
           prop.objectType,
           prop.optional,
-          csharpProperty.attributes,
+          csharpProperty.attributes
         );
       }
 
@@ -104,7 +104,7 @@ export default class CSharpSchemaExporter extends SchemaExporter {
     this.appendLine('using System;');
     this.appendLine('using System.Collections.Generic;');
     this.appendLine('using Realms;');
-    additionalUsing.forEach(using => this.appendLine(using));
+    additionalUsing.forEach((using) => this.appendLine(using));
 
     this.appendLine('');
 
@@ -114,7 +114,7 @@ export default class CSharpSchemaExporter extends SchemaExporter {
     this.appendLine(
       `${this.ClassPadding}public class ${schema.name} : ${
         schema.embedded ? 'EmbeddedObject' : 'RealmObject'
-      }`,
+      }`
     );
     this.appendLine(`${this.ClassPadding}{`);
 
@@ -123,8 +123,8 @@ export default class CSharpSchemaExporter extends SchemaExporter {
         this.appendLine('');
       }
 
-      prop.attributes.forEach(attribute =>
-        this.appendLine(`${this.PropertyPadding}[${attribute}]`),
+      prop.attributes.forEach((attribute) =>
+        this.appendLine(`${this.PropertyPadding}[${attribute}]`)
       );
 
       if (prop.mappedTo !== prop.name) {
@@ -132,7 +132,7 @@ export default class CSharpSchemaExporter extends SchemaExporter {
       }
 
       this.appendLine(
-        `${this.PropertyPadding}public ${prop.type} ${prop.name} { get;${prop.setter} }`,
+        `${this.PropertyPadding}public ${prop.type} ${prop.name} { get;${prop.setter} }`
       );
     });
 
@@ -149,7 +149,7 @@ export default class CSharpSchemaExporter extends SchemaExporter {
     type: string | undefined,
     objectType: string | undefined,
     isOptional: boolean | undefined,
-    attributes: string[],
+    attributes: string[]
   ): string {
     let isNullable = false;
     let result: string;
@@ -188,7 +188,7 @@ export default class CSharpSchemaExporter extends SchemaExporter {
       default:
         if (!objectType)
           throw new Error(
-            `No specific match & missing objectType for type "${type}".`,
+            `No specific match & missing objectType for type "${type}".`
           );
 
         result = objectType;

@@ -51,7 +51,7 @@ class SidebarContainer extends React.Component<
 > {
   public state: ISidebarContainerState = {
     width: this.props.initialWidth || 200,
-    resizing: null,
+    resizing: null
   };
 
   private outerElement: HTMLElement | null = null;
@@ -64,7 +64,6 @@ class SidebarContainer extends React.Component<
     );
     return (
       <Sidebar
-        children={this.props.children}
         className={this.props.className}
         contentClassName={this.props.contentClassName}
         isOpen={this.props.isOpen}
@@ -75,7 +74,9 @@ class SidebarContainer extends React.Component<
         outerRef={this.outerRef}
         position={this.props.position}
         width={this.state.width}
-      />
+      >
+        {this.props.children}
+      </Sidebar>
     );
   }
 
@@ -95,7 +96,7 @@ class SidebarContainer extends React.Component<
     e.preventDefault();
     const resizing = {
       startX: e.clientX,
-      startWidth: this.state.width,
+      startWidth: this.state.width
     };
     // Set the state and register event listeners
     this.setState({ resizing }, () => {
@@ -118,7 +119,7 @@ class SidebarContainer extends React.Component<
       const width = this.getBoundedWidth(startWidth + deltaWidth);
       // Set the width
       this.setState({
-        width,
+        width
       });
     }
   };

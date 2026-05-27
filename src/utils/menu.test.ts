@@ -31,9 +31,9 @@ const before: MenuItemConstructorOptions[] = [
     submenu: [
       { id: 'item-c-1', label: 'Item C 1' },
       { id: 'item-c-2', label: 'Item C 2' },
-      { id: 'item-c-3', label: 'Item C 3' },
-    ],
-  },
+      { id: 'item-c-3', label: 'Item C 3' }
+    ]
+  }
 ];
 
 describe('menu utilities', () => {
@@ -41,7 +41,7 @@ describe('menu utilities', () => {
     const after = menu.performModification(before, {
       action: 'replace',
       id: 'item-b',
-      items: [{ id: 'item-b-replaced', label: 'Item B Replaced' }],
+      items: [{ id: 'item-b-replaced', label: 'Item B Replaced' }]
     });
     assert.strictEqual(before.length, 3);
     assert.strictEqual(after.length, 3);
@@ -53,7 +53,7 @@ describe('menu utilities', () => {
     const after = menu.performModification(before, {
       action: 'append',
       id: 'item-b',
-      items: [{ id: 'item-after-b', label: 'Item After B' }],
+      items: [{ id: 'item-after-b', label: 'Item After B' }]
     });
     assert.strictEqual(before.length, 3);
     assert.strictEqual(after.length, 4);
@@ -65,7 +65,7 @@ describe('menu utilities', () => {
     const after = menu.performModification(before, {
       action: 'prepend',
       id: 'item-b',
-      items: [{ id: 'item-before-b', label: 'Item Before B' }],
+      items: [{ id: 'item-before-b', label: 'Item Before B' }]
     });
     assert.strictEqual(before.length, 3);
     assert.strictEqual(after.length, 4);
@@ -80,20 +80,20 @@ describe('menu utilities', () => {
       {
         action: 'prepend',
         id: 'item-c-2',
-        items: [{ id: 'item-before-c-2', label: 'Item Before C 2' }],
+        items: [{ id: 'item-before-c-2', label: 'Item Before C 2' }]
       },
       {
         action: 'append',
         id: 'item-c-2',
         items: [
           { id: 'item-after-c-2-A', label: 'Item After C 2 A' },
-          { id: 'item-after-c-2-B', label: 'Item After C 2 B' },
-        ],
+          { id: 'item-after-c-2-B', label: 'Item After C 2 B' }
+        ]
       },
       {
         action: 'replace',
         id: 'item-c-2',
-        items: [{ id: 'item-c-2-replaced', label: 'Item C 2 Replaced' }],
+        items: [{ id: 'item-c-2-replaced', label: 'Item C 2 Replaced' }]
       },
       {
         action: 'replace',
@@ -101,10 +101,10 @@ describe('menu utilities', () => {
         items: [
           {
             id: 'item-after-c-2-A-replaced',
-            label: 'Item After C 2 A Replaced',
-          },
-        ],
-      },
+            label: 'Item After C 2 A Replaced'
+          }
+        ]
+      }
     ]);
     assert.strictEqual(before.length, 3);
     const itemC = after[2];
@@ -115,7 +115,7 @@ describe('menu utilities', () => {
       { id: 'item-c-2-replaced', label: 'Item C 2 Replaced' },
       { id: 'item-after-c-2-A-replaced', label: 'Item After C 2 A Replaced' },
       { id: 'item-after-c-2-B', label: 'Item After C 2 B' },
-      { id: 'item-c-3', label: 'Item C 3' },
+      { id: 'item-c-3', label: 'Item C 3' }
     ]);
   });
 });

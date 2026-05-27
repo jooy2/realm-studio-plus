@@ -17,7 +17,6 @@
 ////////////////////////////////////////////////////////////////////////////
 
 import classNames from 'classnames';
-import React from 'react';
 
 export const display = (value: ArrayBuffer | null) =>
   value ? `[${value.byteLength} bytes of data]` : 'null';
@@ -29,9 +28,10 @@ interface IDataCellProps {
 
 export const DataCell = ({ value, isEditable }: IDataCellProps) => (
   <div
+    // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
     tabIndex={isEditable ? 0 : undefined}
     className={classNames('RealmBrowser__Table__DataCell', {
-      'RealmBrowser__Table__DataCell--null': value === null,
+      'RealmBrowser__Table__DataCell--null': value === null
     })}
   >
     {display(value)}

@@ -20,7 +20,7 @@ import util from 'node:util';
 
 export const displayObject = (
   object: Realm.Object | null,
-  inspectOnMissingPk = false,
+  inspectOnMissingPk = false
 ) => {
   if (object) {
     const schema = object.objectSchema();

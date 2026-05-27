@@ -27,7 +27,7 @@ export type InnerWindowComponent = React.ComponentClass<
 export interface IWindow {
   getComponent(): Promise<InnerWindowComponent>;
   getWindowOptions(
-    props: WindowProps,
+    props: WindowProps
   ): Partial<Electron.BrowserWindowConstructorOptions>;
   getSingletonKey?(props: WindowProps): string | undefined;
   getTrackedProperties(props: WindowProps): { [key: string]: string };
@@ -35,10 +35,8 @@ export interface IWindow {
 
 import { GreetingWindow } from './GreetingWindow';
 import { RealmBrowserWindow } from './RealmBrowserWindow';
-import { ConnectToServerWindow } from './ConnectToServerWindow';
 
-export interface IWindowConstructorOptions
-  extends Partial<Electron.BrowserWindowConstructorOptions> {
+export interface IWindowConstructorOptions extends Partial<Electron.BrowserWindowConstructorOptions> {
   maximize?: boolean;
 }
 
@@ -49,8 +47,6 @@ export function getWindowClass(type: WindowType): IWindow {
     return GreetingWindow;
   } else if (type === 'realm-browser') {
     return RealmBrowserWindow;
-  } else if (type === 'connect-to-server') {
-    return ConnectToServerWindow;
   } else {
     throw new Error(`Unexpected window type: ${type}`);
   }
@@ -62,7 +58,7 @@ export function getWindowClass(type: WindowType): IWindow {
  */
 export function getWindowOptions({
   type,
-  props,
+  props
 }: WindowOptions): IWindowConstructorOptions {
   const WindowClass = getWindowClass(type);
   return WindowClass.getWindowOptions(props);
@@ -70,7 +66,7 @@ export function getWindowOptions({
 
 export function getSingletonKey({
   type,
-  props,
+  props
 }: WindowOptions): string | undefined {
   const WindowClass = getWindowClass(type);
   return WindowClass.getSingletonKey

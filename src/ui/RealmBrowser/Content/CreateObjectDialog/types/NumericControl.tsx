@@ -16,7 +16,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-import React from 'react';
 import { Button, Input, InputGroup } from 'reactstrap';
 
 import { parseNumber } from '../../../parsers';
@@ -27,7 +26,7 @@ export const NumericControl = ({
   children,
   onChange,
   property,
-  value,
+  value
 }: IBaseControlProps) => (
   <InputGroup className="CreateObjectDialog__NumericControl">
     <Input
@@ -36,7 +35,7 @@ export const NumericControl = ({
       step={property.type === 'int' ? 1 : 'any'}
       max={property.type === 'int' ? Number.MAX_SAFE_INTEGER : Number.MAX_VALUE}
       min={property.type === 'int' ? Number.MIN_SAFE_INTEGER : Number.MIN_VALUE}
-      onChange={e => onChange(parseNumber(e.target.value, property))}
+      onChange={(e) => onChange(parseNumber(e.target.value, property))}
       required={!property.optional}
       placeholder={value === null ? 'null' : ''}
       value={typeof value === 'number' ? value : ''}

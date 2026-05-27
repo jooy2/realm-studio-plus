@@ -24,7 +24,7 @@ export interface IExportEngine {
 
 export enum DataExportFormat {
   JSON = 'json',
-  LocalRealm = 'local-realm',
+  LocalRealm = 'local-realm'
 }
 
 export class DataExporter {
@@ -58,5 +58,5 @@ import { JSONExportEngine } from './json';
 import { LocalRealmExportEngine } from './local-realm';
 const engines = {
   [DataExportFormat.JSON]: JSONExportEngine,
-  [DataExportFormat.LocalRealm]: LocalRealmExportEngine,
+  [DataExportFormat.LocalRealm]: LocalRealmExportEngine
 };

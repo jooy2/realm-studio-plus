@@ -32,7 +32,7 @@ export default class KotlinSchemaExporter extends SchemaExporter {
   }
 
   public exportSchema(realm: Realm): ISchemaFile[] {
-    realm.schema.forEach(schema => {
+    realm.schema.forEach((schema) => {
       this.makeSchema(schema);
     });
 
@@ -41,7 +41,7 @@ export default class KotlinSchemaExporter extends SchemaExporter {
 
   public makeSchema(schema: Realm.ObjectSchema) {
     this.appendLine(
-      '// Please note : @LinkingObjects and default values are not represented in the schema and thus will not be part of the generated models',
+      '// Please note : @LinkingObjects and default values are not represented in the schema and thus will not be part of the generated models'
     );
     this.appendLine('package your.package.name.here');
     this.appendLine('');
@@ -55,7 +55,7 @@ export default class KotlinSchemaExporter extends SchemaExporter {
     this.fieldsContent += `open class ${schema.name} : RealmObject() {\n\n`;
 
     // Properties
-    filteredProperties(schema.properties).forEach(prop => {
+    filteredProperties(schema.properties).forEach((prop) => {
       this.propertyLine(prop, schema.primaryKey);
       if (prop.indexed && prop.name !== schema.primaryKey) {
         this.realmImports.add('import io.realm.annotations.Index');
@@ -75,7 +75,7 @@ export default class KotlinSchemaExporter extends SchemaExporter {
     }
 
     // Add all Realm imports
-    this.realmImports.forEach(line => {
+    this.realmImports.forEach((line) => {
       this.appendLine(line);
     });
     this.appendLine('');
@@ -110,7 +110,7 @@ export default class KotlinSchemaExporter extends SchemaExporter {
     this.fieldsContent += `${KotlinSchemaExporter.PADDING}var ${
       prop.name
     }: ${this.kotlinTypeForProperty(prop)} ${this.sensibleDefaultForProperty(
-      prop,
+      prop
     )}\n`;
   }
 
@@ -154,7 +154,7 @@ export default class KotlinSchemaExporter extends SchemaExporter {
   }
 
   private kotlinTypeForProperty(property: any): any {
-    let propertyType = null;
+    let propertyType: any = null;
 
     if (property.type === 'list') {
       this.realmImports.add('import io.realm.RealmList');

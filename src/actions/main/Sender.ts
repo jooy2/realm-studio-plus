@@ -28,7 +28,7 @@ export class Sender extends ActionSender {
     super(
       process.type === 'renderer'
         ? new RendererTransport()
-        : LoopbackTransport.getInstance(),
+        : LoopbackTransport.getInstance()
     );
   }
 
@@ -50,10 +50,6 @@ export class Sender extends ActionSender {
 
   public showRealmBrowser(props: IRealmBrowserWindowProps) {
     return this.send(MainActions.ShowRealmBrowser, props);
-  }
-
-  public showConnectToServer(url?: string) {
-    return this.send(MainActions.ShowConnectToServer, url);
   }
 
   public clearRendererCache() {

@@ -16,8 +16,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-import React from 'react';
-
 export const EmbeddedFocusPlaceholder = () => (
   <div className="RealmBrowser__EmbeddedFocusPlaceholder" />
 );

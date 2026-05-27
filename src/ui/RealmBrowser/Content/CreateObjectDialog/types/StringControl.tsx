@@ -16,7 +16,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-import React from 'react';
 import { Button, Input, InputGroup } from 'reactstrap';
 
 import { IBaseControlProps } from './TypeControl';
@@ -25,12 +24,12 @@ export const StringControl = ({
   children,
   onChange,
   property,
-  value,
+  value
 }: IBaseControlProps) => (
   <InputGroup className="CreateObjectDialog__StringControl">
     <Input
       className="CreateObjectDialog__StringControl__Input"
-      onChange={e => onChange(e.target.value)}
+      onChange={(e) => onChange(e.target.value)}
       placeholder={value === null ? 'null' : ''}
       value={value ? value : ''}
     />

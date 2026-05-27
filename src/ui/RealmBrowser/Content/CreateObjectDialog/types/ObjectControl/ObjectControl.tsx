@@ -40,7 +40,7 @@ export const ObjectControl = ({
   property,
   selectObjectDialog,
   updateObjectReference,
-  value,
+  value
 }: IObjectControlProps) => (
   <section className="CreateObjectDialog__ObjectControl">
     <InputGroup>
@@ -50,7 +50,7 @@ export const ObjectControl = ({
       >
         <span
           className={classNames('CreateObjectDialog__ObjectControl__Display', {
-            'CreateObjectDialog__ObjectControl__Display--null': value === null,
+            'CreateObjectDialog__ObjectControl__Display--null': value === null
           })}
         >
           {displayObject(value)}

@@ -52,7 +52,7 @@ const initialState = {
   optional: false,
   nameIsValid: true,
   isList: false,
-  primitiveTypeSelected: false,
+  primitiveTypeSelected: false
 };
 
 class AddPropertyModalContainer extends React.Component<
@@ -63,11 +63,11 @@ class AddPropertyModalContainer extends React.Component<
     super(props);
     this.state = {
       ...initialState,
-      typeOptions: [],
+      typeOptions: []
     };
   }
 
-  public componentWillReceiveProps() {
+  public UNSAFE_componentWillReceiveProps() {
     this.generateTypeOptions();
   }
 
@@ -87,7 +87,7 @@ class AddPropertyModalContainer extends React.Component<
     const newValue = e.target.value;
     this.setState({
       name: newValue,
-      nameIsValid: this.props.isPropertyNameAvailable(newValue),
+      nameIsValid: this.props.isPropertyNameAvailable(newValue)
     });
   };
 
@@ -95,19 +95,19 @@ class AddPropertyModalContainer extends React.Component<
     const newValue = e.target.value;
     this.setState({
       type: newValue,
-      primitiveTypeSelected: primitives.isPrimitive(newValue),
+      primitiveTypeSelected: primitives.isPrimitive(newValue)
     });
   };
 
   public onOptionalChange = () => {
     this.setState({
-      optional: !this.state.optional,
+      optional: !this.state.optional
     });
   };
 
   public onIsListChange = () => {
     this.setState({
-      isList: !this.state.isList,
+      isList: !this.state.isList
     });
   };
 
@@ -115,31 +115,31 @@ class AddPropertyModalContainer extends React.Component<
     const primitiveTypesHeader = {
       value: 'Primitive Types',
       disabled: true,
-      show: true,
+      show: true
     };
-    const primitiveTypesOptions = primitives.TYPES.map(type => ({
+    const primitiveTypesOptions = primitives.TYPES.map((type) => ({
       value: type,
       disabled: false,
-      show: true,
+      show: true
     }));
     const classes = this.getClassesTypes(this.props.classes);
     const classTypeHeader = {
       value: 'Link Types',
       disabled: true,
-      show: classes.length > 0,
+      show: classes.length > 0
     };
-    const classTypesOptions = classes.map(type => ({
+    const classTypesOptions = classes.map((type) => ({
       value: type,
       disabled: false,
-      show: true,
+      show: true
     }));
     this.setState({
       typeOptions: [
         primitiveTypesHeader,
         ...primitiveTypesOptions,
         classTypeHeader,
-        ...classTypesOptions,
-      ],
+        ...classTypesOptions
+      ]
     });
   };
 
@@ -148,7 +148,7 @@ class AddPropertyModalContainer extends React.Component<
       type: propertyType,
       optional,
       isList,
-      primitiveTypeSelected,
+      primitiveTypeSelected
     } = this.state;
     const optionalMarker =
       optional && !(isList && !primitiveTypeSelected) ? '?' : '';
@@ -157,7 +157,7 @@ class AddPropertyModalContainer extends React.Component<
   };
 
   private getClassesTypes = (classes: Realm.ObjectSchema[]): string[] =>
-    classes.map(c => c.name);
+    classes.map((c) => c.name);
 }
 
 export { AddPropertyModalContainer as AddPropertyModal };

@@ -25,15 +25,16 @@ export const DataControl = ({
   children,
   onChange,
   property,
-  value,
+  value
 }: IBaseControlProps) => {
-  let fileInput: HTMLInputElement;
+  const fileInputRef = React.useRef<HTMLInputElement | null>(null);
   return (
     <InputGroup className="CreateObjectDialog__DataControl">
       <Input
         className="CreateObjectDialog__DataControl__Input form-control"
         type="file"
-        onChange={e => {
+        onChange={() => {
+          const fileInput = fileInputRef.current;
           if (fileInput && fileInput.files && fileInput.files.length >= 1) {
             const firstFile = fileInput.files.item(0);
             if (firstFile) {
@@ -46,15 +47,14 @@ export const DataControl = ({
           }
         }}
         required={!property.optional}
-        innerRef={(element: HTMLInputElement) => {
-          fileInput = element;
-        }}
+        innerRef={fileInputRef}
         placeholder={value === null ? 'null' : ''}
       />
       {value !== null && property.optional ? (
         <Button
           size="sm"
           onClick={() => {
+            const fileInput = fileInputRef.current;
             if (fileInput) {
               // Reset the input field
               fileInput.value = '';

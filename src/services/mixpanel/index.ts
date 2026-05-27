@@ -47,16 +47,16 @@ mixpanel.init('bbadd422d2866fc9431cb63baa70bb1a', {
   // As we are currenly transfering credentials in the URLs, lets not send these
   property_blacklist: ['$current_url'],
   // We are tracking "Window opened" instead
-  track_pageview: false,
+  track_pageview: false
 });
 
 mixpanel.disable([
-  '$web_event', // This was tracking every click - potentially transfering confirdential data
+  '$web_event' // This was tracking every click - potentially transfering confirdential data
 ]);
 
 const browserParams = {
   $browser: app.name,
-  $browser_version: app.getVersion() || 'unknown',
+  $browser_version: app.getVersion() || 'unknown'
 };
 
 // Sends the browser version on every request
@@ -110,16 +110,11 @@ const linkClickedHandler = (e: MouseEvent) => {
     e.target.href.indexOf('http') === 0
   ) {
     mixpanel.track('Link clicked', {
-      href: e.target.href,
+      href: e.target.href
     });
   }
 };
 
 document.addEventListener('click', linkClickedHandler);
-if (module.hot) {
-  module.hot.dispose(() => {
-    document.removeEventListener('click', linkClickedHandler);
-  });
-}
 
 export { mixpanel };

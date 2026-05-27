@@ -24,7 +24,7 @@ import './services/mixpanel';
 
 import * as remote from '@electron/remote';
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
 // This is needed to prevent Realm JS from writing to directories it doesn't have access to
 import './utils/process-directories';
@@ -41,38 +41,24 @@ import '../styles/index.scss';
 import { CurrentWindow } from './windows/WindowComponent';
 
 const appElement = document.getElementById('app');
+const root = appElement ? createRoot(appElement) : null;
 
 if (!isDevelopment) {
-  ReactDOM.render(<CurrentWindow />, appElement);
+  root?.render(<CurrentWindow />);
 } else {
   // The react-hot-loader is a dev-dependency, why we cannot use a regular import in the top of this file
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const { AppContainer } = require('react-hot-loader');
 
   function render(Component: React.FC) {
-    ReactDOM.render(
-      <AppContainer>
-        <Component />
-      </AppContainer>,
-      appElement,
-    );
+    root?.render(<Component />);
   }
 
   render(CurrentWindow);
 
-  // Hot Module Replacement API
-  if (module.hot) {
-    module.hot.accept('./windows/WindowComponent', () => {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const NextWindow = require('./windows/WindowComponent').CurrentWindow;
-      render(NextWindow);
-    });
-  }
-
   // Add a tool that will notify us when components update
   if (process.env.WHY_DID_YOU_UPDATE) {
     console.warn('Loading why-did-you-update');
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
+
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { whyDidYouUpdate } = require('why-did-you-update');
     whyDidYouUpdate(React);
   }
@@ -80,7 +66,7 @@ if (!isDevelopment) {
 
 // Using process.nextTick - as requiring realm blocks rendering
 process.nextTick(() => {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const Realm = require('realm');
   // If sync is enabled on Realm - make it less verbose
   if (Realm.Sync) {

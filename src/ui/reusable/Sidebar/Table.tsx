@@ -17,7 +17,6 @@
 ////////////////////////////////////////////////////////////////////////////
 
 import classNames from 'classnames';
-import React from 'react';
 import { Table as ReactstrapTable, TableProps } from 'reactstrap';
 
 export const Table = (props: TableProps) => (

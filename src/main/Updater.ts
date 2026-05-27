@@ -59,7 +59,7 @@ export class Updater {
     autoUpdater.on('checking-for-update', () => {
       this.isBusy = true;
       this.sendUpdateStatus({
-        state: 'checking',
+        state: 'checking'
       });
     });
 
@@ -67,44 +67,44 @@ export class Updater {
       this.nextVersion = info.version;
       this.sendUpdateStatus({
         state: 'available',
-        nextVersion: this.nextVersion,
+        nextVersion: this.nextVersion
       });
       this.onUpdateAvailable(info);
     });
 
-    autoUpdater.on('update-not-available', (info: UpdateInfo) => {
+    autoUpdater.on('update-not-available', (_info: UpdateInfo) => {
       this.isBusy = false;
       this.sendUpdateStatus({
-        state: 'up-to-date',
+        state: 'up-to-date'
       });
     });
 
-    autoUpdater.on('download-progress', progress => {
+    autoUpdater.on('download-progress', (progress) => {
       this.sendUpdateStatus({
         state: 'downloading',
         nextVersion: this.nextVersion,
         progress: {
           total: progress.total,
-          downloaded: progress.transferred,
-        },
+          downloaded: progress.transferred
+        }
       });
     });
 
-    autoUpdater.on('error', err => {
+    autoUpdater.on('error', (err) => {
       this.isBusy = false;
       if (!this.quite) {
         this.showError('Error occurred while updating', err.message);
       }
       this.sendUpdateStatus({
         state: 'failed',
-        error: err.message,
+        error: err.message
       });
     });
 
     autoUpdater.on('update-downloaded', (info: UpdateInfo) => {
       this.sendUpdateStatus({
         state: 'downloaded',
-        nextVersion: this.nextVersion,
+        nextVersion: this.nextVersion
       });
       this.onUpdateDownloaded(info);
     });
@@ -149,7 +149,7 @@ export class Updater {
       this.nextVersion = 'v.1.2.3';
       this.sendUpdateStatus({
         state: 'available',
-        nextVersion: this.nextVersion,
+        nextVersion: this.nextVersion
       });
       const total = 60 * 1024 * 1024;
       const duration = 10000;
@@ -162,24 +162,24 @@ export class Updater {
           nextVersion: this.nextVersion,
           progress: {
             downloaded,
-            total,
-          },
+            total
+          }
         });
         // Stop the timer - and go to installing
         if (downloaded === total) {
           clearTimeout(timer);
           this.sendUpdateStatus({
             state: 'downloaded',
-            nextVersion: this.nextVersion,
+            nextVersion: this.nextVersion
           });
           setTimeout(() => {
             this.sendUpdateStatus({
               state: 'installing',
-              nextVersion: this.nextVersion,
+              nextVersion: this.nextVersion
             });
             setTimeout(() => {
               this.sendUpdateStatus({
-                state: 'up-to-date',
+                state: 'up-to-date'
               });
             }, 2000);
           }, 5000);
@@ -198,10 +198,10 @@ export class Updater {
         dialog.showMessageBoxSync({
           type: 'info',
           message: `A new version of ${appName} is available!`,
-          detail: `${appName} ${lastestVersion} is available – you have ${currentVersion}.\nWould you like to update it now?`,
+          detail: `${appName} ${lastestVersion} is available - you have ${currentVersion}.\nWould you like to update it now?`,
           buttons: ['Yes', 'No'],
           defaultId: 0,
-          cancelId: 1,
+          cancelId: 1
         }) === 0
       );
     }
@@ -218,7 +218,7 @@ export class Updater {
           message: `A new version of ${appName} is downloaded!`,
           detail: `${appName} ${lastestVersion} is downloaded.\nClick "Ok" to quit and restart Realm Studio.`,
           buttons: ['Ok'],
-          defaultId: 0,
+          defaultId: 0
         }) === 0
       );
     }
@@ -250,12 +250,12 @@ export class Updater {
     dialog.showMessageBox({
       type: 'error',
       message,
-      detail,
+      detail
     });
   }
 
   private sendUpdateStatus(status: IUpdateStatus) {
-    this.listeningWindows.forEach(window => {
+    this.listeningWindows.forEach((window) => {
       window.webContents.send('update-status', status);
     });
   }
