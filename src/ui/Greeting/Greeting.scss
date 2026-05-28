@@ -19,15 +19,19 @@
 @import "~realm-studio-styles/variables";
 
 $history-panel-icon-size: 20px;
+$history-panel-muted: rgba($dove, .55);
+$history-panel-header: rgba($dove, .6);
+$history-panel-empty: rgba($dove, .5);
+$history-panel-hover: rgba($dove, .08);
 
 .Greeting {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   height: 100%;
 
   &__ActionsPanel,
   &__HistoryPanel {
-    padding: $spacer * .5;
+    padding: $spacer * 1.9;
   }
 
   &__ActionsPanel {
@@ -114,38 +118,137 @@ $history-panel-icon-size: 20px;
   &__HistoryPanel {
     background: $charcoal;
     color: $dove;
+    display: flex;
+    flex-direction: column;
     flex-grow: 1;
     font-size: .9rem;
+    min-height: 0;
 
     a {
       color: $dove;
     }
 
+    &__Header {
+      color: $history-panel-header;
+      flex-shrink: 0;
+      font-size: .75rem;
+      font-weight: 600;
+      letter-spacing: .05em;
+      margin: 0 0 $spacer * .5;
+      text-transform: uppercase;
+    }
+
+    &__List {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      min-height: 0;
+      overflow-y: auto;
+
+      &::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      &::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: $history-panel-hover;
+        border-radius: 4px;
+
+        &:hover {
+          background: $history-panel-empty;
+        }
+      }
+    }
+
     &__Entry {
       align-items: center;
+      border-radius: $spacer * .25;
       display: flex;
+      padding: $spacer * .4 $spacer * .5;
+      transition: background-color .15s ease;
+
+      &--clickable {
+        cursor: pointer;
+
+        &:hover {
+          background: $history-panel-hover;
+
+          .Greeting__HistoryPanel__Remove {
+            opacity: 1;
+          }
+        }
+      }
     }
 
     &__Icon {
+      flex-shrink: 0;
       height: $history-panel-icon-size;
-      margin: $spacer * .5;
+      margin-right: $spacer * .6;
       width: $history-panel-icon-size;
+
+      &--fa {
+        align-items: center;
+        display: inline-flex;
+        font-size: $history-panel-icon-size * .9;
+        justify-content: center;
+        opacity: .75;
+      }
     }
 
     &__Description {
       flex-grow: 1;
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    &__Name {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      width: 20px;
+    }
+
+    &__Path {
+      color: $history-panel-muted;
+      direction: rtl;
+      font-size: .7rem;
+      overflow: hidden;
+      text-align: left;
+      text-overflow: ellipsis;
+      unicode-bidi: plaintext;
+      white-space: nowrap;
+    }
+
+    &__Remove {
+      background: transparent;
+      border: 0;
+      color: $history-panel-header;
+      cursor: pointer;
+      flex-shrink: 0;
+      margin-left: $spacer * .25;
+      opacity: 0;
+      padding: $spacer * .25 $spacer * .4;
+      transition: color .15s ease, opacity .15s ease;
+
+      &:hover {
+        color: $sexy-salmon;
+      }
+
+      &:focus {
+        opacity: 1;
+        outline: none;
+      }
     }
 
     &__Empty {
       align-items: center;
+      color: $history-panel-empty;
       cursor: default;
       display: flex;
       flex-direction: column;
-      height: 100%;
+      flex-grow: 1;
       justify-content: center;
       padding: $spacer * .5;
       text-align: center;

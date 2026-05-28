@@ -22,15 +22,25 @@ import React from 'react';
 
 import { main } from '../../actions/main';
 import { IUpdateStatus } from '../../main/Updater';
+import {
+  getRecentFiles,
+  IRecentFile,
+  removeRecentFile
+} from '../../services/recent-files';
 import { IMenuGeneratorProps } from '../../windows/MenuGenerator';
 
 import { Greeting } from './Greeting';
+import {
+  IHistoryEntry,
+  ILocalRealmEntry
+} from './HistoryPanel/HistoryEntry';
 
 export type SocialNetwork = 'twitter' | 'facebook' | 'reddit' | 'hacker-news';
 
 interface IGreetingContainerState {
   isCloudInstancesDropdownOpen: boolean;
   isSyncEnabled: boolean;
+  recentFiles: IRecentFile[];
   updateStatus: IUpdateStatus;
   version: string;
 }
@@ -42,6 +52,7 @@ class GreetingContainer extends React.Component<
   public state: IGreetingContainerState = {
     isCloudInstancesDropdownOpen: false,
     isSyncEnabled: false,
+    recentFiles: getRecentFiles(),
     updateStatus: {
       state: 'up-to-date'
     },
@@ -50,6 +61,7 @@ class GreetingContainer extends React.Component<
 
   public componentDidMount() {
     electron.ipcRenderer.on('update-status', this.updateStatusChanged);
+    window.addEventListener('focus', this.refreshRecentFiles);
     // Require realm and check update state with the sync support
     // Using nextTick to prevent blocking when loading realm
     process.nextTick(() => {
@@ -66,14 +78,27 @@ class GreetingContainer extends React.Component<
       'update-status',
       this.updateStatusChanged
     );
+    window.removeEventListener('focus', this.refreshRecentFiles);
   }
 
   public render() {
-    return <Greeting {...this.state} {...this} />;
+    const entries: IHistoryEntry[] = this.state.recentFiles.map((file) => ({
+      type: 'local-realm',
+      path: file.path
+    } as ILocalRealmEntry));
+    return (
+      <Greeting
+        {...this.state}
+        {...this}
+        historyEntries={entries}
+        onOpenRecentFile={this.onOpenRecentFile}
+        onRemoveRecentFile={this.onRemoveRecentFile}
+      />
+    );
   }
 
   public onOpenLocalRealm = () => {
-    main.showOpenLocalRealm();
+    main.showOpenLocalRealm().then(this.refreshRecentFiles);
   };
 
   public onCheckForUpdates = () => {
@@ -85,6 +110,21 @@ class GreetingContainer extends React.Component<
     status: IUpdateStatus
   ) => {
     this.setState({ updateStatus: status });
+  };
+
+  private refreshRecentFiles = () => {
+    this.setState({ recentFiles: getRecentFiles() });
+  };
+
+  private onOpenRecentFile = (entry: IHistoryEntry) => {
+    const localEntry = entry as ILocalRealmEntry;
+    main.showOpenLocalRealmAtPath(localEntry.path);
+  };
+
+  private onRemoveRecentFile = (entry: IHistoryEntry) => {
+    const localEntry = entry as ILocalRealmEntry;
+    removeRecentFile(localEntry.path);
+    this.refreshRecentFiles();
   };
 }
 

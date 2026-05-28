@@ -22,6 +22,7 @@ import path from 'path';
 import { MainReceiver } from '../actions/main';
 import { CLOUD_PROTOCOL, STUDIO_PROTOCOL } from '../constants';
 import * as dataImporter from '../services/data-importer';
+import { addRecentFile } from '../services/recent-files';
 import { showError } from '../ui/reusable/errors';
 import { RealmLoadingMode } from '../utils/realms';
 import { IRealmBrowserWindowProps } from '../windows/WindowProps';
@@ -49,6 +50,9 @@ export class Application {
     },
     [MainActions.ShowOpenLocalRealm]: () => {
       return this.showOpenLocalRealm();
+    },
+    [MainActions.ShowOpenLocalRealmAtPath]: (filePath: string) => {
+      return this.openLocalRealmAtPath(filePath);
     },
     [MainActions.ShowRealmBrowser]: (props: IRealmBrowserWindowProps) => {
       return this.showRealmBrowser(props);
@@ -308,6 +312,7 @@ export class Application {
   };
 
   private openLocalRealmAtPath = (filePath: string) => {
+    addRecentFile(filePath);
     return this.showRealmBrowser({
       realm: {
         mode: RealmLoadingMode.Local,

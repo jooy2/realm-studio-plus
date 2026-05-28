@@ -27,7 +27,9 @@ export const GreetingWindow: IWindow = {
     title: app.name,
     width: 750,
     height: 500,
-    resizable: false,
+    minWidth: 600,
+    minHeight: 450,
+    resizable: true,
     fullscreenable: false
   }),
   getComponent: () =>

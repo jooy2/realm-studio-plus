@@ -16,6 +16,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
+import path from 'path';
+
 import serverIcon from '../../../../static/svgs/server-icon.svg';
 import syncedRealmFileIcon from '../../../../static/svgs/synced-realm-icon.svg';
 
@@ -33,7 +35,21 @@ export interface ISyncedRealmEntry extends IHistoryEntry {
   url: string;
 }
 
-export const HistoryEntry = ({ entry }: { entry: IHistoryEntry }) => {
+export interface ILocalRealmEntry extends IHistoryEntry {
+  path: string;
+}
+
+interface IHistoryEntryProps {
+  entry: IHistoryEntry;
+  onOpen?: (entry: IHistoryEntry) => void;
+  onRemove?: (entry: IHistoryEntry) => void;
+}
+
+export const HistoryEntry = ({
+  entry,
+  onOpen,
+  onRemove
+}: IHistoryEntryProps) => {
   if (entry.type === 'server') {
     const serverEntry = entry as IServerEntry;
     return (
@@ -62,6 +78,38 @@ export const HistoryEntry = ({ entry }: { entry: IHistoryEntry }) => {
         <div className="Greeting__HistoryPanel__Description">
           {serverEntry.url}
         </div>
+      </div>
+    );
+  } else if (entry.type === 'local-realm') {
+    const localEntry = entry as ILocalRealmEntry;
+    const fileName = path.basename(localEntry.path);
+    return (
+      <div
+        className="Greeting__HistoryPanel__Entry Greeting__HistoryPanel__Entry--clickable"
+        title={localEntry.path}
+        onClick={() => onOpen && onOpen(localEntry)}
+      >
+        <i
+          className="fa fa-file-o Greeting__HistoryPanel__Icon Greeting__HistoryPanel__Icon--fa"
+          aria-hidden="true"
+        />
+        <div className="Greeting__HistoryPanel__Description">
+          <div className="Greeting__HistoryPanel__Name">{fileName}</div>
+          <div className="Greeting__HistoryPanel__Path">{localEntry.path}</div>
+        </div>
+        {onRemove && (
+          <button
+            type="button"
+            className="Greeting__HistoryPanel__Remove"
+            title="Remove from list"
+            onClick={(e) => {
+              e.stopPropagation();
+              onRemove(localEntry);
+            }}
+          >
+            <i className="fa fa-trash" aria-hidden="true" />
+          </button>
+        )}
       </div>
     );
   } else {

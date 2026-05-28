@@ -16,23 +16,40 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-import * as remote from '@electron/remote';
-
 import { HistoryEntry, IHistoryEntry } from './HistoryEntry';
-
-const { app } = remote;
 
 const Empty = () => (
   <div className="Greeting__HistoryPanel__Empty">
-    <p>Welcome to {app.name}!</p>
+    <p>No recently opened files</p>
   </div>
 );
 
-export const HistoryPanel = ({ entries }: { entries: IHistoryEntry[] }) => (
+interface IHistoryPanelProps {
+  entries: IHistoryEntry[];
+  onOpen?: (entry: IHistoryEntry) => void;
+  onRemove?: (entry: IHistoryEntry) => void;
+}
+
+export const HistoryPanel = ({
+  entries,
+  onOpen,
+  onRemove
+}: IHistoryPanelProps) => (
   <div className="Greeting__HistoryPanel">
-    {entries.map((entry, index) => (
-      <HistoryEntry entry={entry} key={index} />
-    ))}
-    {entries.length === 0 ? <Empty /> : null}
+    <h6 className="Greeting__HistoryPanel__Header">Recently opened</h6>
+    <div className="Greeting__HistoryPanel__List">
+      {entries.length === 0 ? (
+        <Empty />
+      ) : (
+        entries.map((entry, index) => (
+          <HistoryEntry
+            entry={entry}
+            key={index}
+            onOpen={onOpen}
+            onRemove={onRemove}
+          />
+        ))
+      )}
+    </div>
   </div>
 );

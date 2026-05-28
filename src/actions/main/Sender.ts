@@ -44,6 +44,10 @@ export class Sender extends ActionSender {
     return this.send(MainActions.ShowOpenLocalRealm);
   }
 
+  public showOpenLocalRealmAtPath(filePath: string) {
+    return this.send(MainActions.ShowOpenLocalRealmAtPath, filePath);
+  }
+
   public showImportData(format: ImportFormat) {
     return this.send(MainActions.ShowImportData, format);
   }

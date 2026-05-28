@@ -22,6 +22,8 @@ import { Button } from 'reactstrap';
 import { IUpdateStatus } from '../../main/Updater';
 
 import realmLogo from '../../../static/svgs/realm-logo.svg';
+import { HistoryPanel } from './HistoryPanel/HistoryPanel';
+import { IHistoryEntry } from './HistoryPanel/HistoryEntry';
 import { UpdateStatusIndicator } from './UpdateStatusIndicator';
 
 import './Greeting.scss';
@@ -29,13 +31,19 @@ import './Greeting.scss';
 const { app } = remote;
 
 export const Greeting = ({
+  historyEntries,
   onCheckForUpdates,
   onOpenLocalRealm,
+  onOpenRecentFile,
+  onRemoveRecentFile,
   updateStatus,
   version
 }: {
+  historyEntries: IHistoryEntry[];
   onCheckForUpdates: () => void;
   onOpenLocalRealm: () => void;
+  onOpenRecentFile: (entry: IHistoryEntry) => void;
+  onRemoveRecentFile: (entry: IHistoryEntry) => void;
   updateStatus: IUpdateStatus;
   version: string;
 }) => (
@@ -67,5 +75,10 @@ export const Greeting = ({
         </a>
       </div>
     </div>
+    <HistoryPanel
+      entries={historyEntries}
+      onOpen={onOpenRecentFile}
+      onRemove={onRemoveRecentFile}
+    />
   </div>
 );
