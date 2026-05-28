@@ -194,14 +194,101 @@ export class WindowManager {
     }
 
     // Load the renderer html into the window
-    window.loadURL(
-      url.format({
-        pathname: getRendererHtmlPath(),
-        protocol: 'file:',
-        query,
-        slashes: true
-      })
-    );
+    const rendererUrl = url.format({
+      pathname: getRendererHtmlPath(),
+      protocol: 'file:',
+      query,
+      slashes: true
+    });
+    window.loadURL(rendererUrl);
+
+    // Recover from native renderer crashes (e.g. SIGBUS/SIGSEGV from the
+    // Realm SDK when another process modifies the open .realm file) by
+    // re-navigating to the same URL. The URL embeds the original window
+    // options including the realm path, so the same file is reopened.
+    // Throttle so a crash that immediately reproduces does not loop.
+    let lastCrashReloadAt = 0;
+    window.webContents.on('render-process-gone', (_event, details) => {
+      if (details.reason === 'clean-exit' || details.reason === 'killed') {
+        return;
+      }
+      if (window.isDestroyed()) {
+        return;
+      }
+      const now = Date.now();
+      if (now - lastCrashReloadAt < 5000) {
+        sentry.addBreadcrumb({
+          category: 'ui.window',
+          message: `Renderer crashed again within 5s — not reloading`,
+          data: { reason: details.reason, exitCode: details.exitCode }
+        });
+        return;
+      }
+      lastCrashReloadAt = now;
+      sentry.addBreadcrumb({
+        category: 'ui.window',
+        message: `Renderer crashed — reloading window`,
+        data: { reason: details.reason, exitCode: details.exitCode }
+      });
+      window.loadURL(rendererUrl);
+    });
+
+    // Recover from a hung renderer (no 'render-process-gone' fires because
+    // the process is alive but blocked, e.g. Realm SDK stuck on a file lock
+    // held by another process). Electron emits 'unresponsive' once the event
+    // loop has been blocked long enough. We give it a grace period to come
+    // back on its own; if not, kill the renderer — which then triggers
+    // 'render-process-gone' above and the URL is re-loaded.
+    const HANG_GRACE_MS = 10000;
+    let hangTimer: NodeJS.Timeout | null = null;
+    let lastHangReloadAt = 0;
+    const clearHangTimer = () => {
+      if (hangTimer) {
+        clearTimeout(hangTimer);
+        hangTimer = null;
+      }
+    };
+    window.on('unresponsive', () => {
+      if (window.isDestroyed()) return;
+      if (hangTimer) return;
+      const now = Date.now();
+      if (now - lastHangReloadAt < 5000) {
+        sentry.addBreadcrumb({
+          category: 'ui.window',
+          message: `Renderer unresponsive again within 5s — leaving alone`
+        });
+        return;
+      }
+      sentry.addBreadcrumb({
+        category: 'ui.window',
+        message: `Renderer unresponsive — waiting ${HANG_GRACE_MS}ms before kill`
+      });
+      hangTimer = setTimeout(() => {
+        hangTimer = null;
+        if (window.isDestroyed()) return;
+        lastHangReloadAt = Date.now();
+        sentry.addBreadcrumb({
+          category: 'ui.window',
+          message: `Renderer still unresponsive — forcefully crashing`
+        });
+        try {
+          window.webContents.forcefullyCrashRenderer();
+        } catch {
+          // If the API is unavailable or fails, fall back to a direct reload.
+          if (!window.isDestroyed()) {
+            window.loadURL(rendererUrl);
+          }
+        }
+      }, HANG_GRACE_MS);
+    });
+    window.on('responsive', () => {
+      clearHangTimer();
+      sentry.addBreadcrumb({
+        category: 'ui.window',
+        message: `Renderer recovered on its own`
+      });
+    });
+    window.on('closed', clearHangTimer);
 
     window.on('page-title-updated', (event) => {
       // Prevents windows from updating their title

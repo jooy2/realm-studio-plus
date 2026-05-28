@@ -22,6 +22,9 @@ if (process.type === 'browser') {
 
 import './services/mixpanel';
 
+// Must run before any `react-dom/*` import — see file for rationale.
+import './utils/disable-react-profiling';
+
 import * as remote from '@electron/remote';
 import React from 'react';
 import { createRoot } from 'react-dom/client';

@@ -21,6 +21,7 @@ import * as remote from '@electron/remote';
 import fs from 'fs-extra';
 import path from 'path';
 import Realm from 'realm';
+import { flushSync } from 'react-dom';
 
 import { DataExporter, DataExportFormat } from '../../services/data-exporter';
 import * as dataImporter from '../../services/data-importer';
@@ -138,6 +139,8 @@ class RealmBrowserContainer
   private contentInstance: Content | null = null;
   private fileWatcher: fs.FSWatcher | null = null;
   private watchedInode: number | null = null;
+  private watchedMtimeMs: number | null = null;
+  private watchedSize: number | null = null;
   private watchedFileName: string | null = null;
   private watchDebounceTimer: ReturnType<typeof setTimeout> | null = null;
   private isReloading = false;
@@ -778,7 +781,7 @@ class RealmBrowserContainer
     this.reloadFromDisk();
   };
 
-  private reloadFromDisk = () => {
+  private reloadFromDisk = async () => {
     if (this.isReloading) {
       return;
     }
@@ -787,11 +790,69 @@ class RealmBrowserContainer
     }
     this.isReloading = true;
     this.stopWatchingRealmFile();
-    // Reload the whole renderer. The original window query string carries
-    // the realm path but not the encryption key, so an encrypted file will
-    // naturally re-prompt via the existing loadingRealmFailed flow.
-    // In-flight transactions are handled by onBeforeUnload.
-    window.location.reload();
+
+    // Keep a reference to the realm we are about to discard. We must NOT call
+    // realm.close() until React has fully committed a render in which no
+    // Realm-bound objects remain in the tree. Otherwise React 19's passive
+    // effects / devtools profiling pass walks the previous render's props
+    // (e.g. focus.results, which is a Realm.Results) and trips the SDK's
+    // "Accessing object which has been invalidated or deleted" assertion
+    // mid-commit, which permanently wedges the reconciler.
+    const closingRealm = this.realm;
+
+    // Detach listeners first so a late change/schema notification fired during
+    // the close handshake cannot land in React state that references the
+    // closing realm.
+    if (closingRealm) {
+      try {
+        closingRealm.removeListener('change', this.onRealmChanged);
+        closingRealm.removeListener('schema', this.onRealmSchemaChanged);
+      } catch {
+        // ignore
+      }
+    }
+
+    // Hide the realm from render() before flushing, so <Content> unmounts and
+    // the sidebar drops its schema references.
+    this.realm = undefined;
+
+    flushSync(() => {
+      this.setState({
+        focus: null,
+        classes: [],
+        progress: { status: 'in-progress' },
+        dataVersion: 0,
+        dataVersionAtBeginning: undefined
+      });
+    });
+
+    // At this point Content (and any other consumer of Realm objects) has
+    // unmounted and its passive effects have run with the realm still valid.
+    // Releasing the native resources is now safe.
+    if (closingRealm) {
+      if (closingRealm.isInTransaction) {
+        try {
+          closingRealm.cancelTransaction();
+        } catch {
+          // ignore
+        }
+      }
+      try {
+        closingRealm.close();
+      } catch {
+        // ignore
+      }
+    }
+
+    try {
+      await this.loadRealm(
+        this.props.realm,
+        this.props.import ? this.props.import.schema : undefined
+      );
+    } finally {
+      this.startWatchingRealmFile();
+      this.isReloading = false;
+    }
   };
 
   private startWatchingRealmFile() {
@@ -802,9 +863,14 @@ class RealmBrowserContainer
     const realmPath = realm.path;
     this.stopWatchingRealmFile();
     try {
-      this.watchedInode = fs.statSync(realmPath).ino;
+      const stat = fs.statSync(realmPath);
+      this.watchedInode = stat.ino;
+      this.watchedMtimeMs = stat.mtimeMs;
+      this.watchedSize = stat.size;
     } catch {
       this.watchedInode = null;
+      this.watchedMtimeMs = null;
+      this.watchedSize = null;
     }
     const dir = path.dirname(realmPath);
     this.watchedFileName = path.basename(realmPath);
@@ -840,6 +906,8 @@ class RealmBrowserContainer
       this.fileWatcher = null;
     }
     this.watchedInode = null;
+    this.watchedMtimeMs = null;
+    this.watchedSize = null;
     this.watchedFileName = null;
   }
 
@@ -853,20 +921,26 @@ class RealmBrowserContainer
       return;
     }
     const realmPath = realm.path;
-    let currentInode: number | null = null;
+    let stat: fs.Stats | null = null;
     try {
-      currentInode = fs.statSync(realmPath).ino;
+      stat = fs.statSync(realmPath);
     } catch {
       // File does not currently exist on disk — keep the current view
       // (matches existing behavior when a file is only deleted).
       return;
     }
-    if (
-      currentInode !== null &&
-      this.watchedInode !== null &&
-      currentInode !== this.watchedInode
-    ) {
-      this.reloadFromDisk();
+    // Inode change = file was replaced (atomic rename / delete+recreate).
+    // mtime or size change = another process wrote in-place to the same file.
+    // Either way, our mmap may now be inconsistent with disk and must be
+    // released before any further reads.
+    const inodeChanged =
+      this.watchedInode !== null && stat.ino !== this.watchedInode;
+    const mtimeChanged =
+      this.watchedMtimeMs !== null && stat.mtimeMs !== this.watchedMtimeMs;
+    const sizeChanged =
+      this.watchedSize !== null && stat.size !== this.watchedSize;
+    if (inodeChanged || mtimeChanged || sizeChanged) {
+      void this.reloadFromDisk();
     }
   }
 
