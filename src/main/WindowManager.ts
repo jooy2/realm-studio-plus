@@ -202,12 +202,21 @@ export class WindowManager {
     });
     window.loadURL(rendererUrl);
 
-    // Recover from native renderer crashes (e.g. SIGBUS/SIGSEGV from the
-    // Realm SDK when another process modifies the open .realm file) by
-    // re-navigating to the same URL. The URL embeds the original window
-    // options including the realm path, so the same file is reopened.
-    // Throttle so a crash that immediately reproduces does not loop.
-    let lastCrashReloadAt = 0;
+    // Recover from native renderer crashes (e.g. encrypted Realm HMAC
+    // failure when another process writes to the file — see
+    // https://github.com/realm/realm-js/issues/7084) by re-navigating to the
+    // same URL. The URL embeds the original window options including the
+    // realm path, so the same file is reopened.
+    //
+    // The throttle is intentionally permissive: with the encrypted-realm
+    // bug each external write can trigger another crash and the user
+    // expects the app to keep recovering. We cap at CRASH_RELOAD_LIMIT
+    // within CRASH_RELOAD_WINDOW_MS only to avoid an unbounded loop when
+    // the situation is unrecoverable (e.g. the renderer crashes during
+    // startup before the realm even opens).
+    const CRASH_RELOAD_WINDOW_MS = 60000;
+    const CRASH_RELOAD_LIMIT = 8;
+    let crashReloadTimestamps: number[] = [];
     window.webContents.on('render-process-gone', (_event, details) => {
       if (details.reason === 'clean-exit' || details.reason === 'killed') {
         return;
@@ -216,18 +225,21 @@ export class WindowManager {
         return;
       }
       const now = Date.now();
-      if (now - lastCrashReloadAt < 5000) {
+      crashReloadTimestamps = crashReloadTimestamps.filter(
+        (t) => now - t < CRASH_RELOAD_WINDOW_MS
+      );
+      if (crashReloadTimestamps.length >= CRASH_RELOAD_LIMIT) {
         sentry.addBreadcrumb({
           category: 'ui.window',
-          message: `Renderer crashed again within 5s — not reloading`,
+          message: `Renderer crashed but reload limit reached (${CRASH_RELOAD_LIMIT} in ${CRASH_RELOAD_WINDOW_MS / 1000}s) — giving up`,
           data: { reason: details.reason, exitCode: details.exitCode }
         });
         return;
       }
-      lastCrashReloadAt = now;
+      crashReloadTimestamps.push(now);
       sentry.addBreadcrumb({
         category: 'ui.window',
-        message: `Renderer crashed — reloading window`,
+        message: `Renderer crashed — reloading window (attempt ${crashReloadTimestamps.length}/${CRASH_RELOAD_LIMIT})`,
         data: { reason: details.reason, exitCode: details.exitCode }
       });
       window.loadURL(rendererUrl);
@@ -239,9 +251,16 @@ export class WindowManager {
     // loop has been blocked long enough. We give it a grace period to come
     // back on its own; if not, kill the renderer — which then triggers
     // 'render-process-gone' above and the URL is re-loaded.
+    //
+    // We cap kills at HANG_KILL_LIMIT within HANG_KILL_WINDOW_MS to avoid
+    // pinning into an infinite kill/reload loop when the underlying cause
+    // (e.g. another process is continuously writing to the realm file)
+    // can't be resolved by reload alone.
     const HANG_GRACE_MS = 10000;
+    const HANG_KILL_WINDOW_MS = 60000;
+    const HANG_KILL_LIMIT = 3;
     let hangTimer: NodeJS.Timeout | null = null;
-    let lastHangReloadAt = 0;
+    let hangKillTimestamps: number[] = [];
     const clearHangTimer = () => {
       if (hangTimer) {
         clearTimeout(hangTimer);
@@ -252,21 +271,24 @@ export class WindowManager {
       if (window.isDestroyed()) return;
       if (hangTimer) return;
       const now = Date.now();
-      if (now - lastHangReloadAt < 5000) {
+      hangKillTimestamps = hangKillTimestamps.filter(
+        (t) => now - t < HANG_KILL_WINDOW_MS
+      );
+      if (hangKillTimestamps.length >= HANG_KILL_LIMIT) {
         sentry.addBreadcrumb({
           category: 'ui.window',
-          message: `Renderer unresponsive again within 5s — leaving alone`
+          message: `Renderer unresponsive but kill limit reached (${HANG_KILL_LIMIT} in ${HANG_KILL_WINDOW_MS / 1000}s) — giving up`
         });
         return;
       }
       sentry.addBreadcrumb({
         category: 'ui.window',
-        message: `Renderer unresponsive — waiting ${HANG_GRACE_MS}ms before kill`
+        message: `Renderer unresponsive — waiting ${HANG_GRACE_MS}ms before kill (attempt ${hangKillTimestamps.length + 1}/${HANG_KILL_LIMIT})`
       });
       hangTimer = setTimeout(() => {
         hangTimer = null;
         if (window.isDestroyed()) return;
-        lastHangReloadAt = Date.now();
+        hangKillTimestamps.push(Date.now());
         sentry.addBreadcrumb({
           category: 'ui.window',
           message: `Renderer still unresponsive — forcefully crashing`

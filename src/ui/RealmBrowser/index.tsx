@@ -143,6 +143,10 @@ class RealmBrowserContainer
   private watchedSize: number | null = null;
   private watchedFileName: string | null = null;
   private watchDebounceTimer: ReturnType<typeof setTimeout> | null = null;
+  private watchStabilityTimer: ReturnType<typeof setTimeout> | null = null;
+  private lastStableStat: { size: number; mtimeMs: number } | null = null;
+  private reloadAttemptTimestamps: number[] = [];
+  private watcherDisabled = false;
   private isReloading = false;
 
   public componentDidMount() {
@@ -778,7 +782,12 @@ class RealmBrowserContainer
   };
 
   private onManualReload = () => {
-    this.reloadFromDisk();
+    // A manual reload is also a vote of confidence that we should resume
+    // watching: clear the attempt counter and re-enable the watcher in case
+    // it was previously disabled by the rate limiter.
+    this.reloadAttemptTimestamps = [];
+    this.watcherDisabled = false;
+    void this.reloadFromDisk();
   };
 
   private reloadFromDisk = async () => {
@@ -855,9 +864,22 @@ class RealmBrowserContainer
     }
   };
 
+  // Watcher tuning constants. The debounce + stability window together let
+  // the other process finish its write (and release its lock) before we try
+  // to reopen, which is what prevents `new Realm()` from blocking the event
+  // loop on lock contention.
+  private static readonly WATCH_DEBOUNCE_MS = 750;
+  private static readonly WATCH_STABILITY_POLL_MS = 500;
+  private static readonly WATCH_MAX_STABILITY_POLLS = 20; // 10s ceiling
+  private static readonly RELOAD_ATTEMPT_WINDOW_MS = 30000;
+  private static readonly RELOAD_ATTEMPT_MAX = 5;
+
   private startWatchingRealmFile() {
     const realm = this.props.realm;
     if (!realm || realm.mode !== realms.RealmLoadingMode.Local) {
+      return;
+    }
+    if (this.watcherDisabled) {
       return;
     }
     const realmPath = realm.path;
@@ -883,8 +905,9 @@ class RealmBrowserContainer
           clearTimeout(this.watchDebounceTimer);
         }
         this.watchDebounceTimer = setTimeout(() => {
+          this.watchDebounceTimer = null;
           this.handleWatchedFileEvent();
-        }, 250);
+        }, RealmBrowserContainer.WATCH_DEBOUNCE_MS);
       });
     } catch {
       // Watching is best-effort; the manual refresh button remains as a fallback.
@@ -896,6 +919,10 @@ class RealmBrowserContainer
     if (this.watchDebounceTimer) {
       clearTimeout(this.watchDebounceTimer);
       this.watchDebounceTimer = null;
+    }
+    if (this.watchStabilityTimer) {
+      clearTimeout(this.watchStabilityTimer);
+      this.watchStabilityTimer = null;
     }
     if (this.fileWatcher) {
       try {
@@ -909,6 +936,7 @@ class RealmBrowserContainer
     this.watchedMtimeMs = null;
     this.watchedSize = null;
     this.watchedFileName = null;
+    this.lastStableStat = null;
   }
 
   private handleWatchedFileEvent() {
@@ -931,17 +959,88 @@ class RealmBrowserContainer
     }
     // Inode change = file was replaced (atomic rename / delete+recreate).
     // mtime or size change = another process wrote in-place to the same file.
-    // Either way, our mmap may now be inconsistent with disk and must be
-    // released before any further reads.
     const inodeChanged =
       this.watchedInode !== null && stat.ino !== this.watchedInode;
     const mtimeChanged =
       this.watchedMtimeMs !== null && stat.mtimeMs !== this.watchedMtimeMs;
     const sizeChanged =
       this.watchedSize !== null && stat.size !== this.watchedSize;
-    if (inodeChanged || mtimeChanged || sizeChanged) {
-      void this.reloadFromDisk();
+    if (!(inodeChanged || mtimeChanged || sizeChanged)) {
+      return;
     }
+    // Wait for the file to stop changing before triggering reload. Reopening
+    // mid-write is the case where Realm SDK's lock acquisition tends to
+    // block the entire renderer event loop, so we pay the cost of a short
+    // poll here to avoid that.
+    this.lastStableStat = { size: stat.size, mtimeMs: stat.mtimeMs };
+    this.waitForFileStability(0);
+  }
+
+  private waitForFileStability(pollsSoFar: number) {
+    if (this.watchStabilityTimer) {
+      clearTimeout(this.watchStabilityTimer);
+      this.watchStabilityTimer = null;
+    }
+    this.watchStabilityTimer = setTimeout(() => {
+      this.watchStabilityTimer = null;
+      const realm = this.props.realm;
+      if (
+        !realm ||
+        realm.mode !== realms.RealmLoadingMode.Local ||
+        this.isReloading ||
+        this.watcherDisabled
+      ) {
+        return;
+      }
+      let stat: fs.Stats | null = null;
+      try {
+        stat = fs.statSync(realm.path);
+      } catch {
+        return;
+      }
+      const prev = this.lastStableStat;
+      if (prev && prev.size === stat.size && prev.mtimeMs === stat.mtimeMs) {
+        // File has been quiet for one full poll interval. Safe to reload.
+        this.lastStableStat = null;
+        if (this.recordAndCheckReloadAttempt()) {
+          void this.reloadFromDisk();
+        }
+        return;
+      }
+      this.lastStableStat = { size: stat.size, mtimeMs: stat.mtimeMs };
+      if (pollsSoFar + 1 >= RealmBrowserContainer.WATCH_MAX_STABILITY_POLLS) {
+        // Other process is writing continuously — give up this round; the
+        // next fs.watch event will restart the cycle.
+        this.lastStableStat = null;
+        return;
+      }
+      this.waitForFileStability(pollsSoFar + 1);
+    }, RealmBrowserContainer.WATCH_STABILITY_POLL_MS);
+  }
+
+  private recordAndCheckReloadAttempt(): boolean {
+    const now = Date.now();
+    const cutoff = now - RealmBrowserContainer.RELOAD_ATTEMPT_WINDOW_MS;
+    this.reloadAttemptTimestamps = this.reloadAttemptTimestamps.filter(
+      (t) => t >= cutoff
+    );
+    if (
+      this.reloadAttemptTimestamps.length >=
+      RealmBrowserContainer.RELOAD_ATTEMPT_MAX
+    ) {
+      // Too many auto-reloads in a short window — back off completely. The
+      // user can still trigger a manual reload via the sidebar button.
+      this.watcherDisabled = true;
+      this.stopWatchingRealmFile();
+      console.warn(
+        `Realm file changed >= ${RealmBrowserContainer.RELOAD_ATTEMPT_MAX} times ` +
+          `in ${RealmBrowserContainer.RELOAD_ATTEMPT_WINDOW_MS / 1000}s; ` +
+          `disabling auto-reload. Use the reload button to retry.`
+      );
+      return false;
+    }
+    this.reloadAttemptTimestamps.push(now);
+    return true;
   }
 
   private onBeforeUnload = (e: BeforeUnloadEvent) => {
