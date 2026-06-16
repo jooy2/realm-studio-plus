@@ -13,6 +13,8 @@
   "main": "./build/main.bundle.js",
   "build": {
     "appId": "com.realm.realm-studio-plus",
+    "compression": "maximum",
+    "artifactName": "${productName} ${version}_${arch}.${ext}",
     "directories": {
       "buildResources": "./resources"
     },
@@ -122,6 +124,7 @@
     "lint": "eslint . --ext .js,.ts,.tsx,.jsx --fix . && sass-lint --max-warnings=0 -c .sass-lint.yml 'src/**/*.scss' -v",
     "format": "prettier . --write",
     "package": "electron-builder --publish=never",
+    "package:all": "electron-builder --publish=never -wml",
     "postinstall": "electron-builder install-app-deps",
     "prepackage": "rm -rf ./build && npm run build",
     "generate-https-certificate": "openssl req -x509 -newkey rsa:4096 -keyout data/keys/server.key -out data/keys/server.crt -days 365 -nodes",
