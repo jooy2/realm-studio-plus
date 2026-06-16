@@ -2,9 +2,20 @@
 
 > Forked from https://github.com/realm/realm-studio
 
-Realm Studio Plus ensures that existing Realm Studio installations remain operational in anticipation of the end of support for the original version, while also offering enhanced features.
+Realm Studio Plus is the tool, any developer or system administrator would use when building and maintaining their app built on the Realm Mobile Platform.
 
-Realm Studio is the tool, any developer or system administrator would use when building and maintaining their app built on the Realm Mobile Platform.
+Realm Studio Plus ensures that existing **Realm Studio** installations remain operational in anticipation of the end of support for the original version, while also offering enhanced features.
+
+# New Features Added to Realm Studio Plus
+
+- Fix: Added compatibility with the latest operating systems (+ support for macOS Arm builds)
+- Fix: Improved performance and fixed security issues through the latest module updates
+- Feat: List of recently opened files
+- Feat: Reload when data files are regenerated (improved "Watch file" functionality)
+
+This repository is actively maintained. That's because I'm the one using it :) We also actively incorporate your pull requests.
+
+Below is the `README.md` file from the original repository.
 
 Visit https://docs.mongodb.com/realm/studio/ for more information on Realm Studio.
 
@@ -12,26 +23,18 @@ Visit https://docs.mongodb.com/realm/studio/ for more information on Realm Studi
 
 Click the links below to download the latest version of Realm Studio for
 
-- [MacOS](https://studio-releases.realm.io/latest/download/mac-dmg)
-- [Windows](https://studio-releases.realm.io/latest/download/win-setup)
-- [Linux](https://studio-releases.realm.io/latest/download/linux-appimage)
-
-To download a specific version of Realm Studio, see https://studio-releases.realm.io/ or the [releases on GitHub](https://github.com/realm/realm-studio/releases).
+https://github.com/jooy2/realm-studio-plus/releases
 
 ## Code of Conduct
 
-This project adheres to the [MongoDB Code of Conduct](https://www.mongodb.com/community-code-of-conduct). By participating, you are expected to uphold this code. Please report unacceptable behavior to [community-conduct@mongodb.com](mailto:community-conduct@mongodb.com).
+See [CODE_OF_CONDUCT.md](https://github.com/jooy2/realm-studio-plus/blob/master/docs/CODE_OF_CONDUCT.md) for more details
 
 ## Developing and contributing
 
-See [CONTRIBUTING.md](https://github.com/realm/realm-studio/blob/master/docs/CONTRIBUTING.md) for more details!
+See [CONTRIBUTING.md](https://github.com/jooy2/realm-studio-plus/blob/master/docs/CONTRIBUTING.md) for more details!
 
 ## License
 
 Realm Studio is published under [the Apache 2.0 license](LICENSE).
 
-## Feedback
-
-If you use Realm and are happy with it, all we ask is that you please consider sending out a tweet mentioning [@realm](https://twitter.com/realm) to share your thoughts.
-
-<img style="width: 0px; height: 0px;" src="https://3eaz4mshcd.execute-api.us-east-1.amazonaws.com/prod?s=https://github.com/realm/realm-studio#README.md">
+Realm Studio Plus is a fork of the original Realm Studio. This project also inherits the license of the original project.
