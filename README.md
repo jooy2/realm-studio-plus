@@ -6,10 +6,11 @@ Realm Studio Plus is the tool, any developer or system administrator would use w
 
 Realm Studio Plus ensures that existing **Realm Studio** installations remain operational in anticipation of the end of support for the original version, while also offering enhanced features.
 
-# New Features Added to Realm Studio Plus
+## New Features Added to Realm Studio Plus
 
 - Fix: Added compatibility with the latest operating systems (+ support for macOS Arm builds)
 - Fix: Improved performance and fixed security issues through the latest module updates
+- Fix: Removed code related to Realm Atlas Sync; removed the deprecated Realm Web API
 - Feat: List of recently opened files
 - Feat: Reload when data files are regenerated (improved "Watch file" functionality)
 
