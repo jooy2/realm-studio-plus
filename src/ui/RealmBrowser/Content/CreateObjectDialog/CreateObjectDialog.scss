@@ -46,7 +46,7 @@
       font-size: .8rem;
 
       &--null {
-        color: $elephant;
+        color: var(--rs-text-muted);
         font-style: italic;
       }
     }
@@ -93,7 +93,7 @@
 
   &__ListControl {
     $list-control-gutter: $spacer * .5;
-    background: $window-background;
+    background: var(--rs-window-bg);
     border: $input-border-width solid $input-border-color;
     border-radius: $input-border-radius;
     padding: $input-padding-y $input-padding-x;

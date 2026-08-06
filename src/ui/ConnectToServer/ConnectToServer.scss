@@ -20,7 +20,7 @@
 
 .ConnectToServer {
   -webkit-app-region: drag;
-  background: $window-background;
+  background: var(--rs-window-bg);
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -45,7 +45,7 @@
   }
 
   &__AuthenticationForm {
-    background: $white;
+    background: var(--rs-surface);
     display: flex;
     flex-basis: 150px;
     flex-direction: column;

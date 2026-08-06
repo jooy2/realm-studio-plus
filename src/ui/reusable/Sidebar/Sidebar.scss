@@ -20,17 +20,17 @@
 @import "./variables";
 
 .Sidebar {
-  background: $sidebar-background;
+  background: var(--rs-sidebar-bg);
   position: relative;
   transition: flex-basis $sidebar-transition-duration;
   z-index: 6;
 
   &--left {
-    border-right: 1px solid $sidebar-border-color;
+    border-right: 1px solid var(--rs-sidebar-border);
   }
 
   &--right {
-    border-left: 1px solid $sidebar-border-color;
+    border-left: 1px solid var(--rs-sidebar-border);
   }
 
   &--closed {
@@ -93,7 +93,7 @@
     align-items: center;
     border-radius: $border-radius-lg;
     bottom: 1rem;
-    color: $elephant;
+    color: var(--rs-text-muted);
     cursor: pointer;
     // Default is not to display the toggle button, unless it's --visible
     display: none;
@@ -112,8 +112,8 @@
     }
 
     &::before {
-      background-color: $sidebar-background;
-      border: 1px solid $sidebar-border-color;
+      background-color: var(--rs-sidebar-bg);
+      border: 1px solid var(--rs-sidebar-border);
       border-radius: $border-radius-lg;
       box-sizing: content-box;
       content: "";
@@ -135,13 +135,13 @@
         border-bottom-right-radius: 0;
         border-right: 0;
         border-top-right-radius: 0;
-        box-shadow: -3px 0 3px $sidebar-shadow;
+        box-shadow: -3px 0 3px var(--rs-raised-shadow);
         left: -1px;
       }
 
       &:hover {
         &::after {
-          box-shadow: -3px 0 3px $sidebar-shadow-hover;
+          box-shadow: -3px 0 3px var(--rs-raised-shadow);
         }
       }
     }
@@ -155,19 +155,19 @@
         border-bottom-left-radius: 0;
         border-left: 0;
         border-top-left-radius: 0;
-        box-shadow: 3px 0 3px $sidebar-shadow;
+        box-shadow: 3px 0 3px var(--rs-raised-shadow);
         right: -1px;
       }
 
       &:hover {
         &::after {
-          box-shadow: 3px 0 3px $sidebar-shadow-hover;
+          box-shadow: 3px 0 3px var(--rs-raised-shadow);
         }
       }
     }
 
     &:hover {
-      color: $charcoal;
+      color: var(--rs-text-strong);
     }
   }
 
@@ -205,7 +205,7 @@
     }
 
     &__EmptyExplanation {
-      color: $elephant;
+      color: var(--rs-text-muted);
       font-size: .9rem;
       text-align: center;
     }

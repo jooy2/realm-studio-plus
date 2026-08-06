@@ -29,6 +29,7 @@ import {
   IWindowConstructorOptions
 } from '../windows/Window';
 import { WindowOptions, WindowType } from '../windows/WindowOptions';
+import { getWindowBackgroundColor } from './theme';
 
 export interface IEventListenerCallbacks {
   blur?: () => void;
@@ -109,8 +110,9 @@ export class WindowManager {
       height: 600,
       // vibrancy: 'light',
       show: false,
-      // This should be the same as the value of the SCSS variable $body-bg
-      backgroundColor: '#f5f5f9',
+      // Painted until the renderer produces its first frame, so it has to
+      // match the SCSS window background of the active appearance
+      backgroundColor: getWindowBackgroundColor(),
       // Accepting the first mouse event, so users dont have to focus windows before clicking them.
       // This improves the UX by minimizing the clicks needed to complete a task.
       acceptFirstMouse: true,
@@ -374,6 +376,20 @@ export class WindowManager {
           });
         })
     );
+  }
+
+  /**
+   * Repaints the chrome of every open window for the current appearance. The
+   * renderers restyle themselves, but the background colour behind them is
+   * owned by the main process.
+   */
+  public updateBackgroundColors() {
+    const backgroundColor = getWindowBackgroundColor();
+    for (const { window } of this.windows) {
+      if (!window.isDestroyed()) {
+        window.setBackgroundColor(backgroundColor);
+      }
+    }
   }
 
   public setPendingUpdate(pendingUpdate: boolean) {

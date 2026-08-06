@@ -19,6 +19,7 @@
 
 @import "./variables";
 @import "./bootstrap";
+@import "./theme";
 @import "./react-virtualized";
 @import "~font-awesome/css/font-awesome.css";
 @import "./fonts/realm";
@@ -37,8 +38,14 @@ body,
   height: 100%;
 }
 
+// Paint the backdrop before <body> gets a chance to, so switching appearance
+// doesn't flash the previous background around the edges of the window.
+html {
+  background: var(--bs-body-bg);
+}
+
 .Link {
-  color: $primary;
+  color: var(--rs-accent);
   cursor: pointer;
   text-decoration: underline;
 }

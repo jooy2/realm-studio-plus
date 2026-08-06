@@ -1,0 +1,224 @@
+////////////////////////////////////////////////////////////////////////////
+//
+// Copyright 2018 Realm Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+////////////////////////////////////////////////////////////////////////////
+
+// Theme tokens
+//
+// Every colour that differs between the light and the dark appearance lives
+// here as a CSS custom property. Component stylesheets reference the tokens
+// (`var(--rs-…)`) instead of the raw palette variables, which means switching
+// appearance is a single `data-bs-theme` attribute change on <html> - no
+// stylesheet reload and no duplicated selectors.
+//
+// The `:root` values are byte-for-byte the colours the app used before dark
+// mode existed, so the light appearance is unchanged.
+//
+// `data-bs-theme` is Bootstrap's own colour-mode attribute (>= 5.3). Reusing it
+// means our tokens and Bootstrap's component variables always agree on which
+// appearance is active.
+
+@use "sass:color";
+
+:root {
+  // Surfaces
+  --rs-window-bg: #{$window-background};
+  --rs-surface: #{$white};
+  --rs-list-bg: #{$secondary};
+  --rs-list-hover-bg: #{$secondary};
+
+  // Text
+  --rs-text-muted: #{$elephant};
+  --rs-text-strong: #{$charcoal};
+
+  // The colour used for links, selection markers and other interactive accents
+  --rs-accent: #{$primary};
+
+  // Separators
+  --rs-border: #{$dove};
+  --rs-cell-border: #{color.mix($black, $white, 10%)};
+  --rs-raised-shadow: #{$raised-shadow-color};
+
+  // Sidebars
+  --rs-sidebar-bg: #{$window-background};
+  --rs-sidebar-border: #{color.mix($elephant, $dove, 25%)};
+
+  // Panels that are dark even in the light appearance (greeting history,
+  // marketing carousel)
+  --rs-panel-bg: #{$charcoal};
+  --rs-panel-color: #{$dove};
+  --rs-panel-header: #{rgba($dove, .6)};
+  --rs-panel-muted: #{rgba($dove, .55)};
+  --rs-panel-empty: #{rgba($dove, .5)};
+  --rs-panel-hover: #{rgba($dove, .08)};
+  --rs-panel-content-bg: #{rgba($charcoal, .6)};
+  --rs-panel-rule: #{rgba($dove, .33)};
+
+  // Full-window overlays
+  --rs-overlay-bg: #{$overlay-background};
+  --rs-overlay-color: #{$dove};
+
+  // Browser table
+  --rs-row-stripe: transparent;
+  --rs-row-sorting-bg: #{rgb(255 255 255 / 60%)};
+  --rs-row-sorting-border: #{$dove};
+  --rs-row-highlight-bg: #{color.mix($black, $white, 4%)};
+  --rs-row-highlight-color: #{$black};
+  --rs-handle-hover-bg: #{rgb(0 0 0 / 10%)};
+  --rs-handle-dragging-bg: #{rgba($ultramarine, .5)};
+  // The opaque end of the "there is more content in this direction" gradients
+  --rs-more-indicator-color: #{rgb(0 0 0 / 10%)};
+
+  // Unsaved-changes bar at the bottom of the browser
+  --rs-bottombar-bg: #{$ultramarine};
+  --rs-bottombar-color: #{$dove};
+
+  // Forms
+  --rs-input-placeholder: #{rgba($elephant, .6)};
+}
+
+[data-bs-theme="dark"] {
+  --rs-window-bg: #{$dark-window-background};
+  --rs-surface: #{$dark-surface};
+  --rs-list-bg: #{$dark-surface-raised};
+  --rs-list-hover-bg: #{$dark-surface-hover};
+  --rs-text-muted: #{$dark-muted-color};
+  --rs-text-strong: #{$dark-emphasis-color};
+  --rs-accent: #{$dark-accent};
+  --rs-border: #{$dark-border};
+  --rs-cell-border: #{$dark-border};
+  --rs-raised-shadow: #{$dark-raised-shadow-color};
+
+  // The sidebar keeps sharing its background with the window, the same
+  // relationship it has in the light appearance - it is the table that stands
+  // out, not the sidebar.
+  --rs-sidebar-bg: #{$dark-window-background};
+  --rs-sidebar-border: #{$dark-border};
+
+  // In the light appearance this panel is the dark one, which is what sets it
+  // apart from the rest of the greeting window. That contrast is gone once
+  // everything is dark, so raise it two steps above the window instead.
+  --rs-panel-bg: #{$dark-surface-raised};
+  --rs-panel-color: #{$dark-body-color};
+  --rs-panel-header: #{rgba($dark-body-color, .6)};
+  --rs-panel-muted: #{rgba($dark-body-color, .55)};
+  --rs-panel-empty: #{rgba($dark-body-color, .5)};
+  --rs-panel-hover: #{rgb(255 255 255 / 7%)};
+  // Sits on top of the marketing artwork, so it needs to stay opaque enough
+  --rs-panel-content-bg: #{rgb(10 12 24 / 78%)};
+  --rs-panel-rule: #{rgb(255 255 255 / 20%)};
+  --rs-overlay-bg: #{$dark-overlay-background};
+  --rs-overlay-color: #{$dark-body-color};
+  --rs-row-stripe: transparent;
+  --rs-row-sorting-bg: #{$dark-surface-raised};
+  --rs-row-sorting-border: #{$dark-border};
+  --rs-row-highlight-bg: #{$dark-surface-hover};
+  --rs-row-highlight-color: #{$dark-emphasis-color};
+  --rs-handle-hover-bg: #{rgb(255 255 255 / 12%)};
+  --rs-handle-dragging-bg: #{rgba($dark-accent, .5)};
+  // Darker than in the light appearance, otherwise the gradient is invisible
+  // against the already dark table
+  --rs-more-indicator-color: #{rgb(0 0 0 / 45%)};
+  --rs-bottombar-bg: #{$dark-surface-hover};
+  --rs-bottombar-color: #{$dark-emphasis-color};
+  --rs-input-placeholder: #{rgba($dark-body-color, .42)};
+
+  // Bootstrap does not re-colour `.btn-*` per colour mode, and $secondary is a
+  // near-white by design. Left alone it would glare on a dark window, so the
+  // secondary button is re-pointed at the raised surface colours. Bootstrap 5.3
+  // buttons are entirely custom-property driven, so overriding the variables is
+  // enough - no need to restate the rules.
+  // stylelint-disable selector-class-pattern -- Bootstrap owns these names
+  .btn-secondary {
+    --bs-btn-bg: #{$dark-surface-raised};
+    --bs-btn-border-color: #{$dark-border-strong};
+    --bs-btn-color: #{$dark-body-color};
+    --bs-btn-hover-bg: #{$dark-surface-hover};
+    --bs-btn-hover-border-color: #{$dark-border-strong};
+    --bs-btn-hover-color: #{$dark-emphasis-color};
+    --bs-btn-active-bg: #{$dark-border-strong};
+    --bs-btn-active-border-color: #{$dark-border-strong};
+    --bs-btn-active-color: #{$dark-emphasis-color};
+    --bs-btn-disabled-bg: #{$dark-surface};
+    --bs-btn-disabled-border-color: #{$dark-border};
+    --bs-btn-disabled-color: #{$dark-muted-color};
+  }
+
+  // $primary and $info are both $ultramarine, which is barely distinguishable
+  // from a dark backdrop. Lift them the same way the accent token is lifted.
+  .btn-primary,
+  .btn-info {
+    --bs-btn-bg: #{color.mix($indigo, $ultramarine, 55%)};
+    --bs-btn-border-color: #{color.mix($indigo, $ultramarine, 55%)};
+    --bs-btn-color: #{$white};
+    --bs-btn-hover-bg: #{color.mix($indigo, $white, 82%)};
+    --bs-btn-hover-border-color: #{color.mix($indigo, $white, 82%)};
+    --bs-btn-hover-color: #{$white};
+    --bs-btn-active-bg: #{color.mix($indigo, $white, 72%)};
+    --bs-btn-active-border-color: #{color.mix($indigo, $white, 72%)};
+    --bs-btn-active-color: #{$white};
+    --bs-btn-disabled-bg: #{$ultramarine};
+    --bs-btn-disabled-border-color: #{$ultramarine};
+  }
+
+  // Outline buttons inherit the (too dark) theme colour as their text colour
+  .btn-outline-primary,
+  .btn-outline-info {
+    --bs-btn-color: #{$dark-accent};
+    --bs-btn-border-color: #{$dark-accent};
+    --bs-btn-hover-bg: #{$dark-accent};
+    --bs-btn-hover-border-color: #{$dark-accent};
+    --bs-btn-hover-color: #{$charcoal};
+    --bs-btn-active-bg: #{$dark-accent};
+    --bs-btn-active-border-color: #{$dark-accent};
+    --bs-btn-active-color: #{$charcoal};
+    --bs-btn-disabled-color: #{$dark-muted-color};
+    --bs-btn-disabled-border-color: #{$dark-border-strong};
+  }
+
+  .btn-outline-secondary {
+    --bs-btn-color: #{$dark-body-color};
+    --bs-btn-border-color: #{$dark-border-strong};
+    --bs-btn-hover-bg: #{$dark-surface-hover};
+    --bs-btn-hover-border-color: #{$dark-border-strong};
+    --bs-btn-hover-color: #{$dark-emphasis-color};
+    --bs-btn-active-bg: #{$dark-border-strong};
+    --bs-btn-active-border-color: #{$dark-border-strong};
+    --bs-btn-active-color: #{$dark-emphasis-color};
+    --bs-btn-disabled-color: #{$dark-muted-color};
+    --bs-btn-disabled-border-color: #{$dark-border};
+  }
+
+  // `.badge.bg-primary` and friends are set through utility classes, which are
+  // not colour-mode aware either.
+  .bg-primary,
+  .bg-info {
+    // stylelint-disable-next-line declaration-no-important -- matches the utility it overrides
+    background-color: #{color.mix($indigo, $ultramarine, 55%)} !important;
+  }
+
+  .bg-secondary {
+    // stylelint-disable-next-line declaration-no-important -- matches the utility it overrides
+    background-color: #{$dark-surface-raised} !important;
+    color: $dark-body-color;
+  }
+
+  .text-muted {
+    // stylelint-disable-next-line declaration-no-important -- matches the utility it overrides
+    color: $dark-muted-color !important;
+  }
+  // stylelint-enable selector-class-pattern
+}

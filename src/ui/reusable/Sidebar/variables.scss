@@ -15,8 +15,8 @@
 // limitations under the License.
 //
 ////////////////////////////////////////////////////////////////////////////
-@use "sass:color";
-
+// The sidebar background, border and shadow are theme tokens, see
+// styles/_theme.scss
 
 $resize-handle-width: 10px;
 // $resize-handle-background: rgba(255, 0, 0, .2);
@@ -26,9 +26,5 @@ $toggle-button-width: 1.75rem;
 $toggle-button-height: 2.5rem;
 $toggle-button-overhang: $toggle-button-width * .5;
 
-$sidebar-shadow: $raised-shadow-color;
-$sidebar-shadow-hover: rgba($sidebar-shadow, .2);
 $sidebar-transition-duration: .3s;
-$sidebar-background: $window-background;
-$sidebar-border-color: color.mix($elephant, $dove, 25%);
 $sidebar-closed-width: $toggle-button-width * .5;

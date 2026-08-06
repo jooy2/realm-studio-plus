@@ -41,7 +41,11 @@ process.env.REALM_DISABLE_ANALYTICS = 'true';
 
 import '../styles/index.scss';
 
+import { startThemeSync } from './ui/theme';
 import { CurrentWindow } from './windows/WindowComponent';
+
+// Before the first render, so nothing is ever painted in the wrong appearance
+startThemeSync();
 
 const appElement = document.getElementById('app');
 const root = appElement ? createRoot(appElement) : null;

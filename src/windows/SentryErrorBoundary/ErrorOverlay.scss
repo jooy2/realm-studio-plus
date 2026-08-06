@@ -19,7 +19,7 @@
 @import "~realm-studio-styles/variables";
 
 .ErrorOverlay {
-  background: $window-background;
+  background: var(--rs-window-bg);
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -31,7 +31,7 @@
   &__Introduction,
   &__Id,
   &__IdExplanation {
-    color: $charcoal;
+    color: var(--rs-text-strong);
     margin: 0;
     padding: $spacer * .5;
     text-align: center;
@@ -52,7 +52,7 @@
   }
 
   &__Stack {
-    color: $elephant;
+    color: var(--rs-text-muted);
     font-size: 8px;
     overflow-y: auto;
     padding: $spacer;

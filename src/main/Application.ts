@@ -16,13 +16,14 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-import { app, dialog, Menu } from 'electron';
+import { app, dialog, Menu, shell } from 'electron';
 import path from 'path';
 
 import { MainReceiver } from '../actions/main';
 import { CLOUD_PROTOCOL, STUDIO_PROTOCOL } from '../constants';
 import * as dataImporter from '../services/data-importer';
 import { addRecentFile } from '../services/recent-files';
+import { settings, ThemeMode } from '../services/settings';
 import { showError } from '../ui/reusable/errors';
 import { RealmLoadingMode } from '../utils/realms';
 import { IRealmBrowserWindowProps } from '../windows/WindowProps';
@@ -31,6 +32,7 @@ import { removeRendererDirectories } from '../utils';
 import { CertificateManager } from './CertificateManager';
 import { MainActions } from './MainActions';
 import { getDefaultMenuTemplate } from './MainMenu';
+import { applyThemeMode, onResolvedThemeChange } from './theme';
 import { Updater } from './Updater';
 import { WindowManager } from './WindowManager';
 
@@ -61,6 +63,12 @@ export class Application {
       await this.windowManager.closeAllWindows();
       await removeRendererDirectories();
       await this.showGreeting();
+    },
+    [MainActions.SetTheme]: (theme: ThemeMode) => {
+      this.setTheme(theme);
+    },
+    [MainActions.ShowSettingsFile]: () => {
+      return this.showSettingsFile();
     }
   };
 
@@ -70,6 +78,8 @@ export class Application {
   // All files opened while app is loading will be stored on this array and opened when app is ready
   private delayedRealmOpens: string[] = [];
 
+  private removeThemeListener?: () => void;
+
   public run() {
     // Check to see if this is the first instance or not
     const hasAnotherInstance = app.requestSingleInstanceLock() === false;
@@ -78,6 +88,12 @@ export class Application {
       // Quit the app if started multiple times
       app.quit();
     } else {
+      // Repaint window chrome when the resolved appearance changes - either
+      // because the user picked another theme or, in "system" mode, because
+      // the OS switched appearance underneath us.
+      this.removeThemeListener = onResolvedThemeChange(
+        this.onResolvedThemeChanged
+      );
       // Register as a listener for specific URLs
       this.registerProtocols();
       // In Mac we detect the files opened with `open-file` event otherwise we need get it from `process.argv`
@@ -97,6 +113,7 @@ export class Application {
 
   public destroy() {
     this.removeAppListeners();
+    this.removeThemeListener?.();
     this.updater.destroy();
     this.certificateManager.destroy();
     this.windowManager.closeAllWindows();
@@ -211,6 +228,23 @@ export class Application {
     this.updater.checkForUpdates();
   }
 
+  /**
+   * Persists the theme and pushes it into Electron. Every open window follows
+   * along on its own - see src/main/theme.ts for why.
+   */
+  public setTheme(theme: ThemeMode) {
+    settings.setTheme(theme);
+    applyThemeMode(theme);
+  }
+
+  /**
+   * Reveals settings.json in the OS file manager, so the file behind the
+   * preferences is discoverable and can be edited by hand.
+   */
+  public showSettingsFile() {
+    shell.showItemInFolder(settings.path);
+  }
+
   private async showGreetingWindow() {
     this.setDefaultMenu();
     if (this.windowManager.windows.length === 0) {
@@ -237,7 +271,14 @@ export class Application {
   }
 
   private onReady = () => {
+    // Before the first window is created, so it gets the right background
+    // colour and its renderer starts out in the right appearance
+    applyThemeMode();
     this.showGreetingWindow().catch(console.error);
+  };
+
+  private onResolvedThemeChanged = () => {
+    this.windowManager.updateBackgroundColors();
   };
 
   private onActivate = () => {

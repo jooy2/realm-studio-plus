@@ -18,6 +18,7 @@
 
 import { MainActions } from '../../main/MainActions';
 import { ImportFormat } from '../../services/data-importer';
+import { ThemeMode } from '../../services/settings';
 import { IRealmBrowserWindowProps } from '../../windows/WindowProps';
 import { ActionSender } from '../ActionSender';
 import { LoopbackTransport, RendererTransport } from '../transports';
@@ -58,5 +59,13 @@ export class Sender extends ActionSender {
 
   public clearRendererCache() {
     return this.send(MainActions.ClearRendererCache);
+  }
+
+  public setTheme(theme: ThemeMode) {
+    return this.send(MainActions.SetTheme, theme);
+  }
+
+  public showSettingsFile() {
+    return this.send(MainActions.ShowSettingsFile);
   }
 }

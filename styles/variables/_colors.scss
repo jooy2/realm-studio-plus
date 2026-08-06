@@ -51,7 +51,9 @@ $secondary: color.mix($dove, $elephant, 90%);
 $danger: $sexy-salmon;
 $info: $ultramarine;
 
-$input-placeholder-color: rgba($elephant, .6);
+// Themed through a token so the placeholder stays legible in both appearances
+// @see styles/_theme.scss
+$input-placeholder-color: var(--rs-input-placeholder);
 
 $window-background: color.mix(#fff, $dove, 50%);
 $overlay-background: rgba($charcoal, .6);
@@ -63,3 +65,53 @@ $yiq-contrasted-threshold: 165;
 
 // When an element uses box-shadow to show that its raised above another element, use this color for the box-shadow
 $raised-shadow-color: rgb(0 0 0 / 10%);
+
+////////////////////////////////////////////////////////////////////////////
+//
+// Dark appearance
+//
+// The palette below is the counterpart of the light values above. It keeps the
+// navy cast of $charcoal so the dark appearance still reads as "Realm", while
+// staying dark enough for the brand accents to remain legible on top of it.
+// Surfaces get *lighter* as they get closer to the user, the usual elevation
+// convention for dark UIs.
+//
+////////////////////////////////////////////////////////////////////////////
+
+// Backdrop of a window - the furthest surface from the user
+$dark-window-background: #141829;
+// Content surfaces: tables, cards, popovers, inputs
+$dark-surface: #1c2138;
+// Raised surfaces: selected rows, nested lists, hovered items
+$dark-surface-raised: #242a45;
+// Even further raised, used for hover states on top of $dark-surface-raised
+$dark-surface-hover: #2c3352;
+
+$dark-border: #2b3150;
+$dark-border-strong: #384063;
+
+$dark-body-color: #dfe2f0;
+$dark-muted-color: #8f93a8;
+$dark-emphasis-color: #f4f6fb;
+
+// $primary ($ultramarine) is far too dark to sit on a dark backdrop, so links,
+// selection markers and other accents use a tinted version of it instead.
+$dark-accent: #8a97e8;
+
+$dark-overlay-background: rgb(5 6 12 / 72%);
+$dark-raised-shadow-color: rgb(0 0 0 / 45%);
+
+// Bootstrap's own `[data-bs-theme="dark"]` custom properties. Setting these
+// here (before `~bootstrap/scss/variables` is imported) means every Bootstrap
+// component - buttons, modals, dropdowns, forms, tables - picks up the palette
+// above without any per-component override.
+$body-bg-dark: $dark-window-background;
+$body-color-dark: $dark-body-color;
+$body-secondary-color-dark: $dark-muted-color;
+$body-secondary-bg-dark: $dark-surface;
+$body-tertiary-color-dark: rgba($dark-body-color, .5);
+$body-tertiary-bg-dark: $dark-surface-raised;
+$body-emphasis-color-dark: $dark-emphasis-color;
+$border-color-dark: $dark-border;
+$border-color-translucent-dark: rgb(255 255 255 / 12%);
+$link-color-dark: $dark-accent;

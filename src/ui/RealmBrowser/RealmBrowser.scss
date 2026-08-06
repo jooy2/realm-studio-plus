@@ -15,7 +15,6 @@
 // limitations under the License.
 //
 ////////////////////////////////////////////////////////////////////////////
-@use "sass:color";
 @import "~realm-studio-styles/variables";
 @import "./variables";
 
@@ -56,7 +55,7 @@
 
   &__Topbar {
     align-items: center;
-    background: $window-background;
+    background: var(--rs-window-bg);
     display: flex;
     padding: $spacer * .5;
 
@@ -82,12 +81,12 @@
   }
 
   &__Table {
-    background: $white;
+    background: var(--rs-surface);
     flex: 1 0 0;
     position: relative;
 
     &__HeaderGrid {
-      background: $white;
+      background: var(--rs-surface);
     }
 
     &__AddColumnControl {
@@ -131,12 +130,12 @@
       transition: background-color 200ms;
 
       &--striped {
-        background: $row-stripe;
+        background: var(--rs-row-stripe);
       }
 
       &--sorting {
-        background: color.mix($row-stripe, $white, 40%);
-        border-top: 1px solid $dove;
+        background: var(--rs-row-sorting-bg);
+        border-top: 1px solid var(--rs-row-sorting-border);
         margin-top: -1px;
         transition: transform 300ms;
         user-select: none;
@@ -144,12 +143,12 @@
 
       &--highlighted,
       &--sorting-selected {
-        background: $highlight-row-bg;
-        color: $highlight-row-color;
+        background: var(--rs-row-highlight-bg);
+        color: var(--rs-row-highlight-color);
       }
 
       &--sorting-selected {
-        box-shadow: 0 0 10px $highlight-row-bg;
+        box-shadow: 0 0 10px var(--rs-row-highlight-bg);
       }
 
       &--right-padded {
@@ -159,8 +158,8 @@
 
     &__HeaderCell,
     &__Cell {
-      border-bottom: 1px solid $cell-border-color;
-      border-right: 1px solid $cell-border-color;
+      border-bottom: 1px solid var(--rs-cell-border);
+      border-right: 1px solid var(--rs-cell-border);
       padding: 0;
       position: relative;
 
@@ -185,7 +184,7 @@
       }
 
       &--sorting {
-        border-top: $cell-header-border-size solid $primary;
+        border-top: $cell-header-border-size solid var(--rs-accent);
       }
     }
 
@@ -207,14 +206,14 @@
 
       &--primitive {
         &::before {
-          color: $elephant;
+          color: var(--rs-text-muted);
           content: "primitive";
         }
       }
     }
 
     &__HeaderType {
-      color: $elephant;
+      color: var(--rs-text-muted);
       font-size: $font-size-sm;
       font-weight: normal;
       overflow: hidden;
@@ -222,17 +221,17 @@
       white-space: nowrap;
 
       &--sortable {
-        color: $primary;
+        color: var(--rs-accent);
       }
     }
 
     &__HeaderSort {
-      color: $elephant;
+      color: var(--rs-text-muted);
       flex-shrink: 0;
       font-size: 12px;
 
       &--active {
-        color: $charcoal;
+        color: var(--rs-text-strong);
       }
     }
 
@@ -246,12 +245,12 @@
       z-index: 1;
 
       &--dragging {
-        background: $realm-browser-header-handle-dragging-bg;
+        background: var(--rs-handle-dragging-bg);
       }
 
       &:not(&--dragging) {
         &:hover {
-          background: $realm-browser-header-handle-hover-bg;
+          background: var(--rs-handle-hover-bg);
         }
       }
     }
@@ -287,7 +286,7 @@
       width: 100%;
 
       &:focus {
-        border: 1px solid $primary;
+        border: 1px solid var(--rs-accent);
         outline: none;
       }
     }
@@ -298,7 +297,7 @@
     &__SetCell,
     &__ObjectCell {
       // Make these look like clickable elements
-      color: $primary;
+      color: var(--rs-accent);
       cursor: pointer;
     }
 
@@ -306,7 +305,7 @@
     &__StringCell,
     &__DataCell {
       &--null {
-        color: $elephant;
+        color: var(--rs-text-muted);
         cursor: inherit;
         display: block;
         font-style: italic;
@@ -315,7 +314,7 @@
 
     &__MixedCell {
       &--disabled {
-        color: $elephant;
+        color: var(--rs-text-muted);
       }
     }
 
@@ -328,11 +327,11 @@
       padding: $cell-padding-y $cell-padding-x;
 
       &--null {
-        color: $elephant;
+        color: var(--rs-text-muted);
       }
 
       &--disabled {
-        color: $elephant;
+        color: var(--rs-text-muted);
       }
 
       &--int {
@@ -345,7 +344,7 @@
       }
 
       &:invalid &:focus {
-        border: 1px solid $danger;
+        border: 1px solid var(--bs-danger);
       }
     }
 
@@ -403,8 +402,8 @@
       &--top {
         background: linear-gradient(
           to bottom,
-          $realm-browser-more-indicator-dark-color,
-          $realm-browser-more-indicator-light-color
+          var(--rs-more-indicator-color),
+          $realm-browser-more-indicator-transparent
         );
         top: $realm-browser-header-height;
       }
@@ -412,8 +411,8 @@
       &--bottom {
         background: linear-gradient(
           to top,
-          $realm-browser-more-indicator-dark-color,
-          $realm-browser-more-indicator-light-color
+          var(--rs-more-indicator-color),
+          $realm-browser-more-indicator-transparent
         );
         bottom: 0;
       }
@@ -421,8 +420,8 @@
       &--left {
         background: linear-gradient(
           to right,
-          $realm-browser-more-indicator-dark-color,
-          $realm-browser-more-indicator-light-color
+          var(--rs-more-indicator-color),
+          $realm-browser-more-indicator-transparent
         );
         left: 0;
       }
@@ -430,8 +429,8 @@
       &--right {
         background: linear-gradient(
           to left,
-          $realm-browser-more-indicator-dark-color,
-          $realm-browser-more-indicator-light-color
+          var(--rs-more-indicator-color),
+          $realm-browser-more-indicator-transparent
         );
         right: 0;
       }
@@ -452,29 +451,29 @@
 
   &__NoFocusPlaceholder {
     &::before {
-      color: $elephant;
+      color: var(--rs-text-muted);
       content: "No schema selected";
     }
   }
 
   &__NoSubscriptionsPlaceholder {
     &::before {
-      color: $elephant;
+      color: var(--rs-text-muted);
       content: "Add a subscription to see objects";
     }
   }
 
   &__EmbeddedFocusPlaceholder {
     &::before {
-      color: $elephant;
+      color: var(--rs-text-muted);
       content: "Embedded classes aren't directly queryable";
     }
   }
 
   &__Bottombar {
     align-items: center;
-    background: $ultramarine;
-    color: $dove;
+    background: var(--rs-bottombar-bg);
+    color: var(--rs-bottombar-color);
     display: flex;
     height: 0;
     justify-content: space-between;

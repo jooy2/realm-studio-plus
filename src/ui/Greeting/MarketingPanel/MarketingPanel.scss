@@ -18,16 +18,13 @@
 
 @import "~realm-studio-styles/variables";
 
-$content-background: rgba($charcoal, .6);
-$hr-color: rgba($dove, .33);
-
 .MarketingPanel {
-  background: $charcoal;
-  color: $white;
+  background: var(--rs-panel-bg);
+  color: var(--rs-panel-color);
   position: relative;
 
   &__PreviewToggle {
-    background: $content-background;
+    background: var(--rs-panel-content-bg);
     bottom: - $spacer * .5;
     font-size: .8rem;
     padding: $spacer * .25;
@@ -57,7 +54,7 @@ $hr-color: rgba($dove, .33);
 
   &__MessageContent {
     // Tumbleweed
-    background: $content-background;
+    background: var(--rs-panel-content-bg);
     font-size: .8rem;
     overflow: auto;
     padding: $spacer;
@@ -93,16 +90,16 @@ $hr-color: rgba($dove, .33);
     }
 
     a {
-      color: $white;
+      color: var(--rs-panel-color);
       text-decoration: underline;
     }
 
     code {
-      color: $white;
+      color: var(--rs-panel-color);
     }
 
     blockquote {
-      border-left: ($spacer * .125) solid $dove;
+      border-left: ($spacer * .125) solid var(--rs-panel-color);
       padding-left: $spacer * .5;
     }
 
@@ -123,7 +120,7 @@ $hr-color: rgba($dove, .33);
     }
 
     hr {
-      border-color: $hr-color;
+      border-color: var(--rs-panel-rule);
     }
   }
 

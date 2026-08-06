@@ -26,8 +26,8 @@
 
   &__Header {
     align-items: center;
-    border-bottom: 1px solid $dove;
-    color: $elephant;
+    border-bottom: 1px solid var(--rs-border);
+    color: var(--rs-text-muted);
     display: flex;
     flex-basis: 2.5rem;
     flex-shrink: 0;
@@ -61,7 +61,7 @@
       justify-content: flex-start;
 
       &::before {
-        color: $elephant;
+        color: var(--rs-text-muted);
         content: "This Realm has no classes defined";
         padding: $spacer;
         text-align: center;
@@ -92,18 +92,18 @@
 
       &:hover,
       &:focus {
-        background: $secondary;
+        background: var(--rs-list-hover-bg);
       }
 
       &--selected {
-        background: $secondary;
+        background: var(--rs-list-bg);
       }
 
       &--highlighted {
         cursor: inherit;
 
         &::before {
-          background: $primary;
+          background: var(--rs-accent);
           border-radius: 2px;
           bottom: 5px;
           content: "";
@@ -117,7 +117,7 @@
   }
 
   &__List {
-    background: $secondary;
+    background: var(--rs-list-bg);
     // box-shadow: inset 0 0 .4rem $realm-browser-list-box-shadow-color;
     padding: .75 * $spacer;
     padding-left: 1.5 * $spacer;
@@ -145,7 +145,7 @@
     }
 
     &__ParentObject {
-      color: $primary;
+      color: var(--rs-accent);
       cursor: pointer;
       overflow: hidden;
       text-decoration: underline;
@@ -154,7 +154,7 @@
     }
 
     &::before {
-      background: $primary;
+      background: var(--rs-accent);
       border-radius: 2px;
       bottom: 5px;
       content: "";
@@ -167,7 +167,7 @@
 
   &__HiddenClassesHint,
   &__ReadOnlyHint {
-    color: $elephant;
+    color: var(--rs-text-muted);
     font-size: .75rem;
     margin: $spacer * .5;
     overflow: hidden;

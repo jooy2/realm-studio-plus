@@ -13,8 +13,29 @@ Realm Studio Plus ensures that existing **Realm Studio** installations remain op
 - Fix: Removed code related to Realm Atlas Sync; removed the deprecated Realm Web API
 - Feat: List of recently opened files
 - Feat: Reload when data files are regenerated (improved "Watch file" functionality)
+- Feat: Dark mode, selectable under **View → Appearance** (Match System / Light / Dark)
 
 This repository is actively maintained. That's because I'm the one using it :) We also actively incorporate your pull requests.
+
+## Settings
+
+User preferences are stored as a plain JSON file in the user data directory, and can be edited by hand — the app picks up changes without a restart. **View → Show Settings File** reveals it in the file manager.
+
+| Platform | Location                                                        |
+| -------- | --------------------------------------------------------------- |
+| macOS    | `~/Library/Application Support/Realm Studio Plus/settings.json` |
+| Linux    | `~/.config/Realm Studio Plus/settings.json`                     |
+| Windows  | `%APPDATA%\Realm Studio Plus\settings.json`                     |
+
+```json
+{
+  "theme": "system"
+}
+```
+
+| Key | Values | Default | Description |
+| --- | --- | --- | --- |
+| `theme` | `system` \| `light` \| `dark` | `"system"` | `system` follows the operating system's own appearance. |
 
 Below is the `README.md` file from the original repository.
 

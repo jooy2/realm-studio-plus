@@ -16,25 +16,19 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-@use "sass:color";
+// Colours that used to live here are now theme tokens, see styles/_theme.scss
 
 // This constant should match the HANDLE_WIDTH in HeaderCell.tsx
 $realm-browser-header-handle-width: 5px;
 // This constant should match the rowHeights.header constant in Table.tsx
 $realm-browser-header-height: 50px;
 $realm-browser-header-icon-space: 24px;
-$realm-browser-header-handle-hover-bg: rgb(0 0 0 / 10%);
-$realm-browser-header-handle-dragging-bg: rgba($ultramarine, .5);
 
 $realm-browser-more-indicator-size: $spacer;
-$realm-browser-more-indicator-dark-color: rgb(0 0 0 / 10%);
-$realm-browser-more-indicator-light-color: rgb(0 0 0 / 0%);
-
-$row-stripe: transparent;
-$highlight-row-bg: color.mix($black, $white, 4%);
-$highlight-row-color: $black;
+// The transparent end of the more-indicator gradients - the opaque end is
+// themed through --rs-more-indicator-color
+$realm-browser-more-indicator-transparent: rgb(0 0 0 / 0%);
 
 $cell-header-border-size: 2px;
 $cell-padding-x: $spacer;
 $cell-padding-y: .5 * $spacer;
-$cell-border-color: color.mix($black, $white, 10%);

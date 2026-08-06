@@ -19,10 +19,6 @@
 @import "~realm-studio-styles/variables";
 
 $history-panel-icon-size: 20px;
-$history-panel-muted: rgba($dove, .55);
-$history-panel-header: rgba($dove, .6);
-$history-panel-empty: rgba($dove, .5);
-$history-panel-hover: rgba($dove, .08);
 
 .Greeting {
   display: flex;
@@ -36,7 +32,7 @@ $history-panel-hover: rgba($dove, .08);
 
   &__ActionsPanel {
     align-items: center;
-    background: $window-background;
+    background: var(--rs-window-bg);
     display: flex;
     flex-basis: 60%;
     flex-direction: column;
@@ -116,8 +112,8 @@ $history-panel-hover: rgba($dove, .08);
   }
 
   &__HistoryPanel {
-    background: $charcoal;
-    color: $dove;
+    background: var(--rs-panel-bg);
+    color: var(--rs-panel-color);
     display: flex;
     flex-direction: column;
     flex-grow: 1;
@@ -125,11 +121,11 @@ $history-panel-hover: rgba($dove, .08);
     min-height: 0;
 
     a {
-      color: $dove;
+      color: var(--rs-panel-color);
     }
 
     &__Header {
-      color: $history-panel-header;
+      color: var(--rs-panel-header);
       flex-shrink: 0;
       font-size: .75rem;
       font-weight: 600;
@@ -154,11 +150,11 @@ $history-panel-hover: rgba($dove, .08);
       }
 
       &::-webkit-scrollbar-thumb {
-        background: $history-panel-hover;
+        background: var(--rs-panel-hover);
         border-radius: 4px;
 
         &:hover {
-          background: $history-panel-empty;
+          background: var(--rs-panel-empty);
         }
       }
     }
@@ -174,7 +170,7 @@ $history-panel-hover: rgba($dove, .08);
         cursor: pointer;
 
         &:hover {
-          background: $history-panel-hover;
+          background: var(--rs-panel-hover);
 
           .Greeting__HistoryPanel__Remove {
             opacity: 1;
@@ -211,7 +207,7 @@ $history-panel-hover: rgba($dove, .08);
     }
 
     &__Path {
-      color: $history-panel-muted;
+      color: var(--rs-panel-muted);
       direction: rtl;
       font-size: .7rem;
       overflow: hidden;
@@ -224,7 +220,7 @@ $history-panel-hover: rgba($dove, .08);
     &__Remove {
       background: transparent;
       border: 0;
-      color: $history-panel-header;
+      color: var(--rs-panel-header);
       cursor: pointer;
       flex-shrink: 0;
       margin-left: $spacer * .25;
@@ -244,7 +240,7 @@ $history-panel-hover: rgba($dove, .08);
 
     &__Empty {
       align-items: center;
-      color: $history-panel-empty;
+      color: var(--rs-panel-empty);
       cursor: default;
       display: flex;
       flex-direction: column;
@@ -265,9 +261,9 @@ $history-panel-hover: rgba($dove, .08);
   }
 
   &__CloudOverlay {
-    background: $overlay-background;
+    background: var(--rs-overlay-bg);
     inset: 0;
-    color: $dove;
+    color: var(--rs-overlay-color);
     display: flex;
     flex-direction: column;
     padding: $spacer;

@@ -19,6 +19,7 @@
 import electron from 'electron';
 import { main } from '../actions/main';
 import { ImportFormat } from '../services/data-importer';
+import { settings, THEME_MODE_LABELS, THEME_MODES } from '../services/settings';
 import { store } from '../store';
 import { showError } from '../ui/reusable/errors';
 import { getElectronOrRemote } from '../utils';
@@ -33,6 +34,7 @@ export const getDefaultMenuTemplate = (
   updateMenu: () => void
 ): electron.MenuItemConstructorOptions[] => {
   const showInternalFeatures = store.shouldShowInternalFeatures();
+  const currentTheme = settings.getTheme();
   const template: electron.MenuItemConstructorOptions[] = [
     {
       label: 'File',
@@ -82,6 +84,35 @@ export const getDefaultMenuTemplate = (
     {
       label: 'View',
       submenu: [
+        {
+          label: 'Appearance',
+          id: 'appearance',
+          submenu: THEME_MODES.map((mode) => ({
+            id: `appearance-${mode}`,
+            label: THEME_MODE_LABELS[mode],
+            type: 'radio' as const,
+            checked: currentTheme === mode,
+            click: () => {
+              // Only redraw the menu once the setting has been persisted,
+              // otherwise the check mark is rebuilt from the previous value.
+              main
+                .setTheme(mode)
+                .then(updateMenu)
+                .catch((err: unknown) => {
+                  showError('Failed to change the appearance', err);
+                });
+            }
+          }))
+        },
+        {
+          label: 'Show Settings File',
+          click: () => {
+            main.showSettingsFile().catch((err: unknown) => {
+              showError('Failed to show the settings file', err);
+            });
+          }
+        },
+        { type: 'separator' },
         {
           label: 'Show Internal Realm features',
           visible: showInternalFeatures || enableTogglingInternalFeatures,

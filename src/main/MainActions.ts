@@ -23,5 +23,7 @@ export enum MainActions {
   ShowOpenLocalRealm = 'show-open-local-realm',
   ShowOpenLocalRealmAtPath = 'show-open-local-realm-at-path',
   ShowRealmBrowser = 'show-realm-browser',
-  ClearRendererCache = 'clear-renderer-cache'
+  ClearRendererCache = 'clear-renderer-cache',
+  SetTheme = 'set-theme',
+  ShowSettingsFile = 'show-settings-file'
 }

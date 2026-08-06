@@ -27,11 +27,11 @@
     }
 
     &__headerRow {
-      border-bottom: 2px solid $dove;
+      border-bottom: 2px solid var(--rs-border);
     }
 
     &__row {
-      border-bottom: 1px solid $dove;
+      border-bottom: 1px solid var(--rs-border);
 
       &:focus {
         // Disabling the default focus outline
