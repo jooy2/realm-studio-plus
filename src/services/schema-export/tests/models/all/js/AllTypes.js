@@ -4,7 +4,7 @@ exports.ChildEmbeddedType = {
   properties: {
     id: 'int'
   }
-};
+}
 
 exports.IndexedTypes = {
   name: 'IndexedTypes',
@@ -15,7 +15,7 @@ exports.IndexedTypes = {
     stringIndexed: { type: 'string', indexed: true },
     dateIndexed: { type: 'date', indexed: true }
   }
-};
+}
 
 exports.LinkTypes = {
   name: 'LinkTypes',
@@ -24,7 +24,7 @@ exports.LinkTypes = {
     objectType2: 'ReverseType',
     listType: 'ReverseType[]'
   }
-};
+}
 
 exports.OptionalTypes = {
   name: 'OptionalTypes',
@@ -49,7 +49,7 @@ exports.OptionalTypes = {
     objectIdOptionalArray: 'objectId?[]',
     decimal128OptionalArray: 'decimal128?[]'
   }
-};
+}
 
 exports.ParentEmbeddedType = {
   name: 'ParentEmbeddedType',
@@ -57,7 +57,7 @@ exports.ParentEmbeddedType = {
     embeddedObject: 'ChildEmbeddedType',
     embeddedObjectList: 'ChildEmbeddedType[]'
   }
-};
+}
 
 exports.RequiredTypes = {
   name: 'RequiredTypes',
@@ -82,11 +82,12 @@ exports.RequiredTypes = {
     decimal128RequiredArray: 'decimal128[]',
     objectRequiredArray: 'RequiredTypes[]'
   }
-};
+}
 
 exports.ReverseType = {
   name: 'ReverseType',
   properties: {
     links: 'LinkTypes'
   }
-};
+}
+

@@ -57,6 +57,7 @@ export const ListCell = ({
   property: Realm.ObjectSchemaProperty;
   value: any;
 }) => (
+  // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
   <div tabIndex={0} className="RealmBrowser__Table__ListCell">
     <span className="RealmBrowser__Table__ListCell__Value">
       {displayValue(property, value)}

@@ -10,4 +10,5 @@ exports.SampleTypes = {
     linkToObject: 'SampleTypes',
     listOfObjects: 'SampleTypes[]'
   }
-};
+}
+

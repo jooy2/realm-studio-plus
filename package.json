@@ -246,6 +246,9 @@
   "overrides": {
     "@pmmmwh/react-refresh-webpack-plugin": {
       "webpack-dev-server": "$webpack-dev-server"
+    },
+    "sass-lint": {
+      "known-css-properties": "^0.37.0"
     }
   },
   "engines": {
