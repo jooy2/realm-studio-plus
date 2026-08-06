@@ -1,3 +1,42 @@
+## 20.1.0 (2026--)
+
+### Enhancements
+
+- Added dark mode. The appearance is selected under **View → Appearance** as `Match System`, `Light` or `Dark`; `Match System` follows the operating system and switches live when it changes. All open windows change together.
+- Added a `settings.json` preferences file in the user data directory, holding the settings that are meant to be user facing. The file is watched, so editing it by hand takes effect without a restart, and **View → Show Settings File** reveals it in the file manager.
+
+### Internals
+
+- Replaced the unmaintained `sass-lint` with `stylelint`, and resolved the violations it reported.
+- Reworked the stylesheets around CSS custom properties, so a colour that differs between appearances is defined once and Bootstrap's own colour mode (`data-bs-theme`) drives both.
+- Upgraded dependencies, most notably Electron to `v43.3.0`, React to `v19.2.8`, `jsdom` to `v30` and `js-yaml` to `v5`.
+- Excluded the schema exporter test fixtures from Prettier — they are compared byte-for-byte against generator output, so formatting them breaks the tests.
+- Recorded the known issues and deferred work from this release in [TODO.md](TODO.md).
+
+## 20.0.0 (2026-06-16)
+
+First release of `Realm Studio Plus`, forked from `Realm Studio` v15.2.1 to keep existing installations working past the end of support for the original.
+
+### Breaking Changes
+
+- Removed the Atlas Device Sync and App Services integration: the _Connect to Server_ window with its anonymous, email/password, API key and JWT authentication forms, and the subscription list in the browser sidebar. Studio Plus opens local Realm files only.
+- Removed the marketing carousel and the signup overlay from the greeting window, together with the Contentful integration behind them.
+- Raised the Node.js version required for development from `^18` to `^24`.
+
+### Enhancements
+
+- Added a list of recently opened files to the greeting window, with per-entry removal.
+- Added recovery for a Realm file that is deleted and recreated while it is open — the browser reloads the file instead of leaving a dead window behind. This is what the "watch file" behaviour was meant to do.
+- Added recovery from renderer crashes and hangs, including the encrypted-Realm HMAC failure that occurs when another process writes to an open file ([realm-js#7084](https://github.com/realm/realm-js/issues/7084)). The window reopens the same file, rate limited so a file that cannot be recovered does not pin the app in a reload loop.
+- Added macOS `arm64` (Apple Silicon) builds; macOS is now published for both `x64` and `arm64`.
+- Dropped the `.realm` extension filter from the open dialog, so Realm files named with any extension can be opened directly.
+
+### Internals
+
+- Upgraded Realm from `v12.9.0` to `v20.2.0`.
+- Upgraded Electron from `v27` to `v42`, React from `v16` to `v19`, TypeScript from `v5` to `v6`, and Bootstrap to `v5.3`.
+- Added `CODE_OF_CONDUCT.md`, `CONTRIBUTING.md` and `SECURITY.md`.
+
 ## 15.2.1 (2024-06-20)
 
 ### Fixed
