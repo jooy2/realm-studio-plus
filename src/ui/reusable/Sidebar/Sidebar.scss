@@ -48,8 +48,7 @@
   // We need a content wrapper so we can hide overflow of just the content and keep the width of the __Content constant.
   &__ContentWrapper {
     height: 100%;
-    overflow-x: hidden;
-    overflow-y: auto;
+    overflow: hidden auto;
     position: relative;
     width: 100%;
   }

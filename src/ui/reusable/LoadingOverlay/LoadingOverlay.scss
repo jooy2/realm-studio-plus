@@ -35,14 +35,11 @@
   animation-fill-mode: forwards;
   animation-name: fade;
   background: $overlay-background;
-  bottom: 0;
-  left: 0;
+  inset: 0;
   opacity: 0;
   overflow: auto;
   padding: 2 * $spacer;
   position: absolute;
-  right: 0;
-  top: 0;
   z-index: 100;
 
   &--no-fade {

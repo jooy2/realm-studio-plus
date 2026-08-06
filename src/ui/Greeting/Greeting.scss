@@ -266,15 +266,12 @@ $history-panel-hover: rgba($dove, .08);
 
   &__CloudOverlay {
     background: $overlay-background;
-    bottom: 0;
+    inset: 0;
     color: $dove;
     display: flex;
     flex-direction: column;
-    left: 0;
     padding: $spacer;
     position: absolute;
-    right: 0;
-    top: 0;
 
     &__Title {
       margin-top: $spacer;

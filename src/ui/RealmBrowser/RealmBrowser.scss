@@ -15,7 +15,7 @@
 // limitations under the License.
 //
 ////////////////////////////////////////////////////////////////////////////
-
+@use "sass:color";
 @import "~realm-studio-styles/variables";
 @import "./variables";
 
@@ -105,7 +105,7 @@
         white-space: nowrap;
       }
 
-      &__Button:hover &__Text { // sass-lint:disable-line force-pseudo-nesting
+      &__Button:hover &__Text {
         max-width: 1000px;
         opacity: 1;
         transition: opacity $slow linear, max-width $extra-slow ease-in-out;
@@ -135,7 +135,7 @@
       }
 
       &--sorting {
-        background: mix($row-stripe, $white, 40%);
+        background: color.mix($row-stripe, $white, 40%);
         border-top: 1px solid $dove;
         margin-top: -1px;
         transition: transform 300ms;
@@ -166,7 +166,8 @@
 
       // We need to do this, because reactstrap adds the form-control class
       // after the classNames that we provide.
-      .form-control { // sass-lint:disable-line class-name-format
+      // stylelint-disable-next-line selector-class-pattern
+      .form-control {
         background: transparent;
       }
     }

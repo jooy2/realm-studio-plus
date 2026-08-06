@@ -81,10 +81,11 @@
   &__DateControl {
     &__Input {
       // Overriding the bootstrap default as this produces columns
-      flex-direction: row !important; // sass-lint:disable-line no-important
+      // stylelint-disable-next-line declaration-no-important
+      flex-direction: row !important;
 
-      &::-webkit-clear-button { // sass-lint:disable-line no-vendor-prefixes
-        -webkit-appearance: none; // sass-lint:disable-line no-vendor-prefixes
+      &::-webkit-clear-button {
+        -webkit-appearance: none;
         display: none;
       }
     }

@@ -37,11 +37,13 @@ $hr-color: rgba($dove, .33);
   }
 
   // The following is required to make the item go full height, the API has no way of passing another class name
+  // stylelint-disable selector-class-pattern -- .carousel-inner is a bootstrap class
   &__Carousel,
-  &__Carousel > .carousel-inner, // sass-lint:disable-line class-name-format
+  &__Carousel > .carousel-inner,
   &__CarouselItem {
     height: 100%;
   }
+  // stylelint-enable selector-class-pattern
 
   &__MessageSlide {
     align-items: center;

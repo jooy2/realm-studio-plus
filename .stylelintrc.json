@@ -1,0 +1,24 @@
+{
+  "extends": "stylelint-config-standard-scss",
+  "rules": {
+    "selector-class-pattern": [
+      "^[A-Z][A-Za-z0-9]+(?:__[A-Za-z0-9-]+)*(?:--[A-Za-z0-9-]+)?$",
+      {
+        "message": "Class should be written in PascalCase BEM (Block Element Modifier) format"
+      }
+    ],
+    "max-nesting-depth": [
+      4,
+      { "ignore": ["blockless-at-rules", "pseudo-classes"] }
+    ],
+    "declaration-no-important": true,
+    "value-keyword-case": ["lower", { "ignoreProperties": ["/font/"] }],
+    "property-no-vendor-prefix": null,
+    "no-invalid-position-at-import-rule": null,
+    "scss/comment-no-empty": null,
+    "scss/dollar-variable-empty-line-before": null,
+    "scss/double-slash-comment-empty-line-before": null,
+    "rule-empty-line-before": null,
+    "declaration-empty-line-before": null
+  }
+}

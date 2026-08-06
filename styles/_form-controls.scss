@@ -1,3 +1,6 @@
+// This file overrides bootstrap's own classes, so it cannot follow the project's
+// PascalCase BEM selector convention.
+// stylelint-disable selector-class-pattern
 
 .form-control,
 .btn {

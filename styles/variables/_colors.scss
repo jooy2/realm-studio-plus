@@ -15,6 +15,7 @@
 // limitations under the License.
 //
 ////////////////////////////////////////////////////////////////////////////
+@use "sass:color";
 
 // Realm theme colors
 $melon: #fcc397;
@@ -46,13 +47,13 @@ $colors: (
 
 // Override bootstrap colors
 $primary: $ultramarine;
-$secondary: mix($dove, $elephant, 90%);
+$secondary: color.mix($dove, $elephant, 90%);
 $danger: $sexy-salmon;
 $info: $ultramarine;
 
 $input-placeholder-color: rgba($elephant, .6);
 
-$window-background: mix(#fff, $dove, 50%);
+$window-background: color.mix(#fff, $dove, 50%);
 $overlay-background: rgba($charcoal, .6);
 
 $body-bg: $window-background;
@@ -61,4 +62,4 @@ $body-bg: $window-background;
 $yiq-contrasted-threshold: 165;
 
 // When an element uses box-shadow to show that its raised above another element, use this color for the box-shadow
-$raised-shadow-color: rgba(0, 0, 0, .1);
+$raised-shadow-color: rgb(0 0 0 / 10%);
