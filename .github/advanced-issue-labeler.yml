@@ -28,18 +28,6 @@ policy:
           - name: 'Repro:No'
             keys: ['No']
 
-      - id: [sync, flavour, services]
-        block-list: []
-        label:
-          - name: 'SDK-Use:Local'
-            keys: ['Local Database only']
-          - name: 'SDK-Use:Sync'
-            keys: ['Atlas Device Sync']
-          - name: 'SDK-Use:Services'
-            keys: ['Atlas App Services: Function or GraphQL or DataAPI etc']
-          - name: ['SDK-Use:All']
-            keys: ['Both Atlas Device Sync and Atlas App Services']
-
       - id: [encryption]
         block-list: []
         label:

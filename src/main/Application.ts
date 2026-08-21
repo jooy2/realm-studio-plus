@@ -20,7 +20,7 @@ import { app, dialog, Menu, shell } from 'electron';
 import path from 'path';
 
 import { MainReceiver } from '../actions/main';
-import { CLOUD_PROTOCOL, STUDIO_PROTOCOL } from '../constants';
+import { STUDIO_PROTOCOL } from '../constants';
 import * as dataImporter from '../services/data-importer';
 import { addRecentFile } from '../services/recent-files';
 import { settings, ThemeMode } from '../services/settings';
@@ -313,7 +313,6 @@ export class Application {
   };
 
   private registerProtocols() {
-    this.registerProtocol(CLOUD_PROTOCOL);
     this.registerProtocol(STUDIO_PROTOCOL);
   }
 
