@@ -2,3 +2,6 @@
 # in src/services/schema-export/tests. Formatting them breaks those tests.
 # (The .ts fixtures use a .unformatted suffix for the same reason.)
 src/services/schema-export/tests/models/
+
+# Not a parseable source file
+electron-builder.env.example

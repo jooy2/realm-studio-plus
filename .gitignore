@@ -13,6 +13,9 @@ data/
 
 # Secrets
 secrets.sh
+electron-builder.env
+*.p12
+*.p8
 
 # Test results from JUnit and screenshots from failures
 test-results.xml

@@ -1,3 +1,19 @@
+## vNext (TBD)
+
+### Enhancements
+
+- None
+
+### Fixed
+
+- macOS builds are now signed with a Developer ID Application certificate and notarized by Apple. Previous releases set `mac.identity` to `null`, which skipped code signing entirely and left the bundle with the signature electron-builder had invalidated while repacking it, so macOS refused to launch the app and reported it as damaged ([#2](https://github.com/jooy2/realm-studio-plus/issues/2)).
+
+### Internals
+
+- Enabled `mac.forceCodeSigning`, so a macOS build without a usable signing identity fails instead of silently producing an unsigned app.
+- Removed the `mac.binaries` entry. Its path was hard-coded to `dist/mac`, which does not exist for the arm64 build, and `realm.node` is signed anyway as part of the bundle.
+- Added `npm run notarize:dmg` and `npm run verify:mac`, and documented the release procedure in [docs/MACOS-SIGNING.md](docs/MACOS-SIGNING.md). Replaced the `notarize` script, which pointed at a file that was never part of this repository.
+
 ## 20.1.0 (2026-08-07)
 
 ### Enhancements

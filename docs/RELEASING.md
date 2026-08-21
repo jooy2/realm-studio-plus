@@ -1,6 +1,8 @@
 # Releasing Realm Studio
 
-The instructions below is only possible to be performed by Realm employees.
+> **macOS:** the `.dmg` artifacts have to be signed and notarized, which can only be done on a Mac holding the project's Developer ID certificate. See [MACOS-SIGNING.md](MACOS-SIGNING.md) for that part of the release.
+
+The instructions below is only possible to be performed by Realm employees, and describe the original project's pipeline. Realm Studio Plus does not have access to it.
 
 ## Prepare a release
 

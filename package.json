@@ -35,12 +35,11 @@
     "mac": {
       "hardenedRuntime": true,
       "gatekeeperAssess": false,
-      "notarize": false,
-      "identity": null,
+      "notarize": true,
+      "forceCodeSigning": true,
+      "entitlements": "resources/entitlements.mac.plist",
+      "entitlementsInherit": "resources/entitlements.mac.inherit.plist",
       "category": "public.app-category.developer-tools",
-      "binaries": [
-        "dist/mac/Realm Studio Plus.app/Contents/Resources/app.asar.unpacked/node_modules/realm/binding/build/realm.node"
-      ],
       "target": [
         {
           "target": "dmg",
@@ -136,7 +135,9 @@
     "wait-for-bundle": "node ./scripts/wait-for-bundle.js",
     "webpack:main": "webpack --mode development --config configs/webpack.main.js",
     "webpack:renderer": "webpack serve --mode development --config configs/webpack.renderer.js",
-    "notarize": "node ./scripts/notarize"
+    "notarize:dmg": "node ./scripts/notarize-mac-dmg.js",
+    "verify:mac": "node ./scripts/verify-mac-signing.js",
+    "release:mac": "npm run package && npm run notarize:dmg && npm run verify:mac"
   },
   "dependencies": {
     "@contentful/rich-text-html-renderer": "17.2.3",
