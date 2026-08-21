@@ -30,10 +30,7 @@ import {
 import { IMenuGeneratorProps } from '../../windows/MenuGenerator';
 
 import { Greeting } from './Greeting';
-import {
-  IHistoryEntry,
-  ILocalRealmEntry
-} from './HistoryPanel/HistoryEntry';
+import { IHistoryEntry } from './HistoryPanel/HistoryEntry';
 
 interface IGreetingContainerState {
   recentFiles: IRecentFile[];
@@ -68,9 +65,8 @@ class GreetingContainer extends React.Component<
 
   public render() {
     const entries: IHistoryEntry[] = this.state.recentFiles.map((file) => ({
-      type: 'local-realm',
       path: file.path
-    } as ILocalRealmEntry));
+    }));
     return (
       <Greeting
         {...this.state}
@@ -102,13 +98,11 @@ class GreetingContainer extends React.Component<
   };
 
   private onOpenRecentFile = (entry: IHistoryEntry) => {
-    const localEntry = entry as ILocalRealmEntry;
-    main.showOpenLocalRealmAtPath(localEntry.path);
+    main.showOpenLocalRealmAtPath(entry.path);
   };
 
   private onRemoveRecentFile = (entry: IHistoryEntry) => {
-    const localEntry = entry as ILocalRealmEntry;
-    removeRecentFile(localEntry.path);
+    removeRecentFile(entry.path);
     this.refreshRecentFiles();
   };
 }
