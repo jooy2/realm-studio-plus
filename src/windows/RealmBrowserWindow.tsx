@@ -17,12 +17,12 @@
 ////////////////////////////////////////////////////////////////////////////
 
 import { ImportFormat } from '../services/data-importer';
-import { RealmLoadingMode, RealmToLoad } from '../utils/realms';
+import { IRealmToLoad } from '../utils/realms';
 
 import { IWindow } from './Window';
 
 export interface IRealmBrowserWindowProps {
-  realm: RealmToLoad;
+  realm: IRealmToLoad;
   readOnly?: boolean;
   import?: {
     format: ImportFormat;
@@ -31,15 +31,10 @@ export interface IRealmBrowserWindowProps {
   };
 }
 
-// TODO: Consider if we can have the window not show before a connection has been established.
-
 export const RealmBrowserWindow: IWindow = {
   getWindowOptions: (props: IRealmBrowserWindowProps) => {
     return {
-      title:
-        props.realm.mode === RealmLoadingMode.Local
-          ? props.realm.path
-          : props.realm.appId,
+      title: props.realm.path,
       width: 900,
       height: 600
     };
@@ -49,19 +44,6 @@ export const RealmBrowserWindow: IWindow = {
       // TODO: Fix the props for this to include a type
       (m) => m.RealmBrowser as any
     ),
-  getSingletonKey: (props: IRealmBrowserWindowProps) => {
-    const { realm } = props;
-    if (realm.mode === RealmLoadingMode.Local) {
-      return realm.path;
-    } else {
-      return [
-        realm.appId,
-        realm.serverUrl,
-        JSON.stringify(realm.credentials)
-      ].join('+');
-    }
-  },
-  getTrackedProperties: (props: IRealmBrowserWindowProps) => ({
-    mode: props.realm.mode
-  })
+  getSingletonKey: (props: IRealmBrowserWindowProps) => props.realm.path,
+  getTrackedProperties: () => ({})
 };

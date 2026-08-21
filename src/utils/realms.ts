@@ -16,61 +16,13 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-export enum RealmLoadingMode {
-  Local = 'local',
-  Synced = 'synced'
-}
-
 export interface IRealmToLoad {
-  mode: RealmLoadingMode;
-  encryptionKey?: Uint8Array;
-}
-
-export interface ILocalRealmToLoad extends IRealmToLoad {
-  mode: RealmLoadingMode.Local;
   path: string;
+  encryptionKey?: Uint8Array;
   enableFormatUpgrade?: boolean;
+  /**
+   * Open a Realm that carries a sync history as a local Realm. The file is
+   * still opened read-write, the sync history is simply ignored.
+   */
   sync?: boolean;
 }
-
-export enum AuthenticationMethod {
-  anonymous = 'anonymous',
-  emailPassword = 'email-password',
-  apiKey = 'api-key',
-  jwt = 'jwt'
-  // TODO: Add function, apple, google, facebook
-}
-
-export type SerializedCredentials =
-  | {
-      method: AuthenticationMethod.anonymous;
-      payload: Record<string, never>;
-    }
-  | {
-      method: AuthenticationMethod.emailPassword;
-      payload: {
-        email: string;
-        password: string;
-      };
-    }
-  | {
-      method: AuthenticationMethod.jwt;
-      payload: {
-        token: string;
-      };
-    }
-  | {
-      method: AuthenticationMethod.apiKey;
-      payload: {
-        apiKey: string;
-      };
-    };
-
-export interface ISyncedRealmToLoad extends IRealmToLoad {
-  mode: RealmLoadingMode.Synced;
-  serverUrl: string;
-  appId: string;
-  credentials: SerializedCredentials;
-}
-
-export type RealmToLoad = ILocalRealmToLoad | ISyncedRealmToLoad;

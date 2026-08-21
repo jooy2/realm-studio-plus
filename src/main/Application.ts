@@ -25,7 +25,6 @@ import * as dataImporter from '../services/data-importer';
 import { addRecentFile } from '../services/recent-files';
 import { settings, ThemeMode } from '../services/settings';
 import { showError } from '../ui/reusable/errors';
-import { RealmLoadingMode } from '../utils/realms';
 import { IRealmBrowserWindowProps } from '../windows/WindowProps';
 
 import { removeRendererDirectories } from '../utils';
@@ -193,10 +192,7 @@ export class Application {
     }
     // Open the Realm Browser, which will perform the import
     return this.showRealmBrowser({
-      realm: {
-        mode: RealmLoadingMode.Local,
-        path: destinationPath
-      },
+      realm: { path: destinationPath },
       import: { format, paths, schema }
     });
   }
@@ -213,7 +209,7 @@ export class Application {
     } else {
       return new Promise((resolve) => {
         // Set the represented filename
-        if (process.platform === 'darwin' && props.realm.mode === 'local') {
+        if (process.platform === 'darwin') {
           window.setRepresentedFilename(props.realm.path);
         }
         window.show();
@@ -355,10 +351,7 @@ export class Application {
   private openLocalRealmAtPath = (filePath: string) => {
     addRecentFile(filePath);
     return this.showRealmBrowser({
-      realm: {
-        mode: RealmLoadingMode.Local,
-        path: filePath
-      }
+      realm: { path: filePath }
     });
   };
 

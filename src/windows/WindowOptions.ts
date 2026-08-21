@@ -24,13 +24,7 @@ import {
   WindowProps
 } from './WindowProps';
 
-export type WindowType =
-  | 'cloud-authentication'
-  | 'connect-to-server'
-  | 'graphiql-editor'
-  | 'greeting'
-  | 'realm-browser'
-  | 'server-administration';
+export type WindowType = 'greeting' | 'realm-browser';
 
 /**
  * A WindowOptions object contains the type of window and the props getting passed to its UI component

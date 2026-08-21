@@ -26,7 +26,7 @@ import { flushSync } from 'react-dom';
 import { DataExporter, DataExportFormat } from '../../services/data-exporter';
 import * as dataImporter from '../../services/data-importer';
 import { Language, SchemaExporter } from '../../services/schema-export';
-import { menu, realms } from '../../utils';
+import { menu } from '../../utils';
 import {
   IMenuGenerator,
   IMenuGeneratorProps
@@ -365,10 +365,7 @@ class RealmBrowserContainer
           status: 'done'
         }
       });
-    } else if (
-      message === FILE_UPGRADE_NEEDED_MESSAGE &&
-      realm.mode === realms.RealmLoadingMode.Local
-    ) {
+    } else if (message === FILE_UPGRADE_NEEDED_MESSAGE) {
       const buttons = ['Cancel', 'Upgrade in-place', 'Backup and upgrade'];
       const answerIndex = remote.dialog.showMessageBoxSync({
         type: 'question',
@@ -769,9 +766,6 @@ class RealmBrowserContainer
     if (this.isReloading) {
       return;
     }
-    if (this.props.realm.mode !== realms.RealmLoadingMode.Local) {
-      return;
-    }
     this.isReloading = true;
     this.stopWatchingRealmFile();
 
@@ -851,10 +845,7 @@ class RealmBrowserContainer
 
   private startWatchingRealmFile() {
     const realm = this.props.realm;
-    if (!realm || realm.mode !== realms.RealmLoadingMode.Local) {
-      return;
-    }
-    if (this.watcherDisabled) {
+    if (!realm || this.watcherDisabled) {
       return;
     }
     const realmPath = realm.path;
@@ -916,11 +907,7 @@ class RealmBrowserContainer
 
   private handleWatchedFileEvent() {
     const realm = this.props.realm;
-    if (
-      !realm ||
-      realm.mode !== realms.RealmLoadingMode.Local ||
-      this.isReloading
-    ) {
+    if (!realm || this.isReloading) {
       return;
     }
     const realmPath = realm.path;
@@ -959,12 +946,7 @@ class RealmBrowserContainer
     this.watchStabilityTimer = setTimeout(() => {
       this.watchStabilityTimer = null;
       const realm = this.props.realm;
-      if (
-        !realm ||
-        realm.mode !== realms.RealmLoadingMode.Local ||
-        this.isReloading ||
-        this.watcherDisabled
-      ) {
+      if (!realm || this.isReloading || this.watcherDisabled) {
         return;
       }
       let stat: fs.Stats | null = null;
