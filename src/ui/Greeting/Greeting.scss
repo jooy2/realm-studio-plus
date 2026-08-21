@@ -107,10 +107,6 @@ $history-panel-icon-size: 20px;
     margin-top: $spacer * .5;
   }
 
-  &__MarketingPanel {
-    flex-grow: 1;
-  }
-
   &__HistoryPanel {
     background: var(--rs-panel-bg);
     color: var(--rs-panel-color);
@@ -258,43 +254,5 @@ $history-panel-icon-size: 20px;
 
   &__Logo {
     width: 90px;
-  }
-
-  &__CloudOverlay {
-    background: var(--rs-overlay-bg);
-    inset: 0;
-    color: var(--rs-overlay-color);
-    display: flex;
-    flex-direction: column;
-    padding: $spacer;
-    position: absolute;
-
-    &__Title {
-      margin-top: $spacer;
-      text-align: center;
-    }
-
-    &__ShareButtons {
-      display: flex;
-      justify-content: center;
-
-      & > * {
-        margin: $spacer * .25;
-      }
-    }
-
-    &__Feedback {
-      flex-grow: 1;
-      margin: ($spacer * .5) 0;
-      resize: none;
-    }
-
-    &__Footer {
-      text-align: center;
-
-      & > * {
-        margin: 0 $spacer * .25;
-      }
-    }
   }
 }

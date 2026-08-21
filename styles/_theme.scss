@@ -56,16 +56,13 @@
   --rs-sidebar-bg: #{$window-background};
   --rs-sidebar-border: #{color.mix($elephant, $dove, 25%)};
 
-  // Panels that are dark even in the light appearance (greeting history,
-  // marketing carousel)
+  // Panels that are dark even in the light appearance (greeting history)
   --rs-panel-bg: #{$charcoal};
   --rs-panel-color: #{$dove};
   --rs-panel-header: #{rgba($dove, .6)};
   --rs-panel-muted: #{rgba($dove, .55)};
   --rs-panel-empty: #{rgba($dove, .5)};
   --rs-panel-hover: #{rgba($dove, .08)};
-  --rs-panel-content-bg: #{rgba($charcoal, .6)};
-  --rs-panel-rule: #{rgba($dove, .33)};
 
   // Full-window overlays
   --rs-overlay-bg: #{$overlay-background};
@@ -117,9 +114,6 @@
   --rs-panel-muted: #{rgba($dark-body-color, .55)};
   --rs-panel-empty: #{rgba($dark-body-color, .5)};
   --rs-panel-hover: #{rgb(255 255 255 / 7%)};
-  // Sits on top of the marketing artwork, so it needs to stay opaque enough
-  --rs-panel-content-bg: #{rgb(10 12 24 / 78%)};
-  --rs-panel-rule: #{rgb(255 255 255 / 20%)};
   --rs-overlay-bg: #{$dark-overlay-background};
   --rs-overlay-color: #{$dark-body-color};
   --rs-row-stripe: transparent;
