@@ -44,7 +44,8 @@ mixpanel.init('bbadd422d2866fc9431cb63baa70bb1a', {
   verbose: isDevelopment,
   // Use local storage to persist the users id
   persistence: 'localStorage',
-  // As we are currenly transfering credentials in the URLs, lets not send these
+  // The window URL carries the serialised window options, which include the
+  // path of the Realm file being opened - don't send those
   property_blacklist: ['$current_url'],
   // We are tracking "Window opened" instead
   track_pageview: false

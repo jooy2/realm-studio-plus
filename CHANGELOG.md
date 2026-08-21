@@ -6,10 +6,15 @@
 
 ### Fixed
 
+- The **Add class** dialog no longer advises naming the primary key `_id` with type `objectId` "if this Realm is intended to be synced with Atlas Device Sync". Studio Plus cannot sync a Realm.
 - macOS builds are now signed with a Developer ID Application certificate and notarized by Apple. Previous releases set `mac.identity` to `null`, which skipped code signing entirely and left the bundle with the signature electron-builder had invalidated while repacking it, so macOS refused to launch the app and reported it as damaged ([#2](https://github.com/jooy2/realm-studio-plus/issues/2)).
 
 ### Internals
 
+- Removed the remaining Atlas Device Sync code that survived the fork. None of it was reachable: the `AddSubscriptionModal` was still mounted but no control called `toggleAddSubscription`, and its handler would have thrown on a local Realm anyway; `RealmLoadingMode.Synced`, `ISyncedRealmToLoad` and the `AuthenticationMethod` / `SerializedCredentials` types had no producers, which let eight `mode === Local` guards go with them; and the two `Realm.Sync` checks were testing for a namespace removed from the SDK in Realm JS v10, each of them loading the native module for nothing. `openSyncedRealmLocally` is kept — opening a Realm that carries a sync history as a plain local file is still supported.
+- Studio no longer registers itself as the handler for `x-realm-cloud://`. Nothing consumed the callback once the cloud authentication window was removed, so following such a link only raised the app. Removed the `dev:ros*` scripts and `generate-https-certificate` along with it; they started and provisioned a local Realm Object Server, and `dev:ros-unreliable` pointed at a file that is not in this repository.
+- Deleted the orphaned `ConnectToServer` and `MarketingPanel` directories, which held a stylesheet each and no component, the `__CloudOverlay` and `__MarketingPanel` rules in `Greeting.scss`, the `HistoryPanel` container from the server era, and six unreferenced icons in `static/svgs` that were being shipped inside the package.
+- `REALM_LOG_LEVEL` no longer does anything and is undocumented; it only ever fed the dead `Realm.Sync` branch in the renderer entry point.
 - Enabled `mac.forceCodeSigning`, so a macOS build without a usable signing identity fails instead of silently producing an unsigned app.
 - Removed the `mac.binaries` entry. Its path was hard-coded to `dist/mac`, which does not exist for the arm64 build, and `realm.node` is signed anyway as part of the bundle.
 - Added `npm run notarize:dmg` and `npm run verify:mac`, and documented the release procedure in [docs/MACOS-SIGNING.md](docs/MACOS-SIGNING.md). Replaced the `notarize` script, which pointed at a file that was never part of this repository.
