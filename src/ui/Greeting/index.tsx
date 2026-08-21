@@ -35,11 +35,7 @@ import {
   ILocalRealmEntry
 } from './HistoryPanel/HistoryEntry';
 
-export type SocialNetwork = 'twitter' | 'facebook' | 'reddit' | 'hacker-news';
-
 interface IGreetingContainerState {
-  isCloudInstancesDropdownOpen: boolean;
-  isSyncEnabled: boolean;
   recentFiles: IRecentFile[];
   updateStatus: IUpdateStatus;
   version: string;
@@ -50,8 +46,6 @@ class GreetingContainer extends React.Component<
   IGreetingContainerState
 > {
   public state: IGreetingContainerState = {
-    isCloudInstancesDropdownOpen: false,
-    isSyncEnabled: false,
     recentFiles: getRecentFiles(),
     updateStatus: {
       state: 'up-to-date'
@@ -62,15 +56,6 @@ class GreetingContainer extends React.Component<
   public componentDidMount() {
     electron.ipcRenderer.on('update-status', this.updateStatusChanged);
     window.addEventListener('focus', this.refreshRecentFiles);
-    // Require realm and check update state with the sync support
-    // Using nextTick to prevent blocking when loading realm
-    process.nextTick(() => {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      const Realm = require('realm');
-      this.setState({
-        isSyncEnabled: !!Realm.Sync
-      });
-    });
   }
 
   public componentWillUnmount() {

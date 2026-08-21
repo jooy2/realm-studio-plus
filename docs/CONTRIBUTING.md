@@ -100,8 +100,6 @@ The application has support for some parameters that can be supplied when starti
 
       WHY_DID_YOU_UPDATE=true npm run dev
 
-- If the `REALM_LOG_LEVEL` environment variable is set, this will get passed to `Realm.Sync.setLogLevel(` when the renderer processes start. It defaults to 'error'.
-
 ## Testing
 
 To run all tests, run

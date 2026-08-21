@@ -25,14 +25,12 @@ import './services/mixpanel';
 // Must run before any `react-dom/*` import — see file for rationale.
 import './utils/disable-react-profiling';
 
-import * as remote from '@electron/remote';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 
 // This is needed to prevent Realm JS from writing to directories it doesn't have access to
 import './utils/process-directories';
 
-const { app } = remote;
 const isDevelopment = process.env.NODE_ENV === 'development';
 
 // Don't report Realm JS analytics data
@@ -71,13 +69,3 @@ if (!isDevelopment) {
   }
 }
 
-// Using process.nextTick - as requiring realm blocks rendering
-process.nextTick(() => {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const Realm = require('realm');
-  // If sync is enabled on Realm - make it less verbose
-  if (Realm.Sync) {
-    Realm.Sync.setLogLevel(process.env.REALM_LOG_LEVEL || 'error');
-    Realm.Sync.setUserAgent(`${app.name} ${app.getVersion() || 'unknown'}`);
-  }
-});
