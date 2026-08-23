@@ -6,6 +6,7 @@
 
 ### Fixed
 
+- Checking for updates works again. The packaged app was still asking the original project's S3 bucket for the `major-15` channel, which last published 15.2.1 in June 2024, so every check compared the running version against a two year old release of a different project, found it older, and quietly reported Studio Plus as up to date. Updates are now checked against the releases of this repository.
 - The **Add class** dialog no longer advises naming the primary key `_id` with type `objectId` "if this Realm is intended to be synced with Atlas Device Sync". Studio Plus cannot sync a Realm.
 - macOS builds are now signed with a Developer ID Application certificate and notarized by Apple. Previous releases set `mac.identity` to `null`, which skipped code signing entirely and left the bundle with the signature electron-builder had invalidated while repacking it, so macOS refused to launch the app and reported it as damaged ([#2](https://github.com/jooy2/realm-studio-plus/issues/2)).
 
@@ -18,6 +19,10 @@
 - Enabled `mac.forceCodeSigning`, so a macOS build without a usable signing identity fails instead of silently producing an unsigned app.
 - Removed the `mac.binaries` entry. Its path was hard-coded to `dist/mac`, which does not exist for the arm64 build, and `realm.node` is signed anyway as part of the bundle.
 - Added `npm run notarize:dmg` and `npm run verify:mac`, and documented the release procedure in [docs/MACOS-SIGNING.md](docs/MACOS-SIGNING.md). Replaced the `notarize` script, which pointed at a file that was never part of this repository.
+- `build.publish` now points at the `jooy2/realm-studio-plus` releases, and a `zip` target was added to the macOS build: electron-updater installs an update from a `.zip`, never from a `.dmg`, so the disk images alone left macOS without a way to apply one.
+- Artifact names no longer contain spaces, and the NSIS and portable Windows builds no longer write to the same `.exe`. A space is renamed to `.` by GitHub when a file is uploaded through the web UI but to `-` by electron-builder when it publishes, and the updater only resolves the second form; the shared name meant `latest.yml` described whichever of the two Windows builds was packaged last.
+- The updater now falls back to the GitHub releases API when electron-updater cannot use a release - one published without the `latest*.yml` metadata, or an artifact such as the portable Windows build that cannot install an update - and offers to open the release page rather than reporting a failure.
+- Rewrote [docs/RELEASING.md](docs/RELEASING.md) for this fork, covering what a release has to carry for the auto updater to see it. What was there described the original project's pipeline, which this fork cannot use.
 
 ## 20.1.0 (2026-08-07)
 

@@ -1,5 +1,3 @@
-provider: s3
-bucket: static.realm.io
-region: us-east-1
-path: downloads/realm-studio
-channel: rc
+provider: github
+owner: jooy2
+repo: realm-studio-plus

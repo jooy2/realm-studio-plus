@@ -16,12 +16,19 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-import { app, dialog } from 'electron';
+import { app, dialog, shell } from 'electron';
 import { autoUpdater, UpdateInfo } from 'electron-updater';
+import * as semver from 'semver';
 
+import { GITHUB_OWNER, GITHUB_REPO, LATEST_RELEASE_URL } from '../constants';
 import { WindowManager } from './WindowManager';
 
 const isDevelopment = process.env.NODE_ENV === 'development';
+
+const LATEST_RELEASE_API_URL = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/releases/latest`;
+
+// Give up on the GitHub API rather than leave the check spinning forever.
+const LATEST_RELEASE_TIMEOUT = 10000;
 
 export interface IDownloadProgress {
   total: number;
@@ -91,14 +98,7 @@ export class Updater {
     });
 
     autoUpdater.on('error', (err) => {
-      this.isBusy = false;
-      if (!this.quite) {
-        this.showError('Error occurred while updating', err.message);
-      }
-      this.sendUpdateStatus({
-        state: 'failed',
-        error: err.message
-      });
+      this.onUpdateError(err);
     });
 
     autoUpdater.on('update-downloaded', (info: UpdateInfo) => {
@@ -188,7 +188,7 @@ export class Updater {
     }, 1000);
   }
 
-  private askToUpdate(lastestVersion: string) {
+  private askToUpdate(latestVersion: string) {
     if (process.env.REALM_STUDIO_DISABLE_UPDATE_PROMPT) {
       return true;
     } else {
@@ -198,7 +198,7 @@ export class Updater {
         dialog.showMessageBoxSync({
           type: 'info',
           message: `A new version of ${appName} is available!`,
-          detail: `${appName} ${lastestVersion} is available - you have ${currentVersion}.\nWould you like to update it now?`,
+          detail: `${appName} ${latestVersion} is available - you have ${currentVersion}.\nWould you like to update it now?`,
           buttons: ['Yes', 'No'],
           defaultId: 0,
           cancelId: 1
@@ -207,7 +207,7 @@ export class Updater {
     }
   }
 
-  private askToRestart(lastestVersion: string) {
+  private askToRestart(latestVersion: string) {
     if (process.env.REALM_STUDIO_DISABLE_UPDATE_PROMPT) {
       return true;
     } else {
@@ -216,7 +216,7 @@ export class Updater {
         dialog.showMessageBoxSync({
           type: 'info',
           message: `A new version of ${appName} is downloaded!`,
-          detail: `${appName} ${lastestVersion} is downloaded.\nClick "Ok" to quit and restart Realm Studio.`,
+          detail: `${appName} ${latestVersion} is downloaded.\nClick "Ok" to quit and restart Realm Studio.`,
           buttons: ['Ok'],
           defaultId: 0
         }) === 0
@@ -243,6 +243,107 @@ export class Updater {
     // Quit and install
     if (shouldQuitAndInstall) {
       autoUpdater.quitAndInstall(true, true);
+    }
+  }
+
+  /**
+   * electron-updater can only check for - and install - an update when the
+   * release carries the `latest*.yml` metadata that electron-builder writes
+   * next to the installers, and when the artifact for this platform is one it
+   * knows how to install. Releases published by hand, and the .deb/.rpm builds,
+   * are neither. Ask the GitHub API directly in that case and point the user at
+   * the release page instead of reporting a failure.
+   */
+  private async onUpdateError(err: Error) {
+    try {
+      const latestVersion = await this.getLatestReleasedVersion();
+      if (latestVersion === undefined) {
+        // The fallback failed as well, so report the original error
+        if (!this.quite) {
+          this.showError('Error occurred while updating', err.message);
+        }
+        this.sendUpdateStatus({
+          state: 'failed',
+          error: err.message
+        });
+        return;
+      }
+
+      if (!semver.gt(latestVersion, app.getVersion())) {
+        console.log(
+          `Failed checking for update, but ${latestVersion} is the latest ` +
+            `release: ${err.message}`
+        );
+        this.sendUpdateStatus({
+          state: 'up-to-date'
+        });
+        return;
+      }
+
+      console.log(
+        `Cannot update automatically to ${latestVersion}: ${err.message}`
+      );
+      this.nextVersion = latestVersion;
+      this.sendUpdateStatus({
+        state: 'available',
+        nextVersion: latestVersion
+      });
+      if (this.askToDownloadManually(latestVersion)) {
+        shell.openExternal(LATEST_RELEASE_URL);
+      }
+      // The update is not applied either way - the window titles should say so
+      this.windowManager.setPendingUpdate(true);
+    } finally {
+      this.isBusy = false;
+    }
+  }
+
+  private async getLatestReleasedVersion(): Promise<string | undefined> {
+    try {
+      const response = await fetch(LATEST_RELEASE_API_URL, {
+        headers: { Accept: 'application/vnd.github+json' },
+        signal: AbortSignal.timeout(LATEST_RELEASE_TIMEOUT)
+      });
+      if (!response.ok) {
+        throw new Error(
+          `Got status ${response.status} from ${LATEST_RELEASE_API_URL}`
+        );
+      }
+      const release = (await response.json()) as { tag_name?: string };
+      // Releases are tagged both as "20.1.0" and "v20.1.0"
+      const tag = (release.tag_name ?? '').replace(/^v/, '');
+      const version = semver.valid(tag);
+      if (version === null) {
+        throw new Error(`Could not read a version from the tag "${tag}"`);
+      }
+      return version;
+    } catch (err) {
+      console.error(
+        `Failed asking GitHub for the latest release: ${
+          err instanceof Error ? err.message : err
+        }`
+      );
+      return undefined;
+    }
+  }
+
+  private askToDownloadManually(latestVersion: string) {
+    if (process.env.REALM_STUDIO_DISABLE_UPDATE_PROMPT) {
+      // Opening a browser is never what an automated update test wants
+      return false;
+    } else {
+      const appName = app.name;
+      const currentVersion = app.getVersion();
+      return (
+        dialog.showMessageBoxSync({
+          type: 'info',
+          message: `A new version of ${appName} is available!`,
+          detail: `${appName} ${latestVersion} is available - you have ${currentVersion}.\nThis release cannot be installed automatically.\nWould you like to open the download page?`,
+          buttons: ['Open the download page', 'Not now'],
+          defaultId: 0,
+          cancelId: 1
+        }) === 0
+      );
     }
   }
 

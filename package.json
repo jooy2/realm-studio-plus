@@ -14,7 +14,7 @@
   "build": {
     "appId": "com.realm.realm-studio-plus",
     "compression": "maximum",
-    "artifactName": "${productName} ${version}_${arch}.${ext}",
+    "artifactName": "${name}-${version}-${arch}.${ext}",
     "directories": {
       "buildResources": "./resources"
     },
@@ -43,6 +43,13 @@
       "target": [
         {
           "target": "dmg",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        },
+        {
+          "target": "zip",
           "arch": [
             "x64",
             "arm64"
@@ -81,8 +88,12 @@
       "icon": "resources/icon.ico"
     },
     "nsis": {
+      "artifactName": "${name}-${version}-${arch}-setup.${ext}",
       "installerIcon": "resources/icon.ico",
       "perMachine": true
+    },
+    "portable": {
+      "artifactName": "${name}-${version}-${arch}-portable.${ext}"
     },
     "protocols": [
       {
@@ -99,11 +110,9 @@
     },
     "publish": [
       {
-        "provider": "s3",
-        "bucket": "static.realm.io",
-        "region": "us-east-1",
-        "path": "downloads/realm-studio",
-        "channel": "major-15"
+        "provider": "github",
+        "owner": "jooy2",
+        "repo": "realm-studio-plus"
       }
     ],
     "npmArgs": [
