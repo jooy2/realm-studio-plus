@@ -22,7 +22,7 @@
 - `build.publish` now points at the `jooy2/realm-studio-plus` releases, and a `zip` target was added to the macOS build: electron-updater installs an update from a `.zip`, never from a `.dmg`, so the disk images alone left macOS without a way to apply one.
 - Artifact names no longer contain spaces, and the NSIS and portable Windows builds no longer write to the same `.exe`. A space is renamed to `.` by GitHub when a file is uploaded through the web UI but to `-` by electron-builder when it publishes, and the updater only resolves the second form; the shared name meant `latest.yml` described whichever of the two Windows builds was packaged last.
 - The updater now falls back to the GitHub releases API when electron-updater cannot use a release - one published without the `latest*.yml` metadata, or an artifact such as the portable Windows build that cannot install an update - and offers to open the release page rather than reporting a failure.
-- Rewrote [docs/RELEASING.md](docs/RELEASING.md) for this fork, covering what a release has to carry for the auto updater to see it. What was there described the original project's pipeline, which this fork cannot use.
+- Rewrote [docs/RELEASING.md](docs/RELEASING.md) as a runbook for this fork: the order the platforms are packaged in, what each step of `npm run package` and `npm run release:mac` does, which artifacts and metadata a release has to carry for the auto updater to see it, and how to roll one back. What was there described the original project's pipeline, which this fork cannot use.
 
 ## 20.1.0 (2026-08-07)
 
