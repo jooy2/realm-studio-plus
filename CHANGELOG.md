@@ -4,6 +4,12 @@
 
 - None
 
+## 20.2.0 (2026-08-23)
+
+### Enhancements
+
+- None
+
 ### Fixed
 
 - Checking for updates works again. The packaged app was still asking the original project's S3 bucket for the `major-15` channel, which last published 15.2.1 in June 2024, so every check compared the running version against a two year old release of a different project, found it older, and quietly reported Studio Plus as up to date. Updates are now checked against the releases of this repository.
