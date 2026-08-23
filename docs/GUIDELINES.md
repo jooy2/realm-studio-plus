@@ -14,12 +14,11 @@ Please choose "Squash and merge" when merging a PR. It makes it easier to revert
 
 This document describes guidelines, some of which can be checked by static code analysis tools called linters. Specifically this project has configuration files codifying the code-style that we've decided. These can be read and understood by editors - if the correct plugins have been installed.
 
-If you cannot find editor support for `eslint` and `sass-lint`, run this to test the two respectively
+If you cannot find editor support for `eslint` and `stylelint`, run this to check the code without changing it
 
-    npm run lint:es
-    npm run lint:sass
+    npm run lint:check
 
-Or just run `npm run lint` to run one followed by the other.
+Or run `npm run lint` to have the two of them fix what they can. The check runs on every pull request.
 
 Please discuss or create a pull-request if a part of the code-style feels impeding - we can change them if we choose to.
 
@@ -27,7 +26,7 @@ Please discuss or create a pull-request if a part of the code-style feels impedi
 
 We use TypeScript (configured from `./tsconfig.json`) as it helps us reason about our code and catch errors at build-time rather than when the code is running.
 
-To help us make a choice on style when writing typescript and get warnings when we deviate from that choice we've introduced the use of eslint (configured from `./.eslintrc.json`).
+To help us make a choice on style when writing typescript and get warnings when we deviate from that choice we've introduced the use of eslint (configured from `./eslint.config.ts`).
 
 Please make sure that your editor is emitting warnings when your writing code that is not compliant with the TypeScript flavor of TypeScript that we've chosen. If you don't agree with these - let's change them together.
 

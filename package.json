@@ -121,11 +121,11 @@
   },
   "scripts": {
     "build": "webpack --mode production --config=configs/webpack.js",
-    "check:package-lock": "node ./scripts/check-package-lock.js",
     "dev:debug": "REALM_STUDIO_DEV_TOOLS=true npm run dev",
     "predev": "lsof -ti:8080 | xargs kill -9 2>/dev/null || true",
     "dev": "rm -rf ./build && concurrently --kill-others --names \"WEBPACK:M,WEBPACK:R,ELECTRON\" \"npm run webpack:main\" \"npm run webpack:renderer\" \"npm run wait-for-bundle && ELECTRON_ENABLE_LOGGING=1 electron .\"",
     "lint": "eslint . --ext .js,.ts,.tsx,.jsx --fix . && stylelint 'src/**/*.scss' 'styles/**/*.scss' --fix --max-warnings 0",
+    "lint:check": "eslint . && stylelint 'src/**/*.scss' 'styles/**/*.scss' --max-warnings 0",
     "format": "prettier . --write",
     "package": "electron-builder --publish=never",
     "package:all": "electron-builder --publish=never -wml",

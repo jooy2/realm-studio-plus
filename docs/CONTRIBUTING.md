@@ -130,6 +130,5 @@ See the section on [releasing](./RELEASING.md).
 
 ## Scripts
 
-- `npm run check:package-lock` runs ./scripts/check-package-lock.js to check if the package locks version and dependencies are compatible with that of the package.json.
 - `npm run generate-all-types-realm` runs ./scripts/generate-realm.js to generate a test realm with objects following the schema-exporters all-types schema.
 - `npm run sentry:upload-symbols` downloads electron and uploads symbols to the Sentry error catching service, run this whenever the Electron version is changed.
